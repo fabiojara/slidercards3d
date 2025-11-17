@@ -337,12 +337,18 @@
             }
 
             card.addEventListener('click', () => {
+                // Solo abrir lightbox si es la imagen activa (centro)
+                const isActive = index === this.currentIndex;
+                
                 if (item.type === 'page' && item.link) {
                     // Para páginas, mantener el comportamiento de navegación
                     window.location.href = item.link;
-                } else {
-                    // Para imágenes, abrir lightbox
+                } else if (isActive) {
+                    // Solo abrir lightbox si es la imagen activa
                     this.openLightbox(item);
+                } else {
+                    // Si no es la imagen activa, navegar a ella
+                    this.goTo(index);
                 }
             });
 
