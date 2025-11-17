@@ -97,7 +97,7 @@ class SliderCards3D_Version_Manager {
         }
 
         $changelog_content = file_get_contents($this->changelog_file);
-        
+
         // Verificar si ya existe una entrada para esta versión
         $version_pattern = '/##\s*\[?' . preg_quote($new_version, '/') . '\]?/i';
         if (preg_match($version_pattern, $changelog_content)) {

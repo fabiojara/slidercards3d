@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.0] - 2024-12-XX
+
+### Mejoras
+- Mejorado sistema automático de actualización del CHANGELOG.md
+- El sistema ahora detecta si ya existe una entrada para una versión antes de agregar una nueva
+- Limpieza automática de múltiples encabezados "# Changelog" duplicados
+- El sistema respeta las ediciones manuales del CHANGELOG y no las sobrescribe
+- CHANGELOG.md reorganizado y limpiado de duplicados
+
+### Detalles Técnicos
+- Implementada verificación de versiones existentes en `update_changelog()`
+- Agregada limpieza automática de encabezados duplicados
+- Mejorado el manejo de archivos CHANGELOG existentes
+
 ## [1.5.0] - 2024-12-XX
 
 ### Nuevas Características
