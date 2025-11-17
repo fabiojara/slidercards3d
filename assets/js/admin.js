@@ -398,6 +398,23 @@
                 this.toggleAutoplayInterval();
                 this.saveSettings();
             }
+        },
+
+        copyToClipboard: function(text, $btn) {
+            // Crear elemento temporal para copiar
+            const $temp = $('<textarea>');
+            $('body').append($temp);
+            $temp.val(text).select();
+            document.execCommand('copy');
+            $temp.remove();
+
+            // Feedback visual
+            const originalText = $btn.text();
+            $btn.text('✓ Copiado').addClass('copied');
+            
+            setTimeout(() => {
+                $btn.text(originalText).removeClass('copied');
+            }, 2000);
         }
     };
 

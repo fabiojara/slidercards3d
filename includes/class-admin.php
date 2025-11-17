@@ -321,7 +321,7 @@ class SliderCards3D_Admin {
                             <div class="slidercards3d-usage-section">
                                 <h3 class="slidercards3d-usage-section-title">Shortcode Básico</h3>
                                 <p class="slidercards3d-usage-text">El shortcode principal es <code>[slidercards3d]</code> y puede usarse en cualquier página, entrada o widget de WordPress.</p>
-                                
+
                                 <div class="slidercards3d-usage-code-block">
                                     <div class="slidercards3d-usage-code-header">
                                         <span>Uso Simple</span>
@@ -329,14 +329,14 @@ class SliderCards3D_Admin {
                                     </div>
                                     <pre><code>[slidercards3d]</code></pre>
                                 </div>
-                                
+
                                 <p class="slidercards3d-usage-note">Este shortcode mostrará todas las imágenes y páginas que hayas seleccionado en el panel de administración.</p>
                             </div>
 
                             <!-- Parámetros -->
                             <div class="slidercards3d-usage-section">
                                 <h3 class="slidercards3d-usage-section-title">Parámetros Disponibles</h3>
-                                
+
                                 <div class="slidercards3d-usage-param">
                                     <h4 class="slidercards3d-usage-param-name">type</h4>
                                     <p class="slidercards3d-usage-text">Especifica qué tipo de contenido mostrar en el slider.</p>
@@ -351,7 +351,7 @@ class SliderCards3D_Admin {
                             <!-- Ejemplos -->
                             <div class="slidercards3d-usage-section">
                                 <h3 class="slidercards3d-usage-section-title">Ejemplos de Uso</h3>
-                                
+
                                 <div class="slidercards3d-usage-example">
                                     <h4 class="slidercards3d-usage-example-title">1. Mostrar Todo (Imágenes + Páginas)</h4>
                                     <div class="slidercards3d-usage-code-block">
@@ -397,7 +397,7 @@ class SliderCards3D_Admin {
                             <!-- Dónde Usar -->
                             <div class="slidercards3d-usage-section">
                                 <h3 class="slidercards3d-usage-section-title">Dónde Usar el Shortcode</h3>
-                                
+
                                 <div class="slidercards3d-usage-example">
                                     <h4 class="slidercards3d-usage-example-title">En el Editor de WordPress (Gutenberg)</h4>
                                     <ol class="slidercards3d-usage-list">
