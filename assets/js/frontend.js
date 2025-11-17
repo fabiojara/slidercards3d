@@ -129,9 +129,9 @@
                 baseUrl += '/';
             }
             const mediaUrl = baseUrl + `wp/v2/media/${id}`;
-            
+
             console.log('Obteniendo imagen:', id, 'URL:', mediaUrl);
-            
+
             return fetch(mediaUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -164,9 +164,9 @@
                 baseUrl += '/';
             }
             const pageUrl = baseUrl + `wp/v2/pages/${id}`;
-            
+
             console.log('Obteniendo página:', id, 'URL:', pageUrl);
-            
+
             return fetch(pageUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -348,7 +348,8 @@
 
                 // Calcular transformación 3D
                 let translateZ = -absOffset * 100;
-                let translateX = offset * 50;
+                // Aumentar separación horizontal (de 50 a 100px por cada tarjeta)
+                let translateX = offset * 100;
                 let rotateY = offset * 15;
                 let opacity = 1;
                 let scale = 1;

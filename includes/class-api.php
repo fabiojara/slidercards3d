@@ -182,12 +182,12 @@ class SliderCards3D_API {
      */
     public function get_selection($request) {
         $type = $request->get_param('type');
-        
+
         // Normalizar el tipo (aceptar 'images' o 'image')
         if ($type === 'images') {
             $type = 'image';
         }
-        
+
         if ($type) {
             $selected_ids = $this->get_selected_ids($type);
             return rest_ensure_response(array(
@@ -196,11 +196,11 @@ class SliderCards3D_API {
                 'count' => count($selected_ids)
             ));
         }
-        
+
         // Obtener todas las selecciones
         $images = $this->get_selected_ids('image');
         $pages = $this->get_selected_ids('page');
-        
+
         return rest_ensure_response(array(
             'images' => $images,
             'pages' => $pages,
