@@ -33,7 +33,7 @@
         init() {
             // Mostrar skeleton mientras carga
             this.showLoading();
-            
+
             // Cargar configuración primero
             this.loadSettings().then(() => {
                 this.loadItems();
@@ -100,6 +100,9 @@
             }
 
             Promise.all(promises).then(() => {
+                // Ocultar loading
+                this.hideLoading();
+                
                 if (this.items.length > 0) {
                     this.render();
                     if (this.settings.autoplay) {
@@ -109,7 +112,9 @@
                     this.showEmpty();
                 }
             }).catch(error => {
-                console.error('Error al cargar items:', error);
+                console.error(`[${this.instanceId}] Error al cargar items:`, error);
+                // Ocultar loading en caso de error
+                this.hideLoading();
                 this.showEmpty();
             });
         }
@@ -271,6 +276,9 @@
             const slider = this.container.querySelector(`#${this.instanceId}-slider`);
             if (!slider) return;
 
+            // Asegurar que el loading esté oculto antes de renderizar
+            this.hideLoading();
+            
             slider.innerHTML = '';
 
             // Crear cards
