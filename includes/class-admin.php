@@ -82,7 +82,9 @@ class SliderCards3D_Admin {
             'separation_mobile' => 50,
             'autoplay' => false,
             'autoplay_interval' => 3000,
-            'darkness_intensity' => 25 // Intensidad de oscurecimiento en porcentaje (0-100)
+            'darkness_intensity' => 25, // Intensidad de oscurecimiento en porcentaje (0-100)
+            'filter_intensity' => 30, // Intensidad del filtro en porcentaje (0-100)
+            'brightness_intensity' => 50 // Intensidad de brillo en porcentaje (0-100)
         );
         $settings = get_option('slidercards3d_settings', $defaults);
         $settings = wp_parse_args($settings, $defaults);
@@ -295,6 +297,52 @@ class SliderCards3D_Admin {
                                     >
                                     <div class="slidercards3d-range-value">
                                         <span id="darkness-intensity-value"><?php echo esc_attr($settings['darkness_intensity']); ?></span>
+                                        <span class="slidercards3d-settings-unit">%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Intensidad de filtro</span>
+                                    <span class="slidercards3d-settings-label-desc">Controla la intensidad del filtro aplicado a las imágenes no activas (0% = sin filtro, 100% = máximo filtro). Afecta a imágenes y páginas.</span>
+                                </label>
+                                <div class="slidercards3d-range-wrapper">
+                                    <input
+                                        type="range"
+                                        id="filter-intensity"
+                                        name="filter_intensity"
+                                        class="slidercards3d-range-input"
+                                        min="0"
+                                        max="100"
+                                        step="5"
+                                        value="<?php echo esc_attr($settings['filter_intensity']); ?>"
+                                    >
+                                    <div class="slidercards3d-range-value">
+                                        <span id="filter-intensity-value"><?php echo esc_attr($settings['filter_intensity']); ?></span>
+                                        <span class="slidercards3d-settings-unit">%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Intensidad de brillo</span>
+                                    <span class="slidercards3d-settings-label-desc">Controla el brillo de las imágenes no activas (0% = sin brillo/muy oscuro, 100% = brillo máximo). Afecta a imágenes y páginas.</span>
+                                </label>
+                                <div class="slidercards3d-range-wrapper">
+                                    <input
+                                        type="range"
+                                        id="brightness-intensity"
+                                        name="brightness_intensity"
+                                        class="slidercards3d-range-input"
+                                        min="0"
+                                        max="100"
+                                        step="5"
+                                        value="<?php echo esc_attr($settings['brightness_intensity']); ?>"
+                                    >
+                                    <div class="slidercards3d-range-value">
+                                        <span id="brightness-intensity-value"><?php echo esc_attr($settings['brightness_intensity']); ?></span>
                                         <span class="slidercards3d-settings-unit">%</span>
                                     </div>
                                 </div>

@@ -335,6 +335,10 @@
                     $('#autoplay-interval').val(data.autoplay_interval || 3000);
                     $('#darkness-intensity').val(data.darkness_intensity || 25);
                     $('#darkness-intensity-value').text(data.darkness_intensity || 25);
+                    $('#filter-intensity').val(data.filter_intensity || 30);
+                    $('#filter-intensity-value').text(data.filter_intensity || 30);
+                    $('#brightness-intensity').val(data.brightness_intensity || 50);
+                    $('#brightness-intensity-value').text(data.brightness_intensity || 50);
                     this.toggleAutoplayInterval();
                 },
                 error: () => {

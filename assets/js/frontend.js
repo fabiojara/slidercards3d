@@ -22,7 +22,9 @@
                 separation_mobile: 50,
                 autoplay: false,
                 autoplay_interval: 3000,
-                darkness_intensity: 25
+                darkness_intensity: 25,
+                filter_intensity: 30,
+                brightness_intensity: 50
             };
             this.autoplayTimer = null;
             this.isPaused = false;

@@ -249,7 +249,9 @@ class SliderCards3D_API {
             'separation_mobile' => 50,
             'autoplay' => false,
             'autoplay_interval' => 3000,
-            'darkness_intensity' => 25
+            'darkness_intensity' => 25,
+            'filter_intensity' => 30,
+            'brightness_intensity' => 50
         );
 
         $settings = get_option('slidercards3d_settings', $defaults);
