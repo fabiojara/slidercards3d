@@ -65,20 +65,25 @@ class SliderCards3D_Frontend {
             'type' => 'all' // 'images', 'pages', 'all'
         ), $atts);
 
+        // Generar ID único para esta instancia
+        static $instance_count = 0;
+        $instance_count++;
+        $instance_id = 'slidercards3d-' . $instance_count;
+        
         ob_start();
         ?>
-        <div class="slidercards3d-container" data-type="<?php echo esc_attr($atts['type']); ?>">
+        <div class="slidercards3d-container" data-type="<?php echo esc_attr($atts['type']); ?>" data-instance-id="<?php echo esc_attr($instance_id); ?>">
             <div class="slidercards3d-wrapper">
-                <div class="slidercards3d-slider" id="slidercards3d-slider">
+                <div class="slidercards3d-slider" id="<?php echo esc_attr($instance_id); ?>-slider">
                     <!-- Contenido cargado dinámicamente -->
                 </div>
                 <div class="slidercards3d-controls">
-                    <button class="slidercards3d-btn-prev" aria-label="Anterior">
+                    <button class="slidercards3d-btn-prev" aria-label="Anterior" data-instance="<?php echo esc_attr($instance_id); ?>">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m15 18-6-6 6-6"/>
                         </svg>
                     </button>
-                    <button class="slidercards3d-btn-next" aria-label="Siguiente">
+                    <button class="slidercards3d-btn-next" aria-label="Siguiente" data-instance="<?php echo esc_attr($instance_id); ?>">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m9 18 6-6-6-6"/>
                         </svg>

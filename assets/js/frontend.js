@@ -1,21 +1,20 @@
 /**
  * JavaScript del slider 3D en el frontend
  * Basado en: https://codepen.io/Nidal95/pen/RNNgWNM
+ * Soporta múltiples instancias en la misma página
  */
 
 (function() {
     'use strict';
 
-    const SliderCards3D = {
-        items: [],
-        currentIndex: 0,
-        isAnimating: false,
-        type: 'all',
-
-        init: function() {
-            const container = document.querySelector('.slidercards3d-container');
-            if (!container) return;
-
+    // Clase para cada instancia del slider
+    class SliderCards3DInstance {
+        constructor(container) {
+            this.container = container;
+            this.instanceId = container.dataset.instanceId || 'slidercards3d-1';
+            this.items = [];
+            this.currentIndex = 0;
+            this.isAnimating = false;
             this.type = container.dataset.type || 'all';
             this.settings = {
                 separation_desktop: 100,
@@ -27,15 +26,17 @@
             };
             this.autoplayTimer = null;
             this.isPaused = false;
+        }
 
+        init() {
             // Cargar configuración primero
             this.loadSettings().then(() => {
                 this.loadItems();
                 this.bindEvents();
             });
-        },
+        }
 
-        loadSettings: function() {
+        loadSettings() {
             return fetch(slidercards3dData.apiUrl + 'settings')
                 .then(response => response.json())
                 .then(data => {
@@ -49,43 +50,38 @@
                     };
                 })
                 .catch(() => {
-                    // Usar valores por defecto si falla
                     console.warn('No se pudieron cargar los ajustes, usando valores por defecto');
                 });
-        },
+        }
 
-        startAutoplay: function() {
+        startAutoplay() {
             if (!this.settings.autoplay || this.items.length <= 1) return;
 
             this.stopAutoplay();
 
             this.autoplayTimer = setInterval(() => {
                 if (!this.isPaused && !this.isAnimating) {
-                    // En modo infinito, simplemente avanzar (next ya maneja el ciclo)
                     this.next();
                 }
             }, this.settings.autoplay_interval);
-        },
+        }
 
-        stopAutoplay: function() {
+        stopAutoplay() {
             if (this.autoplayTimer) {
                 clearInterval(this.autoplayTimer);
                 this.autoplayTimer = null;
             }
-        },
+        }
 
-        pauseAutoplay: function() {
+        pauseAutoplay() {
             this.isPaused = true;
-        },
+        }
 
-        resumeAutoplay: function() {
+        resumeAutoplay() {
             this.isPaused = false;
-        },
+        }
 
-        loadItems: function() {
-            console.log('Iniciando carga de items, tipo:', this.type);
-            console.log('API URL:', slidercards3dData.apiUrl);
-
+        loadItems() {
             const promises = [];
 
             if (this.type === 'all' || this.type === 'images') {
@@ -97,25 +93,21 @@
             }
 
             Promise.all(promises).then(() => {
-                console.log('Items finales cargados:', this.items.length, this.items);
                 if (this.items.length > 0) {
                     this.render();
-                    // Iniciar autoplay si está activado
                     if (this.settings.autoplay) {
                         this.startAutoplay();
                     }
                 } else {
-                    console.warn('No se encontraron items para mostrar');
                     this.showEmpty();
                 }
             }).catch(error => {
                 console.error('Error al cargar items:', error);
                 this.showEmpty();
             });
-        },
+        }
 
-        loadImages: function() {
-            // Usar 'image' (singular) que es lo que espera la API
+        loadImages() {
             return fetch(slidercards3dData.apiUrl + 'selection?type=image')
                 .then(response => {
                     if (!response.ok) {
@@ -124,7 +116,6 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Datos de selección de imágenes:', data);
                     if (data.ids && data.ids.length > 0) {
                         return Promise.all(
                             data.ids.map(id => this.getImageData(id))
@@ -133,7 +124,6 @@
                     return [];
                 })
                 .then(images => {
-                    console.log('Imágenes cargadas:', images);
                     const validImages = images.filter(img => img && img.url);
                     this.items = this.items.concat(validImages.map(img => ({
                         type: 'image',
@@ -147,9 +137,9 @@
                     console.error('Error al cargar imágenes:', error);
                     return [];
                 });
-        },
+        }
 
-        loadPages: function() {
+        loadPages() {
             return fetch(slidercards3dData.apiUrl + 'selection?type=page')
                 .then(response => {
                     if (!response.ok) {
@@ -158,7 +148,6 @@
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Datos de selección de páginas:', data);
                     if (data.ids && data.ids.length > 0) {
                         return Promise.all(
                             data.ids.map(id => this.getPageData(id))
@@ -167,7 +156,6 @@
                     return [];
                 })
                 .then(pages => {
-                    console.log('Páginas cargadas:', pages);
                     const validPages = pages.filter(page => page && page !== null);
                     this.items = this.items.concat(validPages.map(page => ({
                         type: 'page',
@@ -182,20 +170,14 @@
                     console.error('Error al cargar páginas:', error);
                     return [];
                 });
-        },
+        }
 
-        getImageData: function(id) {
-            // Construir URL absoluta correctamente
-            // La API URL es: http://localhost/variospluginswp/wp-json/slidercards3d/v1/
-            // Necesitamos: http://localhost/variospluginswp/wp-json/wp/v2/media/{id}
+        getImageData(id) {
             let baseUrl = slidercards3dData.apiUrl.replace('/slidercards3d/v1/', '');
-            // Asegurar que baseUrl termine con /wp-json/ (con barra final)
             if (!baseUrl.endsWith('/')) {
                 baseUrl += '/';
             }
             const mediaUrl = baseUrl + `wp/v2/media/${id}`;
-
-            console.log('Obteniendo imagen:', id, 'URL:', mediaUrl);
 
             return fetch(mediaUrl)
                 .then(response => {
@@ -217,20 +199,16 @@
                 })
                 .catch(error => {
                     console.error(`Error al obtener imagen ${id}:`, error);
-                    return null; // Retornar null para filtrar después
+                    return null;
                 });
-        },
+        }
 
-        getPageData: function(id) {
-            // Construir URL absoluta correctamente
+        getPageData(id) {
             let baseUrl = slidercards3dData.apiUrl.replace('/slidercards3d/v1/', '');
-            // Asegurar que baseUrl termine con /wp-json/ (con barra final)
             if (!baseUrl.endsWith('/')) {
                 baseUrl += '/';
             }
             const pageUrl = baseUrl + `wp/v2/pages/${id}`;
-
-            console.log('Obteniendo página:', id, 'URL:', pageUrl);
 
             return fetch(pageUrl)
                 .then(response => {
@@ -278,12 +256,12 @@
                 })
                 .catch(error => {
                     console.error(`Error al obtener página ${id}:`, error);
-                    return null; // Retornar null para filtrar después
+                    return null;
                 });
-        },
+        }
 
-        render: function() {
-            const slider = document.getElementById('slidercards3d-slider');
+        render() {
+            const slider = this.container.querySelector(`#${this.instanceId}-slider`);
             if (!slider) return;
 
             slider.innerHTML = '';
@@ -295,7 +273,8 @@
             });
 
             // Crear controles si no existen
-            if (!document.querySelector('.slidercards3d-controls')) {
+            const wrapper = this.container.querySelector('.slidercards3d-wrapper');
+            if (wrapper && !wrapper.querySelector('.slidercards3d-controls')) {
                 this.createControls();
             }
 
@@ -304,9 +283,9 @@
 
             // Posicionar cards
             this.updateCards();
-        },
+        }
 
-        createCard: function(item, index) {
+        createCard(item, index) {
             const card = document.createElement('div');
             card.className = 'slidercards3d-card';
             card.dataset.index = index;
@@ -337,7 +316,6 @@
                 linkIcon.alt = '';
                 linkIcon.className = 'slidercards3d-icon-inline';
                 linkIcon.onerror = function() {
-                    // Fallback a API si SVG local no existe
                     this.src = 'https://api.iconify.design/heroicons-outline/arrow-top-right-on-square.svg?width=16&height=16';
                 };
                 link.textContent = 'Ver página ';
@@ -348,76 +326,54 @@
             }
 
             card.addEventListener('click', () => {
-                // Solo abrir lightbox si es la imagen activa (centro)
                 const isActive = index === this.currentIndex;
 
                 if (item.type === 'page' && item.link) {
-                    // Para páginas, mantener el comportamiento de navegación
                     window.location.href = item.link;
                 } else if (isActive) {
-                    // Solo abrir lightbox si es la imagen activa
                     this.openLightbox(item);
                 } else {
-                    // Si no es la imagen activa, navegar a ella
                     this.goTo(index);
                 }
             });
 
             return card;
-        },
+        }
 
-        createControls: function() {
-            const container = document.querySelector('.slidercards3d-wrapper');
-            if (!container) return;
+        createControls() {
+            const wrapper = this.container.querySelector('.slidercards3d-wrapper');
+            if (!wrapper) return;
 
-            let controls = container.querySelector('.slidercards3d-controls');
-            if (!controls) {
-                controls = document.createElement('div');
-                controls.className = 'slidercards3d-controls';
+            let controls = wrapper.querySelector('.slidercards3d-controls');
+            if (controls) return; // Ya existen controles
 
-                const prevBtn = document.createElement('button');
-                prevBtn.className = 'slidercards3d-btn-prev';
-                prevBtn.setAttribute('aria-label', 'Anterior');
-                const prevIcon = document.createElement('img');
-                prevIcon.src = slidercards3dData.pluginUrl + 'assets/icons/chevron-left.svg';
-                prevIcon.width = 24;
-                prevIcon.height = 24;
-                prevIcon.alt = 'Anterior';
-                prevIcon.className = 'slidercards3d-icon';
-                prevIcon.onerror = function() {
-                    // Fallback a API si SVG local no existe
-                    this.src = 'https://api.iconify.design/heroicons-outline/chevron-left.svg?width=24&height=24';
-                };
-                prevBtn.appendChild(prevIcon);
-                prevBtn.addEventListener('click', () => this.prev());
+            controls = document.createElement('div');
+            controls.className = 'slidercards3d-controls';
 
-                const nextBtn = document.createElement('button');
-                nextBtn.className = 'slidercards3d-btn-next';
-                nextBtn.setAttribute('aria-label', 'Siguiente');
-                const nextIcon = document.createElement('img');
-                nextIcon.src = slidercards3dData.pluginUrl + 'assets/icons/chevron-right.svg';
-                nextIcon.width = 24;
-                nextIcon.height = 24;
-                nextIcon.alt = 'Siguiente';
-                nextIcon.className = 'slidercards3d-icon';
-                nextIcon.onerror = function() {
-                    // Fallback a API si SVG local no existe
-                    this.src = 'https://api.iconify.design/heroicons-outline/chevron-right.svg?width=24&height=24';
-                };
-                nextBtn.appendChild(nextIcon);
-                nextBtn.addEventListener('click', () => this.next());
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'slidercards3d-btn-prev';
+            prevBtn.setAttribute('aria-label', 'Anterior');
+            prevBtn.dataset.instance = this.instanceId;
+            prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
+            prevBtn.addEventListener('click', () => this.prev());
 
-                controls.appendChild(prevBtn);
-                controls.appendChild(nextBtn);
-                container.appendChild(controls);
-            }
-        },
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'slidercards3d-btn-next';
+            nextBtn.setAttribute('aria-label', 'Siguiente');
+            nextBtn.dataset.instance = this.instanceId;
+            nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+            nextBtn.addEventListener('click', () => this.next());
 
-        createIndicators: function() {
-            const container = document.querySelector('.slidercards3d-wrapper');
-            if (!container) return;
+            controls.appendChild(prevBtn);
+            controls.appendChild(nextBtn);
+            wrapper.appendChild(controls);
+        }
 
-            let indicators = container.querySelector('.slidercards3d-indicators');
+        createIndicators() {
+            const wrapper = this.container.querySelector('.slidercards3d-wrapper');
+            if (!wrapper) return;
+
+            let indicators = wrapper.querySelector('.slidercards3d-indicators');
             if (indicators) {
                 indicators.remove();
             }
@@ -439,20 +395,18 @@
                 indicators.appendChild(indicator);
             });
 
-            container.appendChild(indicators);
-        },
+            wrapper.appendChild(indicators);
+        }
 
-        updateCards: function() {
-            const cards = document.querySelectorAll('.slidercards3d-card');
+        updateCards() {
+            const cards = this.container.querySelectorAll('.slidercards3d-card');
             const total = cards.length;
 
             if (total === 0) return;
 
             cards.forEach((card, index) => {
-                // Calcular offset con lógica circular para efecto infinito
                 let offset = index - this.currentIndex;
 
-                // Ajustar offset para crear efecto infinito
                 if (offset > total / 2) {
                     offset = offset - total;
                 } else if (offset < -total / 2) {
@@ -461,9 +415,7 @@
 
                 const absOffset = Math.abs(offset);
 
-                // Calcular transformación 3D
                 let translateZ = -absOffset * 100;
-                // Usar separación horizontal desde configuración según el tamaño de pantalla
                 const isMobile = window.innerWidth <= 480;
                 const isTablet = window.innerWidth <= 768 && window.innerWidth > 480;
                 const separationX = isMobile ? this.settings.separation_mobile :
@@ -473,12 +425,9 @@
                 let rotateY = offset * 15;
                 let opacity = 1;
                 let scale = 1;
-                let brightness = 1; // Filtro de brillo (1 = normal, menor = más oscuro)
+                let brightness = 1;
 
-                // Calcular intensidad de oscurecimiento basada en configuración
-                // darkness_intensity es un porcentaje (0-100)
-                // Convertimos a factor de brillo: 0% = sin cambio, 100% = máximo oscurecimiento
-                const darknessFactor = this.settings.darkness_intensity / 100; // 0 a 1
+                const darknessFactor = this.settings.darkness_intensity / 100;
 
                 if (absOffset > 3) {
                     opacity = 0;
@@ -487,19 +436,12 @@
                 } else if (absOffset > 0) {
                     opacity = 1 - (absOffset * 0.2);
                     scale = 1 - (absOffset * 0.05);
-                    // Aplicar filtro oscuro usando la intensidad configurada
-                    // Fórmula mejorada para hacer el efecto más visible:
-                    // - Con 0%: brightness = 1 (sin oscurecimiento)
-                    // - Con 100%: brightness puede llegar hasta 0.2 (muy oscuro)
-                    // - El oscurecimiento aumenta proporcionalmente con la distancia y la intensidad
-                    const baseDarkness = absOffset * 0.3; // Oscurecimiento base más pronunciado
-                    // Aplicar intensidad: 0% = sin efecto, 100% = efecto completo
-                    const intensityMultiplier = 0.3 + (darknessFactor * 0.7); // Rango de 0.3 a 1.0
+                    const baseDarkness = absOffset * 0.3;
+                    const intensityMultiplier = 0.3 + (darknessFactor * 0.7);
                     const adjustedDarkness = baseDarkness * intensityMultiplier;
-                    brightness = Math.max(0.2, 1 - adjustedDarkness); // Mínimo brightness de 0.2
+                    brightness = Math.max(0.2, 1 - adjustedDarkness);
                 }
 
-                // Aplicar transformación
                 card.style.transform = `
                     translateX(${translateX}px)
                     translateZ(${translateZ}px)
@@ -511,47 +453,41 @@
                 card.style.zIndex = total - absOffset;
             });
 
-            // Actualizar indicadores (mantener para referencia visual)
-            const indicatorElements = document.querySelectorAll('.slidercards3d-indicator');
+            // Actualizar indicadores
+            const indicatorElements = this.container.querySelectorAll('.slidercards3d-indicator');
             indicatorElements.forEach((indicator, index) => {
                 indicator.classList.toggle('active', index === this.currentIndex);
             });
 
-            // Los botones nunca se deshabilitan en modo infinito
-            const prevBtn = document.querySelector('.slidercards3d-btn-prev');
-            const nextBtn = document.querySelector('.slidercards3d-btn-next');
+            // Botones siempre habilitados en modo infinito
+            const prevBtn = this.container.querySelector('.slidercards3d-btn-prev');
+            const nextBtn = this.container.querySelector('.slidercards3d-btn-next');
 
-            if (prevBtn) {
-                prevBtn.disabled = false; // Siempre habilitado en modo infinito
-            }
-            if (nextBtn) {
-                nextBtn.disabled = false; // Siempre habilitado en modo infinito
-            }
-        },
+            if (prevBtn) prevBtn.disabled = false;
+            if (nextBtn) nextBtn.disabled = false;
+        }
 
-        next: function() {
+        next() {
             if (this.isAnimating) return;
             this.isAnimating = true;
-            // Navegación circular infinita
             this.currentIndex = (this.currentIndex + 1) % this.items.length;
             this.updateCards();
             setTimeout(() => {
                 this.isAnimating = false;
             }, 500);
-        },
+        }
 
-        prev: function() {
+        prev() {
             if (this.isAnimating) return;
             this.isAnimating = true;
-            // Navegación circular infinita
             this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
             this.updateCards();
             setTimeout(() => {
                 this.isAnimating = false;
             }, 500);
-        },
+        }
 
-        goTo: function(index) {
+        goTo(index) {
             if (this.isAnimating) return;
             if (index >= 0 && index < this.items.length && index !== this.currentIndex) {
                 this.isAnimating = true;
@@ -561,10 +497,10 @@
                     this.isAnimating = false;
                 }, 500);
             }
-        },
+        }
 
-        showEmpty: function() {
-            const slider = document.getElementById('slidercards3d-slider');
+        showEmpty() {
+            const slider = this.container.querySelector(`#${this.instanceId}-slider`);
             if (slider) {
                 slider.innerHTML = `
                     <div class="slidercards3d-empty">
@@ -572,24 +508,18 @@
                         <div class="slidercards3d-empty-title">No hay contenido</div>
                         <div class="slidercards3d-empty-text">
                             <p>Selecciona imágenes o páginas en el panel de administración.</p>
-                            <p style="margin-top: 1rem; font-size: 0.875rem; opacity: 0.7;">
-                                Ve a <strong>Slider 3D</strong> en el menú de WordPress, selecciona contenido y haz clic en "Guardar selección".
-                            </p>
-                            <p style="margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.6;">
-                                Si ya seleccionaste contenido, verifica la consola del navegador (F12) para ver errores.
-                            </p>
                         </div>
                     </div>
                 `;
             }
-        },
+        }
 
-        bindEvents: function() {
-            const container = document.querySelector('.slidercards3d-container');
-            if (!container) return;
-
-            // Navegación con teclado
-            document.addEventListener('keydown', (e) => {
+        bindEvents() {
+            // Navegación con teclado (solo para el slider activo con hover)
+            const handleKeydown = (e) => {
+                // Solo procesar si el mouse está sobre este contenedor
+                if (!this.container.matches(':hover')) return;
+                
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
                     this.pauseAutoplay();
@@ -601,68 +531,41 @@
                     this.next();
                     setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
                 }
-            });
+            };
+            document.addEventListener('keydown', handleKeydown);
 
-            // Pausar autoplay al interactuar con el slider
-            container.addEventListener('mouseenter', () => {
+            // Pausar autoplay al interactuar
+            this.container.addEventListener('mouseenter', () => {
                 this.pauseAutoplay();
             });
 
-            container.addEventListener('mouseleave', () => {
+            this.container.addEventListener('mouseleave', () => {
                 if (this.settings.autoplay) {
                     this.resumeAutoplay();
                 }
             });
 
-            // Pausar autoplay al hacer clic en los botones
-            const prevBtn = container.querySelector('.slidercards3d-btn-prev');
-            const nextBtn = container.querySelector('.slidercards3d-btn-next');
-
-            if (prevBtn) {
-                prevBtn.addEventListener('click', () => {
-                    this.pauseAutoplay();
-                    setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
-                });
-            }
-
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => {
-                    this.pauseAutoplay();
-                    setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
-                });
-            }
-
-            // Recalcular posiciones al redimensionar la ventana
+            // Recalcular posiciones al redimensionar
             let resizeTimeout;
-            window.addEventListener('resize', () => {
+            const handleResize = () => {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
                     this.updateCards();
                 }, 250);
-            });
+            };
+            window.addEventListener('resize', handleResize);
 
             // Touch events para móviles
             let touchStartX = 0;
             let touchEndX = 0;
 
-            if (container) {
-                container.addEventListener('touchstart', (e) => {
-                    touchStartX = e.changedTouches[0].screenX;
-                    this.pauseAutoplay();
-                });
+            this.container.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                this.pauseAutoplay();
+            });
 
-                container.addEventListener('touchend', (e) => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    this.handleSwipe();
-                    setTimeout(() => {
-                        if (this.settings.autoplay) {
-                            this.resumeAutoplay();
-                        }
-                    }, this.settings.autoplay_interval);
-                });
-            }
-
-            this.handleSwipe = () => {
+            this.container.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
                 const swipeThreshold = 50;
                 const diff = touchStartX - touchEndX;
 
@@ -673,34 +576,34 @@
                         this.prev();
                     }
                 }
-            };
-        },
 
-        openLightbox: function(item) {
-            // Crear overlay del lightbox
+                setTimeout(() => {
+                    if (this.settings.autoplay) {
+                        this.resumeAutoplay();
+                    }
+                }, this.settings.autoplay_interval);
+            });
+        }
+
+        openLightbox(item) {
             const overlay = document.createElement('div');
             overlay.className = 'slidercards3d-lightbox';
-            overlay.id = 'slidercards3d-lightbox';
+            overlay.id = `${this.instanceId}-lightbox`;
 
-            // Crear contenedor de la imagen
             const container = document.createElement('div');
             container.className = 'slidercards3d-lightbox-container';
 
-            // Crear botón de cerrar
             const closeBtn = document.createElement('button');
             closeBtn.className = 'slidercards3d-lightbox-close';
             closeBtn.setAttribute('aria-label', 'Cerrar');
-            // Usar SVG inline de Heroicons para mejor rendimiento y estilo moderno
             closeBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>';
             closeBtn.addEventListener('click', () => this.closeLightbox());
 
-            // Crear imagen
             const img = document.createElement('img');
             img.src = item.fullUrl || item.url;
             img.alt = item.title || 'Imagen ampliada';
             img.className = 'slidercards3d-lightbox-image';
 
-            // Crear contenedor de imagen con botón sobre ella
             const imageWrapper = document.createElement('div');
             imageWrapper.className = 'slidercards3d-lightbox-image-wrapper';
             imageWrapper.appendChild(img);
@@ -709,15 +612,12 @@
             container.appendChild(imageWrapper);
             overlay.appendChild(container);
 
-            // Agregar al body
             document.body.appendChild(overlay);
 
-            // Animar entrada
             setTimeout(() => {
                 overlay.classList.add('active');
             }, 10);
 
-            // Cerrar con ESC
             const escHandler = (e) => {
                 if (e.key === 'Escape') {
                     this.closeLightbox();
@@ -726,21 +626,19 @@
             };
             document.addEventListener('keydown', escHandler);
 
-            // Cerrar al hacer clic fuera de la imagen
             overlay.addEventListener('click', (e) => {
                 if (e.target === overlay) {
                     this.closeLightbox();
                 }
             });
 
-            // Prevenir que el clic en la imagen cierre el lightbox
             container.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
-        },
+        }
 
-        closeLightbox: function() {
-            const lightbox = document.getElementById('slidercards3d-lightbox');
+        closeLightbox() {
+            const lightbox = document.getElementById(`${this.instanceId}-lightbox`);
             if (lightbox) {
                 lightbox.classList.remove('active');
                 setTimeout(() => {
@@ -748,16 +646,21 @@
                 }, 300);
             }
         }
-    };
+    }
 
-    // Inicializar cuando el DOM esté listo
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            SliderCards3D.init();
+    // Inicializar todas las instancias cuando el DOM esté listo
+    function initAllSliders() {
+        const containers = document.querySelectorAll('.slidercards3d-container');
+        containers.forEach(container => {
+            const instance = new SliderCards3DInstance(container);
+            instance.init();
         });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAllSliders);
     } else {
-        SliderCards3D.init();
+        initAllSliders();
     }
 
 })();
-

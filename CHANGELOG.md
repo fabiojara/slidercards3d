@@ -1,5 +1,14 @@
 # Changelog
 
+
+## [1.2.0] - 2025-11-17
+
+### Cambios
+- Actualización de versión de 1.0.0 a 1.2.0
+- Mejoras y correcciones generales
+
+# Changelog
+
 ## [1.2.0] - 2024-12-XX
 
 ### Nuevas Características
