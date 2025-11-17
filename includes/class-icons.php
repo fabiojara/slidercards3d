@@ -121,16 +121,16 @@ class SliderCards3D_Icons {
                 // También reemplazar stroke sin comillas (atributo sin valor)
                 $svg_content = preg_replace('/stroke="(#[0-9a-fA-F]{3,6}|black|white|rgb\([^)]+\)|rgba\([^)]+\))"/i', 'stroke="currentColor"', $svg_content);
             }
-            
+
             // Si no tiene stroke, agregarlo como currentColor (para iconos que solo usan fill)
             if (strpos($svg_content, 'stroke') === false && strpos($svg_content, '<svg') !== false) {
                 // Solo agregar stroke si el SVG tiene paths o elementos que lo necesiten
-                if (strpos($svg_content, '<path') !== false || strpos($svg_content, '<circle') !== false || 
+                if (strpos($svg_content, '<path') !== false || strpos($svg_content, '<circle') !== false ||
                     strpos($svg_content, '<rect') !== false || strpos($svg_content, '<line') !== false) {
                     $svg_content = preg_replace('/<svg([^>]*)>/i', '<svg$1 stroke="currentColor">', $svg_content);
                 }
             }
-            
+
             // Asegurar que fill sea "none" o "currentColor" según corresponda
             // Los iconos outline de Heroicons deben tener fill="none"
             if (strpos($svg_content, 'fill=') !== false) {
