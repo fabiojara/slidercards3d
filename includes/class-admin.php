@@ -80,7 +80,8 @@ class SliderCards3D_Admin {
             'separation_tablet' => 70,
             'separation_mobile' => 50,
             'autoplay' => false,
-            'autoplay_interval' => 3000
+            'autoplay_interval' => 3000,
+            'darkness_intensity' => 25 // Intensidad de oscurecimiento en porcentaje (0-100)
         );
         $settings = get_option('slidercards3d_settings', $defaults);
         $settings = wp_parse_args($settings, $defaults);
@@ -264,17 +265,42 @@ class SliderCards3D_Admin {
                                     <span class="slidercards3d-settings-label-desc">Tiempo entre cada transición automática (en milisegundos)</span>
                                 </label>
                                 <div class="slidercards3d-settings-input-wrapper">
-                                    <input
-                                        type="number"
-                                        id="autoplay-interval"
-                                        name="autoplay_interval"
-                                        class="slidercards3d-settings-input"
-                                        min="1000"
-                                        max="10000"
+                                    <input 
+                                        type="number" 
+                                        id="autoplay-interval" 
+                                        name="autoplay_interval" 
+                                        class="slidercards3d-settings-input" 
+                                        min="1000" 
+                                        max="10000" 
                                         step="500"
                                         value="<?php echo esc_attr($settings['autoplay_interval']); ?>"
                                     >
                                     <span class="slidercards3d-settings-unit">ms</span>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-divider"></div>
+
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Intensidad de oscurecimiento</span>
+                                    <span class="slidercards3d-settings-label-desc">Controla qué tan oscuras se ven las imágenes detrás de la principal (0% = sin oscurecimiento, 100% = máximo oscurecimiento)</span>
+                                </label>
+                                <div class="slidercards3d-range-wrapper">
+                                    <input 
+                                        type="range" 
+                                        id="darkness-intensity" 
+                                        name="darkness_intensity" 
+                                        class="slidercards3d-range-input" 
+                                        min="0" 
+                                        max="100" 
+                                        step="5"
+                                        value="<?php echo esc_attr($settings['darkness_intensity']); ?>"
+                                    >
+                                    <div class="slidercards3d-range-value">
+                                        <span id="darkness-intensity-value"><?php echo esc_attr($settings['darkness_intensity']); ?></span>
+                                        <span class="slidercards3d-settings-unit">%</span>
+                                    </div>
                                 </div>
                             </div>
 

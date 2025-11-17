@@ -22,7 +22,8 @@
                 separation_tablet: 70,
                 separation_mobile: 50,
                 autoplay: false,
-                autoplay_interval: 3000
+                autoplay_interval: 3000,
+                darkness_intensity: 25
             };
             this.autoplayTimer = null;
             this.isPaused = false;
@@ -43,7 +44,8 @@
                         separation_tablet: data.separation_tablet || 70,
                         separation_mobile: data.separation_mobile || 50,
                         autoplay: data.autoplay || false,
-                        autoplay_interval: data.autoplay_interval || 3000
+                        autoplay_interval: data.autoplay_interval || 3000,
+                        darkness_intensity: data.darkness_intensity || 25
                     };
                 })
                 .catch(() => {
@@ -432,6 +434,11 @@
                 let scale = 1;
                 let brightness = 1; // Filtro de brillo (1 = normal, menor = más oscuro)
 
+                // Calcular intensidad de oscurecimiento basada en configuración
+                // darkness_intensity es un porcentaje (0-100)
+                // Convertimos a factor de brillo: 0% = sin cambio, 100% = máximo oscurecimiento
+                const darknessFactor = this.settings.darkness_intensity / 100; // 0 a 1
+
                 if (absOffset > 3) {
                     opacity = 0;
                     scale = 0.8;
@@ -439,9 +446,12 @@
                 } else if (absOffset > 0) {
                     opacity = 1 - (absOffset * 0.2);
                     scale = 1 - (absOffset * 0.05);
-                    // Aplicar filtro oscuro: cuanto más lejos, más oscuro
-                    // absOffset 1 = 0.7, absOffset 2 = 0.5, absOffset 3 = 0.3
-                    brightness = 1 - (absOffset * 0.25);
+                    // Aplicar filtro oscuro usando la intensidad configurada
+                    // La fórmula base es: 1 - (absOffset * 0.25)
+                    // Ajustamos con darknessFactor: cuanto mayor sea, más oscuro
+                    const baseDarkness = absOffset * 0.25; // Oscurecimiento base por distancia
+                    const adjustedDarkness = baseDarkness * (0.5 + darknessFactor * 0.5); // Ajuste según configuración
+                    brightness = 1 - adjustedDarkness;
                 }
 
                 // Aplicar transformación

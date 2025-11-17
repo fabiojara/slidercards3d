@@ -56,6 +56,11 @@
             $('#autoplay').on('change', () => {
                 this.toggleAutoplayInterval();
             });
+            
+            // Actualizar valor del slider de oscurecimiento
+            $('#darkness-intensity').on('input', (e) => {
+                $('#darkness-intensity-value').text(e.target.value);
+            });
         },
 
         switchTab: function(tab) {
@@ -324,6 +329,8 @@
                     $('#separation-mobile').val(data.separation_mobile || 50);
                     $('#autoplay').prop('checked', data.autoplay || false);
                     $('#autoplay-interval').val(data.autoplay_interval || 3000);
+                    $('#darkness-intensity').val(data.darkness_intensity || 25);
+                    $('#darkness-intensity-value').text(data.darkness_intensity || 25);
                     this.toggleAutoplayInterval();
                 },
                 error: () => {
@@ -348,7 +355,8 @@
                 separation_tablet: parseInt($('#separation-tablet').val()) || 70,
                 separation_mobile: parseInt($('#separation-mobile').val()) || 50,
                 autoplay: $('#autoplay').is(':checked') ? '1' : '0',
-                autoplay_interval: parseInt($('#autoplay-interval').val()) || 3000
+                autoplay_interval: parseInt($('#autoplay-interval').val()) || 3000,
+                darkness_intensity: parseInt($('#darkness-intensity').val()) || 25
             };
 
             $.ajax({
@@ -381,6 +389,8 @@
                 $('#separation-mobile').val(50);
                 $('#autoplay').prop('checked', false);
                 $('#autoplay-interval').val(3000);
+                $('#darkness-intensity').val(25);
+                $('#darkness-intensity-value').text(25);
                 this.toggleAutoplayInterval();
                 this.saveSettings();
             }
