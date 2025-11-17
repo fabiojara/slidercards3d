@@ -134,6 +134,18 @@
     transform: none;
 }
 
+.slidercards3d-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.slidercards3d-icon-inline {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.25rem;
+}
+
 /* Indicadores */
 .slidercards3d-indicators {
     position: absolute;
@@ -297,7 +309,7 @@
     transform: scale(0.95);
 }
 
-.slidercards3d-lightbox-close svg {
+.slidercards3d-lightbox-close .slidercards3d-icon {
     width: 20px;
     height: 20px;
 }
@@ -307,26 +319,26 @@
     .slidercards3d-lightbox {
         padding: 1rem;
     }
-    
+
     .slidercards3d-lightbox-container {
         max-width: 95vw;
     }
-    
+
     .slidercards3d-lightbox-image-wrapper {
         max-height: 85vh;
     }
-    
+
     .slidercards3d-lightbox-image {
         max-height: 85vh;
     }
-    
+
     .slidercards3d-lightbox-close {
         top: 8px;
         right: 8px;
         width: 36px;
         height: 36px;
     }
-    
+
     .slidercards3d-lightbox-close svg {
         width: 18px;
         height: 18px;

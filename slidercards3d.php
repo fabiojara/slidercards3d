@@ -99,6 +99,7 @@ class SliderCards3D {
 
     public function load_dependencies() {
         // Cargar clases necesarias
+        require_once SLIDERCARDS3D_PLUGIN_DIR . 'includes/class-icons.php';
         require_once SLIDERCARDS3D_PLUGIN_DIR . 'includes/class-admin.php';
         require_once SLIDERCARDS3D_PLUGIN_DIR . 'includes/class-frontend.php';
         require_once SLIDERCARDS3D_PLUGIN_DIR . 'includes/class-version-manager.php';

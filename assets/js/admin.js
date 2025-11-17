@@ -151,9 +151,7 @@
                             <p class="slidercards3d-image-card-title">${this.escapeHtml(image.title)}</p>
                         </div>
                         <div class="slidercards3d-image-card-checkbox">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
+                            <img src="' + slidercards3dAdmin.pluginUrl + 'assets/icons/check.png" width="16" height="16" alt="" class="slidercards3d-check-icon">
                         </div>
                     </div>
                 `;
@@ -190,9 +188,7 @@
                             <h3 class="slidercards3d-page-card-title">
                                 ${this.escapeHtml(page.title)}
                                 <div class="slidercards3d-page-card-checkbox">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
+                                    <img src="' + slidercards3dAdmin.pluginUrl + 'assets/icons/check.png" width="14" height="14" alt="" class="slidercards3d-check-icon">
                                 </div>
                             </h3>
                         </div>

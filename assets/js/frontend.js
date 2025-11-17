@@ -330,7 +330,14 @@
                 link.href = item.link;
                 link.className = 'slidercards3d-card-link';
                 link.textContent = 'Ver página';
-                link.innerHTML = 'Ver página <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"></path></svg>';
+                const linkIcon = document.createElement('img');
+                linkIcon.src = slidercards3dData.pluginUrl + 'assets/icons/external-link.png';
+                linkIcon.width = 16;
+                linkIcon.height = 16;
+                linkIcon.alt = '';
+                linkIcon.className = 'slidercards3d-icon-inline';
+                link.textContent = 'Ver página ';
+                link.appendChild(linkIcon);
                 overlay.appendChild(link);
 
                 card.appendChild(overlay);
@@ -367,13 +374,25 @@
                 const prevBtn = document.createElement('button');
                 prevBtn.className = 'slidercards3d-btn-prev';
                 prevBtn.setAttribute('aria-label', 'Anterior');
-                prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>';
+                const prevIcon = document.createElement('img');
+                prevIcon.src = slidercards3dData.pluginUrl + 'assets/icons/chevron-left.png';
+                prevIcon.width = 24;
+                prevIcon.height = 24;
+                prevIcon.alt = 'Anterior';
+                prevIcon.className = 'slidercards3d-icon';
+                prevBtn.appendChild(prevIcon);
                 prevBtn.addEventListener('click', () => this.prev());
 
                 const nextBtn = document.createElement('button');
                 nextBtn.className = 'slidercards3d-btn-next';
                 nextBtn.setAttribute('aria-label', 'Siguiente');
-                nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+                const nextIcon = document.createElement('img');
+                nextIcon.src = slidercards3dData.pluginUrl + 'assets/icons/chevron-right.png';
+                nextIcon.width = 24;
+                nextIcon.height = 24;
+                nextIcon.alt = 'Siguiente';
+                nextIcon.className = 'slidercards3d-icon';
+                nextBtn.appendChild(nextIcon);
                 nextBtn.addEventListener('click', () => this.next());
 
                 controls.appendChild(prevBtn);
@@ -659,7 +678,13 @@
             const closeBtn = document.createElement('button');
             closeBtn.className = 'slidercards3d-lightbox-close';
             closeBtn.setAttribute('aria-label', 'Cerrar');
-            closeBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+            const closeIcon = document.createElement('img');
+            closeIcon.src = slidercards3dData.pluginUrl + 'assets/icons/x.png';
+            closeIcon.width = 20;
+            closeIcon.height = 20;
+            closeIcon.alt = 'Cerrar';
+            closeIcon.className = 'slidercards3d-icon';
+            closeBtn.appendChild(closeIcon);
             closeBtn.addEventListener('click', () => this.closeLightbox());
 
             // Crear imagen
@@ -667,13 +692,13 @@
             img.src = item.fullUrl || item.url;
             img.alt = item.title || 'Imagen ampliada';
             img.className = 'slidercards3d-lightbox-image';
-            
+
             // Crear contenedor de imagen con botón sobre ella
             const imageWrapper = document.createElement('div');
             imageWrapper.className = 'slidercards3d-lightbox-image-wrapper';
             imageWrapper.appendChild(img);
             imageWrapper.appendChild(closeBtn);
-            
+
             container.appendChild(imageWrapper);
             overlay.appendChild(container);
 

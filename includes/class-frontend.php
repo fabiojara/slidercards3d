@@ -49,7 +49,8 @@ class SliderCards3D_Frontend {
         // Localizar script
         wp_localize_script('slidercards3d-frontend', 'slidercards3dData', array(
             'apiUrl' => rest_url('slidercards3d/v1/'),
-            'nonce' => wp_create_nonce('wp_rest')
+            'nonce' => wp_create_nonce('wp_rest'),
+            'pluginUrl' => SLIDERCARDS3D_PLUGIN_URL
         ));
     }
 

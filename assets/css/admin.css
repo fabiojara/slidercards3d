@@ -110,9 +110,11 @@
     border-bottom-color: var(--sc3d-text);
 }
 
-.slidercards3d-tab svg {
+.slidercards3d-tab-icon {
     width: 20px;
     height: 20px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* Content */
@@ -280,15 +282,19 @@
     border-color: var(--sc3d-primary);
 }
 
-.slidercards3d-image-card-checkbox svg {
+.slidercards3d-check-icon {
     width: 16px;
     height: 16px;
-    color: white;
     opacity: 0;
     transition: opacity 0.2s ease;
+    filter: brightness(0) invert(1); /* Hacer el icono blanco */
 }
 
-.slidercards3d-image-card.selected .slidercards3d-image-card-checkbox svg {
+.slidercards3d-image-card.selected .slidercards3d-image-card-checkbox .slidercards3d-check-icon {
+    opacity: 1;
+}
+
+.slidercards3d-page-card.selected .slidercards3d-page-card-checkbox .slidercards3d-check-icon {
     opacity: 1;
 }
 
