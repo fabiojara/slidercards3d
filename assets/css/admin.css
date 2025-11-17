@@ -399,15 +399,19 @@
     border-color: var(--sc3d-primary);
 }
 
-.slidercards3d-page-card-checkbox svg {
+.slidercards3d-page-card-checkbox svg,
+.slidercards3d-page-card-checkbox img {
     width: 14px;
     height: 14px;
     color: white;
     opacity: 0;
     transition: opacity 0.2s ease;
+    display: block;
+    object-fit: contain;
 }
 
-.slidercards3d-page-card.selected .slidercards3d-page-card-checkbox svg {
+.slidercards3d-page-card.selected .slidercards3d-page-card-checkbox svg,
+.slidercards3d-page-card.selected .slidercards3d-page-card-checkbox img {
     opacity: 1;
 }
 
