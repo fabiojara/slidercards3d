@@ -2,8 +2,8 @@
 
 ## Estado Actual del Proyecto
 
-**Versión**: 1.5.0  
-**Última Actualización**: 2024-12-XX  
+**Versión**: 1.5.0
+**Última Actualización**: 2024-12-XX
 **Estado**: Funcional y estable
 
 ## 📋 Resumen de Funcionalidades Implementadas

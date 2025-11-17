@@ -14,13 +14,13 @@
 
         init: function() {
             this.bindEvents();
-            
+
             // Restaurar pestaña activa desde localStorage
             const savedTab = localStorage.getItem('slidercards3d_active_tab');
-            const initialTab = savedTab && ['images', 'pages', 'settings', 'usage', 'info'].includes(savedTab) 
-                ? savedTab 
+            const initialTab = savedTab && ['images', 'pages', 'settings', 'usage', 'info'].includes(savedTab)
+                ? savedTab
                 : 'images';
-            
+
             this.currentTab = initialTab;
             this.switchTab(initialTab);
         },

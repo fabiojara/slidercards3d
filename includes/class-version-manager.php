@@ -85,17 +85,37 @@ class SliderCards3D_Version_Manager {
      * Actualizar changelog
      */
     private function update_changelog($old_version, $new_version) {
-        $changelog_content = '';
-
-        if (file_exists($this->changelog_file)) {
-            $changelog_content = file_get_contents($this->changelog_file);
+        if (!file_exists($this->changelog_file)) {
+            // Si no existe el archivo, crear uno básico
+            $content = "# Changelog\n\n";
+            $content .= "## [{$new_version}] - " . date('Y-m-d') . "\n\n";
+            $content .= "### Cambios\n";
+            $content .= "- Actualización de versión de {$old_version} a {$new_version}\n";
+            $content .= "- Mejoras y correcciones generales\n\n";
+            file_put_contents($this->changelog_file, $content);
+            return;
         }
 
-        $entry = "\n## [{$new_version}] - " . date('Y-m-d') . "\n\n";
+        $changelog_content = file_get_contents($this->changelog_file);
+        
+        // Verificar si ya existe una entrada para esta versión
+        $version_pattern = '/##\s*\[?' . preg_quote($new_version, '/') . '\]?/i';
+        if (preg_match($version_pattern, $changelog_content)) {
+            // Ya existe una entrada para esta versión, no agregar otra
+            return;
+        }
+
+        // Limpiar múltiples encabezados "# Changelog"
+        $changelog_content = preg_replace('/^#\s*Changelog\s*$/mi', '', $changelog_content);
+        $changelog_content = trim($changelog_content);
+
+        // Crear nueva entrada
+        $entry = "## [{$new_version}] - " . date('Y-m-d') . "\n\n";
         $entry .= "### Cambios\n";
         $entry .= "- Actualización de versión de {$old_version} a {$new_version}\n";
         $entry .= "- Mejoras y correcciones generales\n\n";
 
+        // Agregar al inicio del contenido existente
         $new_content = "# Changelog\n\n" . $entry . $changelog_content;
 
         file_put_contents($this->changelog_file, $new_content);
