@@ -339,7 +339,7 @@
             card.addEventListener('click', () => {
                 // Solo abrir lightbox si es la imagen activa (centro)
                 const isActive = index === this.currentIndex;
-                
+
                 if (item.type === 'page' && item.link) {
                     // Para páginas, mantener el comportamiento de navegación
                     window.location.href = item.link;
@@ -634,7 +634,7 @@
             this.handleSwipe = () => {
                 const swipeThreshold = 50;
                 const diff = touchStartX - touchEndX;
-                
+
                 if (Math.abs(diff) > swipeThreshold) {
                     if (diff > 0) {
                         this.next();
@@ -644,50 +644,47 @@
                 }
             };
         },
-        
+
         openLightbox: function(item) {
             // Crear overlay del lightbox
             const overlay = document.createElement('div');
             overlay.className = 'slidercards3d-lightbox';
             overlay.id = 'slidercards3d-lightbox';
-            
+
             // Crear contenedor de la imagen
             const container = document.createElement('div');
             container.className = 'slidercards3d-lightbox-container';
-            
+
             // Crear botón de cerrar
             const closeBtn = document.createElement('button');
             closeBtn.className = 'slidercards3d-lightbox-close';
             closeBtn.setAttribute('aria-label', 'Cerrar');
             closeBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
             closeBtn.addEventListener('click', () => this.closeLightbox());
-            
+
             // Crear imagen
             const img = document.createElement('img');
             img.src = item.fullUrl || item.url;
             img.alt = item.title || 'Imagen ampliada';
             img.className = 'slidercards3d-lightbox-image';
             
-            // Crear título si existe
-            if (item.title) {
-                const title = document.createElement('div');
-                title.className = 'slidercards3d-lightbox-title';
-                title.textContent = item.title;
-                container.appendChild(title);
-            }
+            // Crear contenedor de imagen con botón sobre ella
+            const imageWrapper = document.createElement('div');
+            imageWrapper.className = 'slidercards3d-lightbox-image-wrapper';
+            imageWrapper.appendChild(img);
+            imageWrapper.appendChild(closeBtn);
             
-            container.appendChild(closeBtn);
-            container.appendChild(img);
+            container.appendChild(imageWrapper);
             overlay.appendChild(container);
-            
+
             // Agregar al body
             document.body.appendChild(overlay);
-            
+
             // Animar entrada
             setTimeout(() => {
                 overlay.classList.add('active');
             }, 10);
-            
+
             // Cerrar con ESC
             const escHandler = (e) => {
                 if (e.key === 'Escape') {
@@ -696,20 +693,20 @@
                 }
             };
             document.addEventListener('keydown', escHandler);
-            
+
             // Cerrar al hacer clic fuera de la imagen
             overlay.addEventListener('click', (e) => {
                 if (e.target === overlay) {
                     this.closeLightbox();
                 }
             });
-            
+
             // Prevenir que el clic en la imagen cierre el lightbox
             container.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
         },
-        
+
         closeLightbox: function() {
             const lightbox = document.getElementById('slidercards3d-lightbox');
             if (lightbox) {

@@ -236,18 +236,25 @@
     max-width: 90vw;
     max-height: 90vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
+}
+
+.slidercards3d-lightbox-image-wrapper {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    max-height: 90vh;
 }
 
 .slidercards3d-lightbox-image {
     max-width: 100%;
-    max-height: 85vh;
+    max-height: 90vh;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     animation: lightboxZoomIn 0.3s ease;
+    display: block;
 }
 
 @keyframes lightboxZoomIn {
@@ -261,27 +268,15 @@
     }
 }
 
-.slidercards3d-lightbox-title {
-    color: white;
-    font-size: 1.25rem;
-    font-weight: 600;
-    text-align: center;
-    padding: 0 2rem;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .slidercards3d-lightbox-close {
     position: absolute;
-    top: -50px;
-    right: 0;
-    width: 44px;
-    height: 44px;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.6);
     color: white;
     cursor: pointer;
     display: flex;
@@ -289,11 +284,12 @@
     justify-content: center;
     transition: all 0.2s ease;
     backdrop-filter: blur(10px);
+    z-index: 10;
 }
 
 .slidercards3d-lightbox-close:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.6);
     transform: scale(1.1);
 }
 
@@ -316,19 +312,24 @@
         max-width: 95vw;
     }
     
+    .slidercards3d-lightbox-image-wrapper {
+        max-height: 85vh;
+    }
+    
     .slidercards3d-lightbox-image {
-        max-height: 80vh;
+        max-height: 85vh;
     }
     
     .slidercards3d-lightbox-close {
-        top: -40px;
-        width: 40px;
-        height: 40px;
+        top: 8px;
+        right: 8px;
+        width: 36px;
+        height: 36px;
     }
     
-    .slidercards3d-lightbox-title {
-        font-size: 1rem;
-        padding: 0 1rem;
+    .slidercards3d-lightbox-close svg {
+        width: 18px;
+        height: 18px;
     }
 }
 
