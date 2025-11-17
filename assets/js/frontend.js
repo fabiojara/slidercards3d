@@ -31,6 +31,9 @@
         }
 
         init() {
+            // Mostrar skeleton mientras carga
+            this.showLoading();
+            
             // Cargar configuración primero
             this.loadSettings().then(() => {
                 this.loadItems();
