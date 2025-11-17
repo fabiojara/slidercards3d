@@ -63,9 +63,9 @@
     <div class="container">
         <h1>Convertir Iconos SVG a PNG</h1>
         <p>Haz clic en cada icono para descargarlo como PNG</p>
-        
+
         <div id="icons-container"></div>
-        
+
         <div class="instructions">
             <h3>Instrucciones:</h3>
             <ol>
@@ -93,7 +93,7 @@
         icons.forEach(icon => {
             const item = document.createElement('div');
             item.className = 'icon-item';
-            
+
             const preview = document.createElement('div');
             preview.className = 'icon-preview';
             const img = document.createElement('img');
@@ -101,18 +101,18 @@
             img.width = icon.size;
             img.height = icon.size;
             preview.appendChild(img);
-            
+
             const info = document.createElement('div');
             info.style.flex = '1';
             info.innerHTML = `
                 <strong>${icon.name}.png</strong><br>
                 <small>Tamaño: ${icon.size}x${icon.size}px</small>
             `;
-            
+
             const downloadBtn = document.createElement('button');
             downloadBtn.textContent = 'Descargar PNG';
             downloadBtn.onclick = () => downloadAsPNG(icon.name, icon.size);
-            
+
             item.appendChild(preview);
             item.appendChild(info);
             item.appendChild(downloadBtn);
@@ -122,7 +122,7 @@
         function downloadAsPNG(iconName, size) {
             // Crear canvas para convertir SVG a PNG
             const svgUrl = `https://api.iconify.design/lucide/${iconName}.svg?width=${size}&height=${size}`;
-            
+
             fetch(svgUrl)
                 .then(response => response.text())
                 .then(svg => {
@@ -130,7 +130,7 @@
                     const ctx = canvas.getContext('2d');
                     canvas.width = size;
                     canvas.height = size;
-                    
+
                     const img = new Image();
                     img.onload = () => {
                         ctx.drawImage(img, 0, 0);
