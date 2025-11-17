@@ -308,18 +308,30 @@
                 const link = document.createElement('a');
                 link.href = item.link;
                 link.className = 'slidercards3d-card-link';
-                link.textContent = 'Ver página';
-                const linkIcon = document.createElement('img');
-                linkIcon.src = slidercards3dData.pluginUrl + 'assets/icons/arrow-top-right-on-square.svg';
-                linkIcon.width = 16;
-                linkIcon.height = 16;
-                linkIcon.alt = '';
-                linkIcon.className = 'slidercards3d-icon-inline';
-                linkIcon.onerror = function() {
-                    this.src = 'https://api.iconify.design/heroicons-outline/arrow-top-right-on-square.svg?width=16&height=16';
-                };
                 link.textContent = 'Ver página ';
-                link.appendChild(linkIcon);
+                
+                // Cargar icono SVG de forma asíncrona
+                this.loadIconSVG('arrow-top-right-on-square', 16, 'slidercards3d-icon-inline')
+                    .then(iconElement => {
+                        link.appendChild(iconElement);
+                    })
+                    .catch(() => {
+                        // Si falla la carga asíncrona, usar método síncrono simple
+                        const img = document.createElement('img');
+                        img.src = slidercards3dData.pluginUrl + 'assets/icons/arrow-top-right-on-square.svg';
+                        img.width = 16;
+                        img.height = 16;
+                        img.alt = '';
+                        img.className = 'slidercards3d-icon-inline';
+                        img.style.display = 'inline-block';
+                        img.style.verticalAlign = 'middle';
+                        img.onerror = function() {
+                            this.onerror = null;
+                            this.src = 'https://api.iconify.design/heroicons-outline/arrow-top-right-on-square.svg?width=16&height=16&color=%23000000';
+                        };
+                        link.appendChild(img);
+                    });
+                
                 overlay.appendChild(link);
 
                 card.appendChild(overlay);
@@ -645,6 +657,63 @@
                     lightbox.remove();
                 }, 300);
             }
+        }
+
+        /**
+         * Cargar icono SVG con fallback robusto
+         */
+        loadIconSVG(iconName, size, className = '') {
+            const iconUrl = slidercards3dData.pluginUrl + `assets/icons/${iconName}.svg`;
+            const fallbackUrl = `https://api.iconify.design/heroicons-outline/${iconName}.svg?width=${size}&height=${size}`;
+            
+            // Intentar cargar SVG local primero
+            return fetch(iconUrl)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error('Local SVG not found');
+                })
+                .then(svgContent => {
+                    // Crear elemento SVG inline
+                    const svgWrapper = document.createElement('span');
+                    svgWrapper.className = className;
+                    svgWrapper.style.display = 'inline-block';
+                    svgWrapper.style.width = `${size}px`;
+                    svgWrapper.style.height = `${size}px`;
+                    svgWrapper.style.verticalAlign = 'middle';
+                    
+                    // Limpiar y preparar SVG
+                    let cleanSvg = svgContent.trim();
+                    cleanSvg = cleanSvg.replace(/<\?xml[^>]*\?>/i, '');
+                    
+                    // Asegurar viewBox
+                    if (!cleanSvg.includes('viewBox') && cleanSvg.includes('<svg')) {
+                        cleanSvg = cleanSvg.replace(/<svg([^>]*)>/i, '<svg$1 viewBox="0 0 24 24">');
+                    }
+                    
+                    // Agregar atributos de tamaño
+                    cleanSvg = cleanSvg.replace(/<svg([^>]*)>/i, `<svg$1 width="${size}" height="${size}" style="display:block;width:100%;height:100%">`);
+                    
+                    svgWrapper.innerHTML = cleanSvg;
+                    return svgWrapper;
+                })
+                .catch(() => {
+                    // Fallback a imagen con URL remota
+                    const img = document.createElement('img');
+                    img.src = fallbackUrl;
+                    img.width = size;
+                    img.height = size;
+                    img.alt = '';
+                    img.className = className;
+                    img.style.display = 'inline-block';
+                    img.style.verticalAlign = 'middle';
+                    img.onerror = function() {
+                        // Si falla, intentar con otro formato
+                        this.src = `https://api.iconify.design/heroicons-outline/${iconName}.svg?color=%23000000&width=${size}&height=${size}`;
+                    };
+                    return img;
+                });
         }
     }
 

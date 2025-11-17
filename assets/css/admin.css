@@ -115,6 +115,22 @@
     height: 20px;
     display: inline-block;
     vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.slidercards3d-tab-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+.slidercards3d-tab-icon img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
 }
 
 /* Content */
@@ -286,6 +302,14 @@
     width: 16px;
     height: 16px;
     opacity: 0;
+    display: block;
+    object-fit: contain;
+}
+
+.slidercards3d-check-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
     transition: opacity 0.2s ease;
     filter: brightness(0) invert(1); /* Hacer el icono blanco */
 }

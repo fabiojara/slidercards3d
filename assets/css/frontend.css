@@ -140,10 +140,36 @@
     display: block;
 }
 
+.slidercards3d-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.slidercards3d-icon img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+}
+
 .slidercards3d-icon-inline {
     display: inline-block;
     vertical-align: middle;
     margin-left: 0.25rem;
+}
+
+.slidercards3d-icon-inline svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.slidercards3d-icon-inline img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
 }
 
 /* Indicadores */

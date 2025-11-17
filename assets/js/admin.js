@@ -159,7 +159,7 @@
                             <p class="slidercards3d-image-card-title">${this.escapeHtml(image.title)}</p>
                         </div>
                         <div class="slidercards3d-image-card-checkbox">
-                            <img src="${slidercards3dAdmin.pluginUrl}assets/icons/check.svg" width="16" height="16" alt="" class="slidercards3d-check-icon" onerror="this.src='https://api.iconify.design/heroicons-outline/check.svg?width=16&height=16'">
+                            <img src="${slidercards3dAdmin.pluginUrl}assets/icons/check.svg" width="16" height="16" alt="" class="slidercards3d-check-icon" onerror="this.onerror=null; this.src='https://api.iconify.design/heroicons-outline/check.svg?width=16&height=16&color=%23000000'">
                         </div>
                     </div>
                 `;
@@ -196,7 +196,7 @@
                             <h3 class="slidercards3d-page-card-title">
                                 ${this.escapeHtml(page.title)}
                                 <div class="slidercards3d-page-card-checkbox">
-                                    <img src="${slidercards3dAdmin.pluginUrl}assets/icons/check.png" width="14" height="14" alt="" class="slidercards3d-check-icon" onerror="this.style.display='none'">
+                                    <img src="${slidercards3dAdmin.pluginUrl}assets/icons/check.svg" width="14" height="14" alt="" class="slidercards3d-check-icon" onerror="this.onerror=null; this.src='https://api.iconify.design/heroicons-outline/check.svg?width=14&height=14&color=%23000000'">
                                 </div>
                             </h3>
                         </div>
