@@ -8,12 +8,12 @@ if (!defined('ABSPATH')) {
 }
 
 class SliderCards3D_Admin {
-    
+
     public function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
     }
-    
+
     /**
      * Agregar menú de administración
      */
@@ -28,7 +28,7 @@ class SliderCards3D_Admin {
             30
         );
     }
-    
+
     /**
      * Cargar assets del admin
      */
@@ -36,7 +36,7 @@ class SliderCards3D_Admin {
         if ($hook !== 'toplevel_page_slidercards3d') {
             return;
         }
-        
+
         // CSS
         wp_enqueue_style(
             'slidercards3d-admin',
@@ -44,7 +44,7 @@ class SliderCards3D_Admin {
             array(),
             SLIDERCARDS3D_VERSION
         );
-        
+
         // JavaScript
         wp_enqueue_script(
             'slidercards3d-admin',
@@ -53,7 +53,7 @@ class SliderCards3D_Admin {
             SLIDERCARDS3D_VERSION,
             true
         );
-        
+
         // Localizar script
         wp_localize_script('slidercards3d-admin', 'slidercards3dAdmin', array(
             'apiUrl' => rest_url('slidercards3d/v1/'),
@@ -69,7 +69,7 @@ class SliderCards3D_Admin {
             )
         ));
     }
-    
+
     /**
      * Renderizar página de administración
      */
@@ -88,7 +88,7 @@ class SliderCards3D_Admin {
                     <span class="slidercards3d-version">v<?php echo SLIDERCARDS3D_VERSION; ?></span>
                 </div>
             </div>
-            
+
             <div class="slidercards3d-tabs">
                 <button class="slidercards3d-tab active" data-tab="images">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -109,7 +109,7 @@ class SliderCards3D_Admin {
                     Páginas
                 </button>
             </div>
-            
+
             <div class="slidercards3d-content">
                 <!-- Pestaña Imágenes -->
                 <div class="slidercards3d-tab-content active" id="tab-images">
@@ -130,7 +130,7 @@ class SliderCards3D_Admin {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Pestaña Páginas -->
                 <div class="slidercards3d-tab-content" id="tab-pages">
                     <div class="slidercards3d-toolbar">

@@ -8,16 +8,27 @@ if (!defined('ABSPATH')) {
 }
 
 class SliderCards3D_Frontend {
-    
+
     public function __construct() {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_assets'));
         add_shortcode('slidercards3d', array($this, 'render_slider'));
     }
-    
+
     /**
      * Cargar assets del frontend
      */
     public function enqueue_assets() {
+        // Solo cargar si hay un shortcode en la página
+        global $post;
+        if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'slidercards3d')) {
+            $this->load_assets();
+        }
+    }
+    
+    /**
+     * Cargar assets
+     */
+    private function load_assets() {
         // CSS
         wp_enqueue_style(
             'slidercards3d-frontend',
@@ -41,11 +52,14 @@ class SliderCards3D_Frontend {
             'nonce' => wp_create_nonce('wp_rest')
         ));
     }
-    
+
     /**
      * Renderizar slider mediante shortcode
      */
     public function render_slider($atts) {
+        // Asegurar que los assets estén cargados
+        $this->load_assets();
+        
         $atts = shortcode_atts(array(
             'type' => 'all' // 'images', 'pages', 'all'
         ), $atts);

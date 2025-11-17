@@ -441,30 +441,30 @@
         align-items: flex-start;
         gap: 1rem;
     }
-    
+
     .slidercards3d-tabs {
         padding: 0 1rem;
         overflow-x: auto;
     }
-    
+
     .slidercards3d-content {
         padding: 1.5rem 1rem;
     }
-    
+
     .slidercards3d-toolbar {
         flex-direction: column;
         align-items: stretch;
     }
-    
+
     .slidercards3d-search {
         max-width: 100%;
     }
-    
+
     .slidercards3d-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 1rem;
     }
-    
+
     .slidercards3d-grid-cards {
         grid-template-columns: 1fr;
     }

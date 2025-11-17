@@ -27,7 +27,7 @@ Un plugin de WordPress moderno que crea un slider 3D interactivo con imágenes y
 
 ### Panel de Administración
 
-1. **Pestaña Imágenes**: 
+1. **Pestaña Imágenes**:
    - Visualiza todas las imágenes de tu biblioteca de medios
    - Selecciona las imágenes que quieres incluir en el slider
    - Haz clic en "Guardar selección"

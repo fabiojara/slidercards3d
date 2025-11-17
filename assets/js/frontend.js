@@ -5,33 +5,33 @@
 
 (function() {
     'use strict';
-    
+
     const SliderCards3D = {
         items: [],
         currentIndex: 0,
         isAnimating: false,
         type: 'all',
-        
+
         init: function() {
             const container = document.querySelector('.slidercards3d-container');
             if (!container) return;
-            
+
             this.type = container.dataset.type || 'all';
             this.loadItems();
             this.bindEvents();
         },
-        
+
         loadItems: function() {
             const promises = [];
-            
+
             if (this.type === 'all' || this.type === 'images') {
                 promises.push(this.loadImages());
             }
-            
+
             if (this.type === 'all' || this.type === 'pages') {
                 promises.push(this.loadPages());
             }
-            
+
             Promise.all(promises).then(() => {
                 if (this.items.length > 0) {
                     this.render();
@@ -40,7 +40,7 @@
                 }
             });
         },
-        
+
         loadImages: function() {
             return fetch(slidercards3dData.apiUrl + 'selection?type=image')
                 .then(response => response.json())
@@ -63,7 +63,7 @@
                 })
                 .catch(() => []);
         },
-        
+
         loadPages: function() {
             return fetch(slidercards3dData.apiUrl + 'selection?type=page')
                 .then(response => response.json())
@@ -87,7 +87,7 @@
                 })
                 .catch(() => []);
         },
-        
+
         getImageData: function(id) {
             return fetch(`/wp-json/wp/v2/media/${id}`)
                 .then(response => response.json())
@@ -98,14 +98,14 @@
                     title: data.title.rendered || 'Sin título'
                 }));
         },
-        
+
         getPageData: function(id) {
             return fetch(`/wp-json/wp/v2/pages/${id}`)
                 .then(response => response.json())
                 .then(data => {
                     const thumbnailId = data.featured_media;
                     let thumbnail = '';
-                    
+
                     if (thumbnailId) {
                         return fetch(`/wp-json/wp/v2/media/${thumbnailId}`)
                             .then(response => response.json())
@@ -116,7 +116,7 @@
                                 url: data.link
                             }));
                     }
-                    
+
                     return {
                         id: data.id,
                         thumbnail: '',
@@ -125,111 +125,111 @@
                     };
                 });
         },
-        
+
         render: function() {
             const slider = document.getElementById('slidercards3d-slider');
             if (!slider) return;
-            
+
             slider.innerHTML = '';
-            
+
             // Crear cards
             this.items.forEach((item, index) => {
                 const card = this.createCard(item, index);
                 slider.appendChild(card);
             });
-            
+
             // Crear controles si no existen
             if (!document.querySelector('.slidercards3d-controls')) {
                 this.createControls();
             }
-            
+
             // Crear indicadores
             this.createIndicators();
-            
+
             // Posicionar cards
             this.updateCards();
         },
-        
+
         createCard: function(item, index) {
             const card = document.createElement('div');
             card.className = 'slidercards3d-card';
             card.dataset.index = index;
-            
+
             const img = document.createElement('img');
             img.src = item.url;
             img.alt = item.title;
             img.loading = 'lazy';
             card.appendChild(img);
-            
+
             if (item.type === 'page' && item.link) {
                 const overlay = document.createElement('div');
                 overlay.className = 'slidercards3d-card-overlay';
-                
+
                 const title = document.createElement('h3');
                 title.className = 'slidercards3d-card-title';
                 title.textContent = item.title;
                 overlay.appendChild(title);
-                
+
                 const link = document.createElement('a');
                 link.href = item.link;
                 link.className = 'slidercards3d-card-link';
                 link.textContent = 'Ver página';
                 link.innerHTML = 'Ver página <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"></path></svg>';
                 overlay.appendChild(link);
-                
+
                 card.appendChild(overlay);
             }
-            
+
             card.addEventListener('click', () => {
                 if (item.type === 'page' && item.link) {
                     window.location.href = item.link;
                 }
             });
-            
+
             return card;
         },
-        
+
         createControls: function() {
             const container = document.querySelector('.slidercards3d-wrapper');
             if (!container) return;
-            
+
             let controls = container.querySelector('.slidercards3d-controls');
             if (!controls) {
                 controls = document.createElement('div');
                 controls.className = 'slidercards3d-controls';
-                
+
                 const prevBtn = document.createElement('button');
                 prevBtn.className = 'slidercards3d-btn-prev';
                 prevBtn.setAttribute('aria-label', 'Anterior');
                 prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>';
                 prevBtn.addEventListener('click', () => this.prev());
-                
+
                 const nextBtn = document.createElement('button');
                 nextBtn.className = 'slidercards3d-btn-next';
                 nextBtn.setAttribute('aria-label', 'Siguiente');
                 nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>';
                 nextBtn.addEventListener('click', () => this.next());
-                
+
                 controls.appendChild(prevBtn);
                 controls.appendChild(nextBtn);
                 container.appendChild(controls);
             }
         },
-        
+
         createIndicators: function() {
             const container = document.querySelector('.slidercards3d-wrapper');
             if (!container) return;
-            
+
             let indicators = container.querySelector('.slidercards3d-indicators');
             if (indicators) {
                 indicators.remove();
             }
-            
+
             if (this.items.length <= 1) return;
-            
+
             indicators = document.createElement('div');
             indicators.className = 'slidercards3d-indicators';
-            
+
             this.items.forEach((item, index) => {
                 const indicator = document.createElement('div');
                 indicator.className = 'slidercards3d-indicator';
@@ -241,27 +241,27 @@
                 });
                 indicators.appendChild(indicator);
             });
-            
+
             container.appendChild(indicators);
         },
-        
+
         updateCards: function() {
             const cards = document.querySelectorAll('.slidercards3d-card');
             const total = cards.length;
-            
+
             if (total === 0) return;
-            
+
             cards.forEach((card, index) => {
                 const offset = index - this.currentIndex;
                 const absOffset = Math.abs(offset);
-                
+
                 // Calcular transformación 3D
                 let translateZ = -absOffset * 100;
                 let translateX = offset * 50;
                 let rotateY = offset * 15;
                 let opacity = 1;
                 let scale = 1;
-                
+
                 if (absOffset > 3) {
                     opacity = 0;
                     scale = 0.8;
@@ -269,28 +269,28 @@
                     opacity = 1 - (absOffset * 0.2);
                     scale = 1 - (absOffset * 0.05);
                 }
-                
+
                 // Aplicar transformación
                 card.style.transform = `
-                    translateX(${translateX}px) 
-                    translateZ(${translateZ}px) 
+                    translateX(${translateX}px)
+                    translateZ(${translateZ}px)
                     rotateY(${rotateY}deg)
                     scale(${scale})
                 `;
                 card.style.opacity = opacity;
                 card.style.zIndex = total - absOffset;
             });
-            
+
             // Actualizar indicadores
             const indicatorElements = document.querySelectorAll('.slidercards3d-indicator');
             indicatorElements.forEach((indicator, index) => {
                 indicator.classList.toggle('active', index === this.currentIndex);
             });
-            
+
             // Actualizar botones
             const prevBtn = document.querySelector('.slidercards3d-btn-prev');
             const nextBtn = document.querySelector('.slidercards3d-btn-next');
-            
+
             if (prevBtn) {
                 prevBtn.disabled = this.currentIndex === 0;
             }
@@ -298,7 +298,7 @@
                 nextBtn.disabled = this.currentIndex === total - 1;
             }
         },
-        
+
         next: function() {
             if (this.isAnimating) return;
             if (this.currentIndex < this.items.length - 1) {
@@ -310,7 +310,7 @@
                 }, 500);
             }
         },
-        
+
         prev: function() {
             if (this.isAnimating) return;
             if (this.currentIndex > 0) {
@@ -322,7 +322,7 @@
                 }, 500);
             }
         },
-        
+
         goTo: function(index) {
             if (this.isAnimating) return;
             if (index >= 0 && index < this.items.length && index !== this.currentIndex) {
@@ -334,7 +334,7 @@
                 }, 500);
             }
         },
-        
+
         showEmpty: function() {
             const slider = document.getElementById('slidercards3d-slider');
             if (slider) {
@@ -347,13 +347,13 @@
                 `;
             }
         },
-        
+
         bindEvents: function() {
             // Navegación con teclado
             document.addEventListener('keydown', (e) => {
                 const container = document.querySelector('.slidercards3d-container');
                 if (!container) return;
-                
+
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
                     this.prev();
@@ -362,27 +362,27 @@
                     this.next();
                 }
             });
-            
+
             // Touch events para móviles
             let touchStartX = 0;
             let touchEndX = 0;
-            
+
             const container = document.querySelector('.slidercards3d-container');
             if (container) {
                 container.addEventListener('touchstart', (e) => {
                     touchStartX = e.changedTouches[0].screenX;
                 });
-                
+
                 container.addEventListener('touchend', (e) => {
                     touchEndX = e.changedTouches[0].screenX;
                     this.handleSwipe();
                 });
             }
-            
+
             this.handleSwipe = () => {
                 const swipeThreshold = 50;
                 const diff = touchStartX - touchEndX;
-                
+
                 if (Math.abs(diff) > swipeThreshold) {
                     if (diff > 0) {
                         this.next();
@@ -393,7 +393,7 @@
             };
         }
     };
-    
+
     // Inicializar cuando el DOM esté listo
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
@@ -402,6 +402,6 @@
     } else {
         SliderCards3D.init();
     }
-    
+
 })();
 

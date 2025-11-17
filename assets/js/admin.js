@@ -4,60 +4,60 @@
 
 (function($) {
     'use strict';
-    
+
     const SliderCards3DAdmin = {
         currentTab: 'images',
         images: [],
         pages: [],
         selectedImages: new Set(),
         selectedPages: new Set(),
-        
+
         init: function() {
             this.bindEvents();
             this.loadTabContent('images');
         },
-        
+
         bindEvents: function() {
             // Cambio de pestañas
             $('.slidercards3d-tab').on('click', (e) => {
                 const tab = $(e.currentTarget).data('tab');
                 this.switchTab(tab);
             });
-            
+
             // Búsqueda
             $('#image-search').on('input', this.debounce(() => {
                 this.filterImages();
             }, 300));
-            
+
             $('#page-search').on('input', this.debounce(() => {
                 this.filterPages();
             }, 300));
-            
+
             // Guardar selecciones
             $('#save-images').on('click', () => {
                 this.saveSelection('image');
             });
-            
+
             $('#save-pages').on('click', () => {
                 this.saveSelection('page');
             });
         },
-        
+
         switchTab: function(tab) {
             this.currentTab = tab;
-            
+
             // Actualizar UI de pestañas
             $('.slidercards3d-tab').removeClass('active');
             $(`.slidercards3d-tab[data-tab="${tab}"]`).addClass('active');
-            
+
             // Actualizar contenido
             $('.slidercards3d-tab-content').removeClass('active');
             $(`#tab-${tab}`).addClass('active');
-            
+
             // Cargar contenido
             this.loadTabContent(tab);
         },
-        
+
         loadTabContent: function(tab) {
             if (tab === 'images') {
                 this.loadImages();
@@ -65,11 +65,11 @@
                 this.loadPages();
             }
         },
-        
+
         loadImages: function() {
             const $grid = $('#images-grid');
             $grid.html('<div class="slidercards3d-loading"><div class="slidercards3d-spinner"></div><p>Cargando imágenes...</p></div>');
-            
+
             $.ajax({
                 url: slidercards3dAdmin.apiUrl + 'images',
                 method: 'GET',
@@ -88,11 +88,11 @@
                 }
             });
         },
-        
+
         loadPages: function() {
             const $grid = $('#pages-grid');
             $grid.html('<div class="slidercards3d-loading"><div class="slidercards3d-spinner"></div><p>Cargando páginas...</p></div>');
-            
+
             $.ajax({
                 url: slidercards3dAdmin.apiUrl + 'pages',
                 method: 'GET',
@@ -111,15 +111,15 @@
                 }
             });
         },
-        
+
         renderImages: function() {
             const $grid = $('#images-grid');
-            
+
             if (this.images.length === 0) {
                 $grid.html('<div class="slidercards3d-empty"><div class="slidercards3d-empty-icon">📷</div><div class="slidercards3d-empty-title">No hay imágenes</div><div class="slidercards3d-empty-text">Sube imágenes a la biblioteca de medios para comenzar</div></div>');
                 return;
             }
-            
+
             const html = this.images.map(image => {
                 const isSelected = this.selectedImages.has(image.id);
                 return `
@@ -136,9 +136,9 @@
                     </div>
                 `;
             }).join('');
-            
+
             $grid.html(html);
-            
+
             // Bind click events
             $('.slidercards3d-image-card').on('click', (e) => {
                 const $card = $(e.currentTarget);
@@ -146,19 +146,19 @@
                 this.toggleImageSelection(id);
             });
         },
-        
+
         renderPages: function() {
             const $grid = $('#pages-grid');
-            
+
             if (this.pages.length === 0) {
                 $grid.html('<div class="slidercards3d-empty"><div class="slidercards3d-empty-icon">📄</div><div class="slidercards3d-empty-title">No hay páginas</div><div class="slidercards3d-empty-text">Crea páginas en WordPress para comenzar</div></div>');
                 return;
             }
-            
+
             const html = this.pages.map(page => {
                 const isSelected = this.selectedPages.has(page.id);
                 const thumbnail = page.thumbnail || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f5f5f5" width="400" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3ESin imagen%3C/text%3E%3C/svg%3E';
-                
+
                 return `
                     <div class="slidercards3d-page-card ${isSelected ? 'selected' : ''}" data-id="${page.id}">
                         <div class="slidercards3d-page-card-image">
@@ -177,9 +177,9 @@
                     </div>
                 `;
             }).join('');
-            
+
             $grid.html(html);
-            
+
             // Bind click events
             $('.slidercards3d-page-card').on('click', (e) => {
                 const $card = $(e.currentTarget);
@@ -187,69 +187,69 @@
                 this.togglePageSelection(id);
             });
         },
-        
+
         toggleImageSelection: function(id) {
             if (this.selectedImages.has(id)) {
                 this.selectedImages.delete(id);
             } else {
                 this.selectedImages.add(id);
             }
-            
+
             $(`.slidercards3d-image-card[data-id="${id}"]`).toggleClass('selected');
         },
-        
+
         togglePageSelection: function(id) {
             if (this.selectedPages.has(id)) {
                 this.selectedPages.delete(id);
             } else {
                 this.selectedPages.add(id);
             }
-            
+
             $(`.slidercards3d-page-card[data-id="${id}"]`).toggleClass('selected');
         },
-        
+
         filterImages: function() {
             const search = $('#image-search').val().toLowerCase();
-            
+
             if (!search) {
                 $('.slidercards3d-image-card').show();
                 return;
             }
-            
+
             $('.slidercards3d-image-card').each(function() {
                 const $card = $(this);
                 const title = $card.find('.slidercards3d-image-card-title').text().toLowerCase();
                 $card.toggle(title.includes(search));
             });
         },
-        
+
         filterPages: function() {
             const search = $('#page-search').val().toLowerCase();
-            
+
             if (!search) {
                 $('.slidercards3d-page-card').show();
                 return;
             }
-            
+
             $('.slidercards3d-page-card').each(function() {
                 const $card = $(this);
                 const title = $card.find('.slidercards3d-page-card-title').text().toLowerCase();
                 $card.toggle(title.includes(search));
             });
         },
-        
+
         saveSelection: function(type) {
             const $btn = type === 'image' ? $('#save-images') : $('#save-pages');
             const originalText = $btn.text();
-            
+
             $btn.prop('disabled', true).text(slidercards3dAdmin.strings.saving);
-            
+
             const selected = type === 'image' ? this.selectedImages : this.selectedPages;
             const items = Array.from(selected).map(id => ({
                 id: id,
                 selected: true
             }));
-            
+
             $.ajax({
                 url: slidercards3dAdmin.apiUrl + 'selection',
                 method: 'POST',
@@ -275,13 +275,13 @@
                 }
             });
         },
-        
+
         escapeHtml: function(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         },
-        
+
         debounce: function(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -294,11 +294,11 @@
             };
         }
     };
-    
+
     // Inicializar cuando el DOM esté listo
     $(document).ready(() => {
         SliderCards3DAdmin.init();
     });
-    
+
 })(jQuery);
 

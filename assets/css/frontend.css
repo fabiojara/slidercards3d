@@ -213,18 +213,18 @@
     .slidercards3d-wrapper {
         height: 500px;
     }
-    
+
     .slidercards3d-card {
         width: 250px;
         height: 350px;
         margin-left: -125px;
         margin-top: -175px;
     }
-    
+
     .slidercards3d-controls {
         bottom: 1rem;
     }
-    
+
     .slidercards3d-btn-prev,
     .slidercards3d-btn-next {
         width: 40px;
@@ -236,7 +236,7 @@
     .slidercards3d-wrapper {
         height: 400px;
     }
-    
+
     .slidercards3d-card {
         width: 200px;
         height: 300px;
