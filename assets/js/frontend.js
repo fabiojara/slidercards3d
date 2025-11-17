@@ -24,17 +24,17 @@
         loadItems: function() {
             console.log('Iniciando carga de items, tipo:', this.type);
             console.log('API URL:', slidercards3dData.apiUrl);
-            
+
             const promises = [];
-            
+
             if (this.type === 'all' || this.type === 'images') {
                 promises.push(this.loadImages());
             }
-            
+
             if (this.type === 'all' || this.type === 'pages') {
                 promises.push(this.loadPages());
             }
-            
+
             Promise.all(promises).then(() => {
                 console.log('Items finales cargados:', this.items.length, this.items);
                 if (this.items.length > 0) {
@@ -121,8 +121,16 @@
 
         getImageData: function(id) {
             // Construir URL absoluta correctamente
-            const baseUrl = slidercards3dData.apiUrl.replace('/slidercards3d/v1/', '');
+            // La API URL es: http://localhost/variospluginswp/wp-json/slidercards3d/v1/
+            // Necesitamos: http://localhost/variospluginswp/wp-json/wp/v2/media/{id}
+            let baseUrl = slidercards3dData.apiUrl.replace('/slidercards3d/v1/', '');
+            // Asegurar que baseUrl termine con /wp-json/ (con barra final)
+            if (!baseUrl.endsWith('/')) {
+                baseUrl += '/';
+            }
             const mediaUrl = baseUrl + `wp/v2/media/${id}`;
+            
+            console.log('Obteniendo imagen:', id, 'URL:', mediaUrl);
             
             return fetch(mediaUrl)
                 .then(response => {
@@ -134,7 +142,7 @@
                 .then(data => {
                     const mediumUrl = data.media_details?.sizes?.medium?.source_url;
                     const fullUrl = data.source_url;
-                    
+
                     return {
                         id: data.id,
                         url: mediumUrl || fullUrl,
@@ -150,8 +158,14 @@
 
         getPageData: function(id) {
             // Construir URL absoluta correctamente
-            const baseUrl = slidercards3dData.apiUrl.replace('/slidercards3d/v1/', '');
+            let baseUrl = slidercards3dData.apiUrl.replace('/slidercards3d/v1/', '');
+            // Asegurar que baseUrl termine con /wp-json/ (con barra final)
+            if (!baseUrl.endsWith('/')) {
+                baseUrl += '/';
+            }
             const pageUrl = baseUrl + `wp/v2/pages/${id}`;
+            
+            console.log('Obteniendo página:', id, 'URL:', pageUrl);
             
             return fetch(pageUrl)
                 .then(response => {
