@@ -188,7 +188,7 @@
                             <h3 class="slidercards3d-page-card-title">
                                 ${this.escapeHtml(page.title)}
                                 <div class="slidercards3d-page-card-checkbox">
-                                    <img src="' + slidercards3dAdmin.pluginUrl + 'assets/icons/check.png" width="14" height="14" alt="" class="slidercards3d-check-icon">
+                                    <img src="${slidercards3dAdmin.pluginUrl}assets/icons/check.png" width="14" height="14" alt="" class="slidercards3d-check-icon" onerror="this.style.display='none'">
                                 </div>
                             </h3>
                         </div>

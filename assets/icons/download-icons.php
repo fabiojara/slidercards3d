@@ -1,10 +1,10 @@
 <?php
 /**
  * Script para descargar iconos PNG de Lucide
- * 
+ *
  * Ejecutar desde la línea de comandos:
  * php download-icons.php
- * 
+ *
  * O visitar desde el navegador (solo para desarrollo)
  */
 
@@ -29,15 +29,15 @@ foreach ($icons as $icon_name => $size) {
     // Usar un servicio que convierta SVG a PNG
     // Opción 1: Usar Iconify con conversión a PNG
     $svg_url = $base_url . $icon_name . '.svg?width=' . $size . '&height=' . $size;
-    
+
     // Descargar SVG primero
     $svg_content = @file_get_contents($svg_url);
-    
+
     if ($svg_content) {
         // Guardar SVG temporalmente
         $temp_svg = $save_dir . '/temp_' . $icon_name . '.svg';
         file_put_contents($temp_svg, $svg_content);
-        
+
         // Convertir SVG a PNG usando ImageMagick si está disponible
         if (extension_loaded('imagick')) {
             $imagick = new Imagick();

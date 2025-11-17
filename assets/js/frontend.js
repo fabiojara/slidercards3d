@@ -336,6 +336,10 @@
                 linkIcon.height = 16;
                 linkIcon.alt = '';
                 linkIcon.className = 'slidercards3d-icon-inline';
+                linkIcon.onerror = function() {
+                    // Fallback a SVG si PNG no existe
+                    this.src = 'https://api.iconify.design/lucide/external-link.svg?width=16&height=16';
+                };
                 link.textContent = 'Ver página ';
                 link.appendChild(linkIcon);
                 overlay.appendChild(link);
@@ -380,6 +384,10 @@
                 prevIcon.height = 24;
                 prevIcon.alt = 'Anterior';
                 prevIcon.className = 'slidercards3d-icon';
+                prevIcon.onerror = function() {
+                    // Fallback a SVG si PNG no existe
+                    this.src = 'https://api.iconify.design/lucide/chevron-left.svg?width=24&height=24';
+                };
                 prevBtn.appendChild(prevIcon);
                 prevBtn.addEventListener('click', () => this.prev());
 
@@ -392,6 +400,10 @@
                 nextIcon.height = 24;
                 nextIcon.alt = 'Siguiente';
                 nextIcon.className = 'slidercards3d-icon';
+                nextIcon.onerror = function() {
+                    // Fallback a SVG si PNG no existe
+                    this.src = 'https://api.iconify.design/lucide/chevron-right.svg?width=24&height=24';
+                };
                 nextBtn.appendChild(nextIcon);
                 nextBtn.addEventListener('click', () => this.next());
 
@@ -684,6 +696,10 @@
             closeIcon.height = 20;
             closeIcon.alt = 'Cerrar';
             closeIcon.className = 'slidercards3d-icon';
+            closeIcon.onerror = function() {
+                // Fallback a SVG si PNG no existe
+                this.src = 'https://api.iconify.design/lucide/x.svg?width=20&height=20';
+            };
             closeBtn.appendChild(closeIcon);
             closeBtn.addEventListener('click', () => this.closeLightbox());
 
