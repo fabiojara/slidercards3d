@@ -519,7 +519,7 @@
             const handleKeydown = (e) => {
                 // Solo procesar si el mouse está sobre este contenedor
                 if (!this.container.matches(':hover')) return;
-                
+
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
                     this.pauseAutoplay();

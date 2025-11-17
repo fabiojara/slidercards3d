@@ -118,6 +118,10 @@ class SliderCards3D_Admin {
                     <?php echo SliderCards3D_Icons::render_icon('document-text', 20, 'Modo de Uso', 'slidercards3d-tab-icon'); ?>
                     Modo de Uso
                 </button>
+                <button class="slidercards3d-tab" data-tab="info">
+                    <?php echo SliderCards3D_Icons::render_icon('information-circle', 20, 'Información', 'slidercards3d-tab-icon'); ?>
+                    Información
+                </button>
             </div>
 
             <div class="slidercards3d-content">
@@ -459,6 +463,128 @@ class SliderCards3D_Admin {
                                     <li>La navegación funciona con teclado (flechas), mouse (botones) y touch (deslizar) en móviles</li>
                                     <li>Puedes configurar la separación horizontal, autoplay y oscurecimiento desde la pestaña <strong>Configuración</strong></li>
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pestaña Información -->
+                <div class="slidercards3d-tab-content" id="tab-info">
+                    <div class="slidercards3d-info">
+                        <div class="slidercards3d-info-header">
+                            <h2 class="slidercards3d-info-title">ℹ️ Información del Plugin</h2>
+                            <p class="slidercards3d-info-description">Detalles de configuración y versión del plugin</p>
+                        </div>
+
+                        <div class="slidercards3d-info-content">
+                            <!-- Versión -->
+                            <div class="slidercards3d-info-section">
+                                <h3 class="slidercards3d-info-section-title">Versión del Plugin</h3>
+                                <div class="slidercards3d-info-item">
+                                    <span class="slidercards3d-info-label">Versión actual:</span>
+                                    <span class="slidercards3d-info-value"><?php echo esc_html(SLIDERCARDS3D_VERSION); ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Configuración Actual -->
+                            <div class="slidercards3d-info-section">
+                                <h3 class="slidercards3d-info-section-title">Configuración Actual</h3>
+                                
+                                <div class="slidercards3d-info-group">
+                                    <h4 class="slidercards3d-info-group-title">Separación Horizontal</h4>
+                                    <div class="slidercards3d-info-item">
+                                        <span class="slidercards3d-info-label">Desktop:</span>
+                                        <span class="slidercards3d-info-value"><?php echo esc_html($settings['separation_desktop']); ?> px</span>
+                                    </div>
+                                    <div class="slidercards3d-info-item">
+                                        <span class="slidercards3d-info-label">Tablet:</span>
+                                        <span class="slidercards3d-info-value"><?php echo esc_html($settings['separation_tablet']); ?> px</span>
+                                    </div>
+                                    <div class="slidercards3d-info-item">
+                                        <span class="slidercards3d-info-label">Móvil:</span>
+                                        <span class="slidercards3d-info-value"><?php echo esc_html($settings['separation_mobile']); ?> px</span>
+                                    </div>
+                                </div>
+
+                                <div class="slidercards3d-info-group">
+                                    <h4 class="slidercards3d-info-group-title">Reproducción Automática</h4>
+                                    <div class="slidercards3d-info-item">
+                                        <span class="slidercards3d-info-label">Estado:</span>
+                                        <span class="slidercards3d-info-value">
+                                            <?php echo $settings['autoplay'] ? '<span class="slidercards3d-info-badge slidercards3d-info-badge-success">Activo</span>' : '<span class="slidercards3d-info-badge slidercards3d-info-badge-inactive">Inactivo</span>'; ?>
+                                        </span>
+                                    </div>
+                                    <?php if ($settings['autoplay']) : ?>
+                                    <div class="slidercards3d-info-item">
+                                        <span class="slidercards3d-info-label">Intervalo:</span>
+                                        <span class="slidercards3d-info-value"><?php echo esc_html($settings['autoplay_interval']); ?> ms</span>
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="slidercards3d-info-group">
+                                    <h4 class="slidercards3d-info-group-title">Efectos Visuales</h4>
+                                    <div class="slidercards3d-info-item">
+                                        <span class="slidercards3d-info-label">Intensidad de oscurecimiento:</span>
+                                        <span class="slidercards3d-info-value"><?php echo esc_html($settings['darkness_intensity']); ?>%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Información del Sistema -->
+                            <div class="slidercards3d-info-section">
+                                <h3 class="slidercards3d-info-section-title">Información del Sistema</h3>
+                                
+                                <div class="slidercards3d-info-item">
+                                    <span class="slidercards3d-info-label">Versión de WordPress:</span>
+                                    <span class="slidercards3d-info-value"><?php echo esc_html(get_bloginfo('version')); ?></span>
+                                </div>
+                                <div class="slidercards3d-info-item">
+                                    <span class="slidercards3d-info-label">Versión de PHP:</span>
+                                    <span class="slidercards3d-info-value"><?php echo esc_html(PHP_VERSION); ?></span>
+                                </div>
+                                <div class="slidercards3d-info-item">
+                                    <span class="slidercards3d-info-label">Ruta del plugin:</span>
+                                    <span class="slidercards3d-info-value slidercards3d-info-path"><?php echo esc_html(SLIDERCARDS3D_PLUGIN_DIR); ?></span>
+                                </div>
+                                <div class="slidercards3d-info-item">
+                                    <span class="slidercards3d-info-label">URL del plugin:</span>
+                                    <span class="slidercards3d-info-value slidercards3d-info-path"><?php echo esc_url(SLIDERCARDS3D_PLUGIN_URL); ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Estadísticas -->
+                            <div class="slidercards3d-info-section">
+                                <h3 class="slidercards3d-info-section-title">Estadísticas</h3>
+                                
+                                <?php
+                                // Obtener selecciones guardadas
+                                global $wpdb;
+                                $table_name = $wpdb->prefix . 'slidercards3d_selections';
+                                
+                                $images_count = $wpdb->get_var($wpdb->prepare(
+                                    "SELECT COUNT(*) FROM $table_name WHERE type = %s AND selected = 1",
+                                    'image'
+                                ));
+                                
+                                $pages_count = $wpdb->get_var($wpdb->prepare(
+                                    "SELECT COUNT(*) FROM $table_name WHERE type = %s AND selected = 1",
+                                    'page'
+                                ));
+                                ?>
+                                
+                                <div class="slidercards3d-info-item">
+                                    <span class="slidercards3d-info-label">Imágenes seleccionadas:</span>
+                                    <span class="slidercards3d-info-value"><?php echo esc_html($images_count ? $images_count : 0); ?></span>
+                                </div>
+                                <div class="slidercards3d-info-item">
+                                    <span class="slidercards3d-info-label">Páginas seleccionadas:</span>
+                                    <span class="slidercards3d-info-value"><?php echo esc_html($pages_count ? $pages_count : 0); ?></span>
+                                </div>
+                                <div class="slidercards3d-info-item">
+                                    <span class="slidercards3d-info-label">Total de elementos:</span>
+                                    <span class="slidercards3d-info-value"><?php echo esc_html(($images_count ? $images_count : 0) + ($pages_count ? $pages_count : 0)); ?></span>
+                                </div>
                             </div>
                         </div>
                     </div>

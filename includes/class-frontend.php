@@ -69,7 +69,7 @@ class SliderCards3D_Frontend {
         static $instance_count = 0;
         $instance_count++;
         $instance_id = 'slidercards3d-' . $instance_count;
-        
+
         ob_start();
         ?>
         <div class="slidercards3d-container" data-type="<?php echo esc_attr($atts['type']); ?>" data-instance-id="<?php echo esc_attr($instance_id); ?>">
