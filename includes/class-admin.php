@@ -103,15 +103,15 @@ class SliderCards3D_Admin {
 
             <div class="slidercards3d-tabs">
                 <button class="slidercards3d-tab active" data-tab="images">
-                    <?php echo SliderCards3D_Icons::render_icon('image', 20, 'Imágenes', 'slidercards3d-tab-icon'); ?>
+                    <?php echo SliderCards3D_Icons::render_icon('photo', 20, 'Imágenes', 'slidercards3d-tab-icon'); ?>
                     Imágenes
                 </button>
                 <button class="slidercards3d-tab" data-tab="pages">
-                    <?php echo SliderCards3D_Icons::render_icon('file-text', 20, 'Páginas', 'slidercards3d-tab-icon'); ?>
+                    <?php echo SliderCards3D_Icons::render_icon('document-text', 20, 'Páginas', 'slidercards3d-tab-icon'); ?>
                     Páginas
                 </button>
                 <button class="slidercards3d-tab" data-tab="settings">
-                    <?php echo SliderCards3D_Icons::render_icon('settings', 20, 'Configuración', 'slidercards3d-tab-icon'); ?>
+                    <?php echo SliderCards3D_Icons::render_icon('cog-6-tooth', 20, 'Configuración', 'slidercards3d-tab-icon'); ?>
                     Configuración
                 </button>
             </div>

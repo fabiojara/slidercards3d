@@ -1,6 +1,6 @@
 /**
  * Script Node.js para descargar iconos PNG de Lucide
- * 
+ *
  * Requiere: npm install lucide
  * Ejecutar: node descargar-con-node.js
  */
@@ -24,16 +24,16 @@ function downloadIcon(iconName, size) {
     return new Promise((resolve, reject) => {
         const url = `https://api.iconify.design/lucide/${iconName}.svg?width=${size}&height=${size}&color=%23000000`;
         const filePath = path.join(__dirname, `${iconName}.svg`);
-        
+
         https.get(url, (response) => {
             if (response.statusCode !== 200) {
                 reject(new Error(`Error ${response.statusCode}`));
                 return;
             }
-            
+
             const fileStream = fs.createWriteStream(filePath);
             response.pipe(fileStream);
-            
+
             fileStream.on('finish', () => {
                 fileStream.close();
                 console.log(`✓ Descargado: ${iconName}.svg`);
@@ -47,7 +47,7 @@ function downloadIcon(iconName, size) {
 
 async function main() {
     console.log('Descargando iconos SVG de Lucide...\n');
-    
+
     for (const icon of icons) {
         try {
             await downloadIcon(icon.name, icon.size);
@@ -55,7 +55,7 @@ async function main() {
             console.error(`✗ Error con ${icon.name}:`, error.message);
         }
     }
-    
+
     console.log('\n¡SVG descargados!');
     console.log('Ahora convierte los SVG a PNG usando:');
     console.log('https://cloudconvert.com/svg-to-png');

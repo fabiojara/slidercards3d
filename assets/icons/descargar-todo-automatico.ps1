@@ -29,7 +29,7 @@ foreach ($icon in $icons) {
     $size = $icon.size
     $url = "${baseUrl}${iconName}.svg?width=${size}&height=${size}&color=%23000000"
     $svgFile = "${iconName}.svg"
-    
+
     if (-not (Test-Path $svgFile)) {
         try {
             Write-Host "  Descargando: $svgFile..." -NoNewline
@@ -57,12 +57,12 @@ $magickPath = Get-Command magick -ErrorAction SilentlyContinue
 if ($magickPath) {
     Write-Host "  ImageMagick encontrado. Convirtiendo..." -ForegroundColor Green
     Write-Host ""
-    
+
     foreach ($icon in $icons) {
         $svgFile = "$($icon.name).svg"
         $pngFile = "$($icon.name).png"
         $size = $icon.size
-        
+
         if (Test-Path $svgFile) {
             Write-Host "  Convirtiendo: $svgFile -> $pngFile..." -NoNewline
             try {
@@ -79,7 +79,7 @@ if ($magickPath) {
             }
         }
     }
-    
+
     Write-Host ""
     Write-Host "=== ¡Proceso completado! ===" -ForegroundColor Green
     Write-Host ""
@@ -91,7 +91,7 @@ else {
     Write-Host ""
     Write-Host "  Abriendo herramienta HTML para conversión..." -ForegroundColor Cyan
     Write-Host ""
-    
+
     # Abrir la herramienta HTML
     $htmlFile = Join-Path $PSScriptRoot "convertir-svg-a-png.html"
     if (Test-Path $htmlFile) {

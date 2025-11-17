@@ -1,7 +1,7 @@
 <?php
 /**
  * Script para descargar y convertir iconos PNG de Lucide automáticamente
- * 
+ *
  * Ejecutar desde navegador: http://localhost/variospluginswp/wp-content/plugins/slidercards3d/assets/icons/descargar-iconos.php
  * O desde línea de comandos: php descargar-iconos.php
  */
@@ -33,27 +33,27 @@ echo "=== Descargando iconos PNG de Lucide ===\n\n";
 
 foreach ($icons as $icon_name => $size) {
     echo "Procesando: {$icon_name}.png ({$size}x{$size})... ";
-    
+
     // URL del SVG desde Iconify
     $svg_url = $base_url . $icon_name . '.svg?width=' . $size . '&height=' . $size . '&color=%23000000';
-    
+
     // Descargar SVG
     $svg_content = @file_get_contents($svg_url);
-    
+
     if ($svg_content === false) {
         echo "ERROR: No se pudo descargar el SVG\n";
         $error_count++;
         continue;
     }
-    
+
     // Guardar SVG temporalmente
     $temp_svg = $save_dir . '/temp_' . $icon_name . '.svg';
     file_put_contents($temp_svg, $svg_content);
-    
+
     // Intentar convertir usando ImageMagick
     $png_path = $save_dir . '/' . $icon_name . '.png';
     $converted = false;
-    
+
     // Método 1: ImageMagick (si está disponible)
     if (extension_loaded('imagick')) {
         try {
@@ -72,25 +72,25 @@ foreach ($icons as $icon_name => $size) {
             echo "⚠ ImageMagick falló: " . $e->getMessage() . "\n";
         }
     }
-    
+
     // Método 2: Usar servicio online de conversión
     if (!$converted) {
         // Usar un servicio que convierta SVG a PNG
         // Por ahora, guardamos el SVG y proporcionamos instrucciones
         echo "⚠ ImageMagick no disponible. Usando método alternativo...\n";
-        
+
         // Intentar usar un servicio de conversión online
         $conversion_url = 'https://api.iconify.design/lucide/' . $icon_name . '.svg?download=true&width=' . $size . '&height=' . $size;
-        
+
         // Como fallback, guardamos el SVG y el usuario puede convertirlo manualmente
         // O podemos usar un servicio como cloudconvert API (requiere API key)
-        
+
         // Por ahora, vamos a crear un PNG básico desde el SVG usando GD si está disponible
         if (extension_loaded('gd')) {
             // GD no puede leer SVG directamente, así que esto no funcionará
             // Necesitamos ImageMagick o un servicio externo
         }
-        
+
         // Guardar el SVG como referencia
         $svg_save_path = $save_dir . '/' . $icon_name . '.svg';
         file_put_contents($svg_save_path, $svg_content);
@@ -98,7 +98,7 @@ foreach ($icons as $icon_name => $size) {
         echo "  Convierte manualmente a PNG usando: https://cloudconvert.com/svg-to-png\n";
         $error_count++;
     }
-    
+
     // Limpiar archivo temporal
     if (file_exists($temp_svg)) {
         unlink($temp_svg);

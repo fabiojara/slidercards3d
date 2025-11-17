@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertir SVG a PNG - Lucide Icons</title>
+    <title>Convertir Heroicons SVG a PNG</title>
     <style>
         * {
             margin: 0;
@@ -115,36 +115,48 @@
             border-radius: 3px;
             font-size: 0.875rem;
         }
+        .badge {
+            display: inline-block;
+            background: #000;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎨 Convertir Iconos SVG a PNG</h1>
-        <p class="subtitle">Convierte los iconos SVG de Lucide a formato PNG</p>
-
+        <div class="badge">Heroicons - Tailwind CSS</div>
+        <h1>🎨 Convertir Iconos Heroicons a PNG</h1>
+        <p class="subtitle">Convierte los iconos SVG de Heroicons a formato PNG para uso en el plugin</p>
+        
         <div id="icons-container"></div>
-
+        
         <div class="instructions">
             <h3>📋 Instrucciones:</h3>
             <ol>
                 <li>Haz clic en "Descargar PNG" para cada icono</li>
                 <li>Guarda cada archivo en la carpeta <code>assets/icons/</code></li>
-                <li>Asegúrate de que los nombres sean exactos (ej: <code>image.png</code>, <code>file-text.png</code>)</li>
+                <li>Asegúrate de que los nombres sean exactos (ej: <code>photo.png</code>, <code>document-text.png</code>)</li>
                 <li>Una vez descargados todos, recarga la página del plugin</li>
             </ol>
         </div>
     </div>
 
     <script>
+        // Iconos Heroicons seleccionados para diseño moderno
         const icons = [
-            { name: 'image', size: 24 },
-            { name: 'file-text', size: 24 },
-            { name: 'settings', size: 24 },
-            { name: 'chevron-left', size: 24 },
-            { name: 'chevron-right', size: 24 },
-            { name: 'x', size: 24 },
-            { name: 'check', size: 24 },
-            { name: 'external-link', size: 16 }
+            { name: 'photo', size: 24, description: 'Imágenes' },
+            { name: 'document-text', size: 24, description: 'Páginas' },
+            { name: 'cog-6-tooth', size: 24, description: 'Configuración' },
+            { name: 'chevron-left', size: 24, description: 'Anterior' },
+            { name: 'chevron-right', size: 24, description: 'Siguiente' },
+            { name: 'x-mark', size: 24, description: 'Cerrar' },
+            { name: 'check', size: 24, description: 'Check' },
+            { name: 'arrow-top-right-on-square', size: 16, description: 'Enlace externo' }
         ];
 
         const container = document.getElementById('icons-container');
@@ -153,7 +165,7 @@
             const item = document.createElement('div');
             item.className = 'icon-item';
             item.id = `icon-${icon.name}`;
-
+            
             const preview = document.createElement('div');
             preview.className = 'icon-preview';
             const img = document.createElement('img');
@@ -163,26 +175,27 @@
             img.style.maxWidth = '100%';
             img.style.height = 'auto';
             img.onerror = function() {
-                this.src = `https://api.iconify.design/lucide/${icon.name}.svg?width=${icon.size}&height=${icon.size}`;
+                // Fallback a Iconify API si el SVG local no existe
+                this.src = `https://api.iconify.design/heroicons-outline/${icon.name}.svg?width=${icon.size}&height=${icon.size}`;
             };
             preview.appendChild(img);
-
+            
             const info = document.createElement('div');
             info.className = 'icon-info';
             info.innerHTML = `
                 <div class="icon-name">${icon.name}.png</div>
-                <div class="icon-size">Tamaño: ${icon.size}x${icon.size}px</div>
+                <div class="icon-size">${icon.description} • ${icon.size}x${icon.size}px</div>
             `;
-
+            
             const status = document.createElement('span');
             status.className = 'status';
             status.id = `status-${icon.name}`;
-
+            
             const downloadBtn = document.createElement('button');
             downloadBtn.textContent = 'Descargar PNG';
             downloadBtn.id = `btn-${icon.name}`;
             downloadBtn.onclick = () => downloadAsPNG(icon.name, icon.size, downloadBtn, status);
-
+            
             item.appendChild(preview);
             item.appendChild(info);
             const btnContainer = document.createElement('div');
@@ -198,12 +211,13 @@
             button.disabled = true;
             statusElement.textContent = 'Convirtiendo...';
             statusElement.className = 'status';
-
+            
             // Cargar SVG local primero, si no existe usar la URL remota
             fetch(`${iconName}.svg`)
                 .then(response => {
                     if (!response.ok) {
-                        return fetch(`https://api.iconify.design/lucide/${iconName}.svg?width=${size}&height=${size}`);
+                        // Fallback a Iconify API
+                        return fetch(`https://api.iconify.design/heroicons-outline/${iconName}.svg?width=${size}&height=${size}`);
                     }
                     return response;
                 })
@@ -214,12 +228,12 @@
                         const ctx = canvas.getContext('2d');
                         canvas.width = size;
                         canvas.height = size;
-
+                        
                         const img = new Image();
                         img.onload = () => {
                             ctx.clearRect(0, 0, size, size);
                             ctx.drawImage(img, 0, 0, size, size);
-
+                            
                             canvas.toBlob(blob => {
                                 if (blob) {
                                     const url = URL.createObjectURL(blob);
@@ -230,7 +244,7 @@
                                     a.click();
                                     document.body.removeChild(a);
                                     URL.revokeObjectURL(url);
-
+                                    
                                     statusElement.textContent = '✓ Descargado';
                                     statusElement.className = 'status success';
                                     button.disabled = false;
@@ -240,9 +254,9 @@
                                 }
                             }, 'image/png');
                         };
-
+                        
                         img.onerror = () => reject(new Error('Error al cargar SVG'));
-
+                        
                         // Convertir SVG a data URL
                         const svgBlob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
                         const url = URL.createObjectURL(svgBlob);
@@ -254,9 +268,10 @@
                     statusElement.textContent = '✗ Error';
                     statusElement.className = 'status error';
                     button.disabled = false;
-                    alert('Error al convertir. Asegúrate de que el archivo SVG existe en esta carpeta.\n\nSi no existe, descárgalo primero usando el script descargar-iconos.ps1');
+                    alert('Error al convertir. Asegúrate de que el archivo SVG existe en esta carpeta.\n\nSi no existe, descárgalo primero usando el script descargar-heroicons.ps1');
                 });
         }
     </script>
 </body>
 </html>
+

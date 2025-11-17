@@ -21,12 +21,12 @@ $magickPath = Get-Command magick -ErrorAction SilentlyContinue
 if ($magickPath) {
     Write-Host "ImageMagick encontrado. Convirtiendo..." -ForegroundColor Green
     Write-Host ""
-    
+
     foreach ($icon in $icons) {
         $svgFile = "$($icon.name).svg"
         $pngFile = "$($icon.name).png"
         $size = $icon.size
-        
+
         if (Test-Path $svgFile) {
             Write-Host "Convirtiendo: $svgFile -> $pngFile ($size x $size)..." -NoNewline
             try {
@@ -41,7 +41,7 @@ if ($magickPath) {
             Write-Host "No se encuentra: $svgFile" -ForegroundColor Yellow
         }
     }
-    
+
     Write-Host ""
     Write-Host "¡Conversión completada!" -ForegroundColor Green
 }

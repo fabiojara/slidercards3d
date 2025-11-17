@@ -1,6 +1,7 @@
 <?php
 /**
- * Gestor de iconos Lucide en formato PNG
+ * Gestor de iconos Heroicons en formato PNG
+ * Heroicons es la librería oficial de Tailwind CSS, perfecta para diseños estilo Vercel/Linear/Stripe/Apple
  */
 
 if (!defined('ABSPATH')) {
@@ -9,7 +10,7 @@ if (!defined('ABSPATH')) {
 
 class SliderCards3D_Icons {
 
-    private static $iconify_api = 'https://api.iconify.design/lucide/';
+    private static $iconify_api = 'https://api.iconify.design/heroicons-outline/';
 
     /**
      * Obtener URL del icono

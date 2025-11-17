@@ -25,7 +25,7 @@ foreach ($icon in $icons) {
     $size = $icon.size
     $url = "${baseUrl}${iconName}.svg?width=${size}&height=${size}&color=%23000000"
     $outputFile = "${iconName}.svg"
-    
+
     try {
         Write-Host "Descargando: $iconName.svg ($size x $size)..." -NoNewline
         Invoke-WebRequest -Uri $url -OutFile $outputFile -ErrorAction Stop

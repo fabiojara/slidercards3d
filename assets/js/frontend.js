@@ -690,17 +690,8 @@
             const closeBtn = document.createElement('button');
             closeBtn.className = 'slidercards3d-lightbox-close';
             closeBtn.setAttribute('aria-label', 'Cerrar');
-            const closeIcon = document.createElement('img');
-            closeIcon.src = slidercards3dData.pluginUrl + 'assets/icons/x.png';
-            closeIcon.width = 20;
-            closeIcon.height = 20;
-            closeIcon.alt = 'Cerrar';
-            closeIcon.className = 'slidercards3d-icon';
-            closeIcon.onerror = function() {
-                // Fallback a SVG si PNG no existe
-                this.src = 'https://api.iconify.design/lucide/x.svg?width=20&height=20';
-            };
-            closeBtn.appendChild(closeIcon);
+            // Usar SVG inline de Heroicons para mejor rendimiento y estilo moderno
+            closeBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>';
             closeBtn.addEventListener('click', () => this.closeLightbox());
 
             // Crear imagen
