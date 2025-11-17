@@ -41,7 +41,7 @@
             $('#save-pages').on('click', () => {
                 this.saveSelection('page');
             });
-            
+
             // Configuración
             $('#slidercards3d-settings-form').on('submit', (e) => {
                 e.preventDefault();
@@ -50,6 +50,11 @@
             
             $('#reset-settings').on('click', () => {
                 this.resetSettings();
+            });
+            
+            // Toggle autoplay interval visibility
+            $('#autoplay').on('change', () => {
+                this.toggleAutoplayInterval();
             });
         },
 
@@ -305,7 +310,7 @@
                 timeout = setTimeout(later, wait);
             };
         },
-        
+
         loadSettings: function() {
             $.ajax({
                 url: slidercards3dAdmin.apiUrl + 'settings',
@@ -317,6 +322,9 @@
                     $('#separation-desktop').val(data.separation_desktop || 100);
                     $('#separation-tablet').val(data.separation_tablet || 70);
                     $('#separation-mobile').val(data.separation_mobile || 50);
+                    $('#autoplay').prop('checked', data.autoplay || false);
+                    $('#autoplay-interval').val(data.autoplay_interval || 3000);
+                    this.toggleAutoplayInterval();
                 },
                 error: () => {
                     console.error('Error al cargar configuración');
@@ -324,6 +332,11 @@
             });
         },
         
+        toggleAutoplayInterval: function() {
+            const isChecked = $('#autoplay').is(':checked');
+            $('#autoplay-interval-group').toggle(isChecked);
+        },
+
         saveSettings: function() {
             const $btn = $('#save-settings');
             const originalText = $btn.text();
@@ -333,9 +346,11 @@
             const settings = {
                 separation_desktop: parseInt($('#separation-desktop').val()) || 100,
                 separation_tablet: parseInt($('#separation-tablet').val()) || 70,
-                separation_mobile: parseInt($('#separation-mobile').val()) || 50
+                separation_mobile: parseInt($('#separation-mobile').val()) || 50,
+                autoplay: $('#autoplay').is(':checked') ? '1' : '0',
+                autoplay_interval: parseInt($('#autoplay-interval').val()) || 3000
             };
-            
+
             $.ajax({
                 url: slidercards3dAdmin.apiUrl + 'settings',
                 method: 'POST',
@@ -358,12 +373,15 @@
                 }
             });
         },
-        
+
         resetSettings: function() {
             if (confirm('¿Estás seguro de que quieres restaurar los valores por defecto?')) {
                 $('#separation-desktop').val(100);
                 $('#separation-tablet').val(70);
                 $('#separation-mobile').val(50);
+                $('#autoplay').prop('checked', false);
+                $('#autoplay-interval').val(3000);
+                this.toggleAutoplayInterval();
                 this.saveSettings();
             }
         }

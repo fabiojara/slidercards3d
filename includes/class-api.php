@@ -46,13 +46,13 @@ class SliderCards3D_API {
                 ),
             ),
         ));
-        
+
         register_rest_route('slidercards3d/v1', '/settings', array(
             'methods' => 'GET',
             'callback' => array($this, 'get_settings'),
             'permission_callback' => '__return_true', // Público para el frontend
         ));
-        
+
         register_rest_route('slidercards3d/v1', '/settings', array(
             'methods' => 'POST',
             'callback' => array($this, 'save_settings'),
@@ -226,19 +226,19 @@ class SliderCards3D_API {
      */
     private function get_selected_ids($type) {
         global $wpdb;
-        
+
         $table_name = $wpdb->prefix . 'slidercards3d_selections';
-        
+
         $results = $wpdb->get_results($wpdb->prepare(
             "SELECT item_id FROM $table_name WHERE type = %s AND selected = 1 ORDER BY order_index ASC",
             $type
         ));
-        
+
         return array_map(function($row) {
             return intval($row->item_id);
         }, $results);
     }
-    
+
     /**
      * Obtener configuración
      */
@@ -246,7 +246,9 @@ class SliderCards3D_API {
         $defaults = array(
             'separation_desktop' => 100,
             'separation_tablet' => 70,
-            'separation_mobile' => 50
+            'separation_mobile' => 50,
+            'autoplay' => false,
+            'autoplay_interval' => 3000
         );
         
         $settings = get_option('slidercards3d_settings', $defaults);
@@ -254,9 +256,12 @@ class SliderCards3D_API {
         // Asegurar que todos los valores estén presentes
         $settings = wp_parse_args($settings, $defaults);
         
+        // Convertir autoplay a booleano si es necesario
+        $settings['autoplay'] = (bool) $settings['autoplay'];
+        
         return rest_ensure_response($settings);
     }
-    
+
     /**
      * Guardar configuración
      */
@@ -264,6 +269,8 @@ class SliderCards3D_API {
         $separation_desktop = intval($request->get_param('separation_desktop'));
         $separation_tablet = intval($request->get_param('separation_tablet'));
         $separation_mobile = intval($request->get_param('separation_mobile'));
+        $autoplay = $request->get_param('autoplay') === '1' || $request->get_param('autoplay') === true || $request->get_param('autoplay') === 'true';
+        $autoplay_interval = intval($request->get_param('autoplay_interval'));
         
         // Validar valores
         if ($separation_desktop < 0 || $separation_desktop > 500) {
@@ -278,10 +285,16 @@ class SliderCards3D_API {
             return new WP_Error('invalid_value', 'El valor de separación móvil debe estar entre 0 y 500', array('status' => 400));
         }
         
+        if ($autoplay_interval < 1000 || $autoplay_interval > 10000) {
+            return new WP_Error('invalid_value', 'El intervalo de reproducción debe estar entre 1000 y 10000 ms', array('status' => 400));
+        }
+        
         $settings = array(
             'separation_desktop' => $separation_desktop,
             'separation_tablet' => $separation_tablet,
-            'separation_mobile' => $separation_mobile
+            'separation_mobile' => $separation_mobile,
+            'autoplay' => $autoplay,
+            'autoplay_interval' => $autoplay_interval
         );
         
         update_option('slidercards3d_settings', $settings);

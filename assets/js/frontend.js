@@ -20,8 +20,12 @@
             this.settings = {
                 separation_desktop: 100,
                 separation_tablet: 70,
-                separation_mobile: 50
+                separation_mobile: 50,
+                autoplay: false,
+                autoplay_interval: 3000
             };
+            this.autoplayTimer = null;
+            this.isPaused = false;
             
             // Cargar configuración primero
             this.loadSettings().then(() => {
@@ -29,7 +33,7 @@
                 this.bindEvents();
             });
         },
-        
+
         loadSettings: function() {
             return fetch(slidercards3dData.apiUrl + 'settings')
                 .then(response => response.json())
@@ -37,13 +41,47 @@
                     this.settings = {
                         separation_desktop: data.separation_desktop || 100,
                         separation_tablet: data.separation_tablet || 70,
-                        separation_mobile: data.separation_mobile || 50
+                        separation_mobile: data.separation_mobile || 50,
+                        autoplay: data.autoplay || false,
+                        autoplay_interval: data.autoplay_interval || 3000
                     };
                 })
                 .catch(() => {
                     // Usar valores por defecto si falla
                     console.warn('No se pudieron cargar los ajustes, usando valores por defecto');
                 });
+        },
+        
+        startAutoplay: function() {
+            if (!this.settings.autoplay || this.items.length <= 1) return;
+            
+            this.stopAutoplay();
+            
+            this.autoplayTimer = setInterval(() => {
+                if (!this.isPaused && !this.isAnimating) {
+                    if (this.currentIndex < this.items.length - 1) {
+                        this.next();
+                    } else {
+                        // Volver al inicio
+                        this.goTo(0);
+                    }
+                }
+            }, this.settings.autoplay_interval);
+        },
+        
+        stopAutoplay: function() {
+            if (this.autoplayTimer) {
+                clearInterval(this.autoplayTimer);
+                this.autoplayTimer = null;
+            }
+        },
+        
+        pauseAutoplay: function() {
+            this.isPaused = true;
+        },
+        
+        resumeAutoplay: function() {
+            this.isPaused = false;
         },
 
         loadItems: function() {
@@ -64,6 +102,10 @@
                 console.log('Items finales cargados:', this.items.length, this.items);
                 if (this.items.length > 0) {
                     this.render();
+                    // Iniciar autoplay si está activado
+                    if (this.settings.autoplay) {
+                        this.startAutoplay();
+                    }
                 } else {
                     console.warn('No se encontraron items para mostrar');
                     this.showEmpty();
@@ -376,8 +418,8 @@
                 // Usar separación horizontal desde configuración según el tamaño de pantalla
                 const isMobile = window.innerWidth <= 480;
                 const isTablet = window.innerWidth <= 768 && window.innerWidth > 480;
-                const separationX = isMobile ? this.settings.separation_mobile : 
-                                   (isTablet ? this.settings.separation_tablet : 
+                const separationX = isMobile ? this.settings.separation_mobile :
+                                   (isTablet ? this.settings.separation_tablet :
                                     this.settings.separation_desktop);
                 let translateX = offset * separationX;
                 let rotateY = offset * 15;
@@ -479,20 +521,53 @@
         },
 
         bindEvents: function() {
+            const container = document.querySelector('.slidercards3d-container');
+            if (!container) return;
+            
             // Navegación con teclado
             document.addEventListener('keydown', (e) => {
-                const container = document.querySelector('.slidercards3d-container');
-                if (!container) return;
-
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
+                    this.pauseAutoplay();
                     this.prev();
+                    setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
                 } else if (e.key === 'ArrowRight') {
                     e.preventDefault();
+                    this.pauseAutoplay();
                     this.next();
+                    setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
                 }
             });
-
+            
+            // Pausar autoplay al interactuar con el slider
+            container.addEventListener('mouseenter', () => {
+                this.pauseAutoplay();
+            });
+            
+            container.addEventListener('mouseleave', () => {
+                if (this.settings.autoplay) {
+                    this.resumeAutoplay();
+                }
+            });
+            
+            // Pausar autoplay al hacer clic en los botones
+            const prevBtn = container.querySelector('.slidercards3d-btn-prev');
+            const nextBtn = container.querySelector('.slidercards3d-btn-next');
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    this.pauseAutoplay();
+                    setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
+                });
+            }
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    this.pauseAutoplay();
+                    setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
+                });
+            }
+            
             // Recalcular posiciones al redimensionar la ventana
             let resizeTimeout;
             window.addEventListener('resize', () => {
@@ -505,23 +580,28 @@
             // Touch events para móviles
             let touchStartX = 0;
             let touchEndX = 0;
-
-            const container = document.querySelector('.slidercards3d-container');
+            
             if (container) {
                 container.addEventListener('touchstart', (e) => {
                     touchStartX = e.changedTouches[0].screenX;
+                    this.pauseAutoplay();
                 });
-
+                
                 container.addEventListener('touchend', (e) => {
                     touchEndX = e.changedTouches[0].screenX;
                     this.handleSwipe();
+                    setTimeout(() => {
+                        if (this.settings.autoplay) {
+                            this.resumeAutoplay();
+                        }
+                    }, this.settings.autoplay_interval);
                 });
             }
-
+            
             this.handleSwipe = () => {
                 const swipeThreshold = 50;
                 const diff = touchStartX - touchEndX;
-
+                
                 if (Math.abs(diff) > swipeThreshold) {
                     if (diff > 0) {
                         this.next();
