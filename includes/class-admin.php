@@ -489,7 +489,7 @@ class SliderCards3D_Admin {
                             <!-- Configuración Actual -->
                             <div class="slidercards3d-info-section">
                                 <h3 class="slidercards3d-info-section-title">Configuración Actual</h3>
-                                
+
                                 <div class="slidercards3d-info-group">
                                     <h4 class="slidercards3d-info-group-title">Separación Horizontal</h4>
                                     <div class="slidercards3d-info-item">
@@ -534,7 +534,7 @@ class SliderCards3D_Admin {
                             <!-- Información del Sistema -->
                             <div class="slidercards3d-info-section">
                                 <h3 class="slidercards3d-info-section-title">Información del Sistema</h3>
-                                
+
                                 <div class="slidercards3d-info-item">
                                     <span class="slidercards3d-info-label">Versión de WordPress:</span>
                                     <span class="slidercards3d-info-value"><?php echo esc_html(get_bloginfo('version')); ?></span>
@@ -556,23 +556,23 @@ class SliderCards3D_Admin {
                             <!-- Estadísticas -->
                             <div class="slidercards3d-info-section">
                                 <h3 class="slidercards3d-info-section-title">Estadísticas</h3>
-                                
+
                                 <?php
                                 // Obtener selecciones guardadas
                                 global $wpdb;
                                 $table_name = $wpdb->prefix . 'slidercards3d_selections';
-                                
+
                                 $images_count = $wpdb->get_var($wpdb->prepare(
                                     "SELECT COUNT(*) FROM $table_name WHERE type = %s AND selected = 1",
                                     'image'
                                 ));
-                                
+
                                 $pages_count = $wpdb->get_var($wpdb->prepare(
                                     "SELECT COUNT(*) FROM $table_name WHERE type = %s AND selected = 1",
                                     'page'
                                 ));
                                 ?>
-                                
+
                                 <div class="slidercards3d-info-item">
                                     <span class="slidercards3d-info-label">Imágenes seleccionadas:</span>
                                     <span class="slidercards3d-info-value"><?php echo esc_html($images_count ? $images_count : 0); ?></span>
