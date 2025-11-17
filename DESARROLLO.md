@@ -2,8 +2,8 @@
 
 ## Estado Actual del Proyecto
 
-**Versión**: 1.4.0  
-**Última Actualización**: 2024-12-XX  
+**Versión**: 1.4.0
+**Última Actualización**: 2024-12-XX
 **Estado**: Funcional y estable
 
 ## 📋 Resumen de Funcionalidades Implementadas
@@ -108,7 +108,7 @@ slidercards3d/
 ### Constantes del Plugin
 
 ```php
-SLIDERCARDS3D_VERSION = '1.3.0'
+SLIDERCARDS3D_VERSION = '1.4.0'
 SLIDERCARDS3D_PLUGIN_DIR = ruta del plugin
 SLIDERCARDS3D_PLUGIN_URL = URL del plugin
 SLIDERCARDS3D_PLUGIN_FILE = archivo principal
@@ -134,7 +134,9 @@ SLIDERCARDS3D_PLUGIN_FILE = archivo principal
     'separation_mobile' => 50,     // px
     'autoplay' => false,           // boolean
     'autoplay_interval' => 3000,   // ms
-    'darkness_intensity' => 25     // %
+    'darkness_intensity' => 25,    // % - Intensidad de oscurecimiento
+    'filter_intensity' => 30,      // % - Intensidad de filtro (blur, contrast)
+    'brightness_intensity' => 50   // % - Intensidad de brillo
 ]
 ```
 
@@ -229,21 +231,21 @@ Todos los endpoints requieren autenticación WordPress:
 
 ## 🎯 Objetivos Cumplidos
 
-✅ Slider 3D funcional  
-✅ Panel de administración moderno  
-✅ Gestión de contenido (imágenes y páginas)  
-✅ Configuración flexible  
-✅ Múltiples instancias  
-✅ Responsive design  
-✅ Sistema de iconos robusto  
-✅ Controles avanzados de efectos visuales (filtro y brillo)  
+✅ Slider 3D funcional
+✅ Panel de administración moderno
+✅ Gestión de contenido (imágenes y páginas)
+✅ Configuración flexible
+✅ Múltiples instancias
+✅ Responsive design
+✅ Sistema de iconos robusto
+✅ Controles avanzados de efectos visuales (filtro y brillo)
 ✅ Documentación completa
 
 ## 📞 Contacto y Soporte
 
 - **Repositorio**: https://github.com/fabiojara/slidercards3d
 - **Autor**: Fabio Jara
-- **Versión Actual**: 1.3.0
+- **Versión Actual**: 1.4.0
 
 ---
 

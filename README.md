@@ -7,7 +7,7 @@ Un slider 3D moderno para WordPress con gestión de imágenes y páginas desde e
 - **Slider 3D Interactivo**: Efecto 3D con transformaciones CSS y navegación fluida
 - **Gestión de Contenido**: Selección de imágenes desde la biblioteca de medios y páginas con imágenes destacadas
 - **Panel de Administración Moderno**: Interfaz estilo Vercel/Linear/Stripe/Apple
-- **Configuración Flexible**: 
+- **Configuración Flexible**:
   - Separación horizontal configurable (Desktop, Tablet, Mobile)
   - Autoplay configurable con intervalo personalizable
   - Control de intensidad de oscurecimiento de imágenes laterales
