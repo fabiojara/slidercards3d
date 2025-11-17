@@ -434,17 +434,17 @@ class SliderCards3D_Admin {
                                     <div class="slidercards3d-usage-code-block">
                                         <div class="slidercards3d-usage-code-header">
                                             <span>PHP</span>
-                                            <button class="slidercards3d-copy-btn" data-copy='<?php echo do_shortcode(\'[slidercards3d]\'); ?>'>Copiar</button>
+                                            <button class="slidercards3d-copy-btn" data-copy="<?php echo esc_attr('<?php echo do_shortcode(\'[slidercards3d]\'); ?>'); ?>">Copiar</button>
                                         </div>
-                                        <pre><code><?php echo do_shortcode('[slidercards3d]'); ?></code></pre>
+                                        <pre><code><?php echo esc_html('<?php echo do_shortcode(\'[slidercards3d]\'); ?>'); ?></code></pre>
                                     </div>
                                     <p class="slidercards3d-usage-text">O con parámetros:</p>
                                     <div class="slidercards3d-usage-code-block">
                                         <div class="slidercards3d-usage-code-header">
                                             <span>PHP</span>
-                                            <button class="slidercards3d-copy-btn" data-copy='<?php echo do_shortcode(\'[slidercards3d type="images"]\'); ?>'>Copiar</button>
+                                            <button class="slidercards3d-copy-btn" data-copy="<?php echo esc_attr('<?php echo do_shortcode(\'[slidercards3d type="images"]\'); ?>'); ?>">Copiar</button>
                                         </div>
-                                        <pre><code><?php echo do_shortcode('[slidercards3d type="images"]'); ?></code></pre>
+                                        <pre><code><?php echo esc_html('<?php echo do_shortcode(\'[slidercards3d type="images"]\'); ?>'); ?></code></pre>
                                     </div>
                                 </div>
                             </div>

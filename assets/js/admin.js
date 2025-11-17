@@ -411,7 +411,7 @@
             // Feedback visual
             const originalText = $btn.text();
             $btn.text('✓ Copiado').addClass('copied');
-            
+
             setTimeout(() => {
                 $btn.text(originalText).removeClass('copied');
             }, 2000);
