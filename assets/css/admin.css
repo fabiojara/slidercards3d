@@ -306,12 +306,14 @@
     object-fit: contain;
 }
 
-.slidercards3d-check-icon svg {
+.slidercards3d-check-icon svg,
+.slidercards3d-check-icon img {
     width: 100%;
     height: 100%;
     display: block;
     transition: opacity 0.2s ease;
     filter: brightness(0) invert(1); /* Hacer el icono blanco */
+    object-fit: contain;
 }
 
 .slidercards3d-image-card.selected .slidercards3d-image-card-checkbox .slidercards3d-check-icon {

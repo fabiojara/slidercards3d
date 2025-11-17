@@ -309,7 +309,7 @@
                 link.href = item.link;
                 link.className = 'slidercards3d-card-link';
                 link.textContent = 'Ver página ';
-                
+
                 // Cargar icono SVG de forma asíncrona
                 this.loadIconSVG('arrow-top-right-on-square', 16, 'slidercards3d-icon-inline')
                     .then(iconElement => {
@@ -331,7 +331,7 @@
                         };
                         link.appendChild(img);
                     });
-                
+
                 overlay.appendChild(link);
 
                 card.appendChild(overlay);
@@ -665,7 +665,7 @@
         loadIconSVG(iconName, size, className = '') {
             const iconUrl = slidercards3dData.pluginUrl + `assets/icons/${iconName}.svg`;
             const fallbackUrl = `https://api.iconify.design/heroicons-outline/${iconName}.svg?width=${size}&height=${size}`;
-            
+
             // Intentar cargar SVG local primero
             return fetch(iconUrl)
                 .then(response => {
@@ -682,19 +682,19 @@
                     svgWrapper.style.width = `${size}px`;
                     svgWrapper.style.height = `${size}px`;
                     svgWrapper.style.verticalAlign = 'middle';
-                    
+
                     // Limpiar y preparar SVG
                     let cleanSvg = svgContent.trim();
                     cleanSvg = cleanSvg.replace(/<\?xml[^>]*\?>/i, '');
-                    
+
                     // Asegurar viewBox
                     if (!cleanSvg.includes('viewBox') && cleanSvg.includes('<svg')) {
                         cleanSvg = cleanSvg.replace(/<svg([^>]*)>/i, '<svg$1 viewBox="0 0 24 24">');
                     }
-                    
+
                     // Agregar atributos de tamaño
                     cleanSvg = cleanSvg.replace(/<svg([^>]*)>/i, `<svg$1 width="${size}" height="${size}" style="display:block;width:100%;height:100%">`);
-                    
+
                     svgWrapper.innerHTML = cleanSvg;
                     return svgWrapper;
                 })

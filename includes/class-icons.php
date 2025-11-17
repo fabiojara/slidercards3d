@@ -61,7 +61,7 @@ class SliderCards3D_Icons {
      */
     private static function get_icon_svg_content($icon_name) {
         $local_path = SLIDERCARDS3D_PLUGIN_DIR . 'assets/icons/' . $icon_name . '.svg';
-        
+
         // Si existe el archivo local, leerlo
         if (file_exists($local_path)) {
             $svg_content = file_get_contents($local_path);
@@ -69,7 +69,7 @@ class SliderCards3D_Icons {
                 return $svg_content;
             }
         }
-        
+
         return false;
     }
 
@@ -78,25 +78,25 @@ class SliderCards3D_Icons {
      */
     public static function render_icon($icon_name, $size = 24, $alt = '', $class = '') {
         $svg_content = self::get_icon_svg_content($icon_name);
-        
+
         // Si tenemos el SVG local, usar inline (mejor rendimiento)
         if ($svg_content !== false) {
             // Limpiar y preparar SVG
             $svg_content = trim($svg_content);
-            
+
             // Remover etiquetas XML si existen
             $svg_content = preg_replace('/<\?xml[^>]*\?>/i', '', $svg_content);
-            
+
             // Asegurar que tenga viewBox si no lo tiene
             if (strpos($svg_content, 'viewBox') === false && strpos($svg_content, '<svg') !== false) {
                 $svg_content = preg_replace('/<svg([^>]*)>/i', '<svg$1 viewBox="0 0 24 24">', $svg_content);
             }
-            
+
             // Agregar atributos de tamaño y clase
             // Primero verificar si ya tiene width/height para no duplicar
             $has_width = preg_match('/width\s*=/i', $svg_content);
             $has_height = preg_match('/height\s*=/i', $svg_content);
-            
+
             if (!$has_width && !$has_height) {
                 $svg_content = preg_replace('/<svg([^>]*)>/i', '<svg$1 width="' . esc_attr($size) . '" height="' . esc_attr($size) . '">', $svg_content);
             } else if (!$has_width) {
@@ -104,31 +104,31 @@ class SliderCards3D_Icons {
             } else if (!$has_height) {
                 $svg_content = preg_replace('/<svg([^>]*)>/i', '<svg$1 height="' . esc_attr($size) . '">', $svg_content);
             }
-            
+
             // Agregar clase y aria-label
             if ($class || $alt) {
                 $class_attr = $class ? ' class="' . esc_attr($class) . '"' : '';
                 $aria_attr = $alt ? ' aria-label="' . esc_attr($alt) . '"' : '';
                 $svg_content = preg_replace('/<svg([^>]*)>/i', '<svg$1' . $class_attr . $aria_attr . '>', $svg_content);
             }
-            
+
             // Asegurar que el stroke sea currentColor para que herede el color del texto
             if (strpos($svg_content, 'stroke=') !== false && strpos($svg_content, 'stroke="currentColor"') === false) {
                 $svg_content = preg_replace('/stroke="[^"]*"/i', 'stroke="currentColor"', $svg_content);
             }
-            
+
             return $svg_content;
         }
-        
+
         // Fallback a imagen con URL (con fallback a API)
         $url = self::get_icon_url($icon_name, $size);
         $alt_attr = $alt ? ' alt="' . esc_attr($alt) . '"' : '';
         $class_attr = $class ? ' class="' . esc_attr($class) . '"' : '';
         $fallback_url = self::get_iconify_url($icon_name, $size);
-        
+
         return '<img src="' . esc_url($url) . '" width="' . esc_attr($size) . '" height="' . esc_attr($size) . '"' . $alt_attr . $class_attr . ' onerror="this.onerror=null; this.src=\'' . esc_url($fallback_url) . '\'">';
     }
-    
+
     /**
      * Generar tag img para icono (método alternativo)
      */

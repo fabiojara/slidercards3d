@@ -335,9 +335,26 @@
     transform: scale(0.95);
 }
 
+.slidercards3d-lightbox-close svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+    stroke: currentColor;
+    fill: none;
+}
+
 .slidercards3d-lightbox-close .slidercards3d-icon {
     width: 20px;
     height: 20px;
+    display: block;
+}
+
+.slidercards3d-lightbox-close .slidercards3d-icon svg,
+.slidercards3d-lightbox-close .slidercards3d-icon img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
 }
 
 /* Responsive para lightbox */
