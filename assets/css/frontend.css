@@ -1,0 +1,247 @@
+/**
+ * Estilos del slider 3D en el frontend
+ * Basado en: https://codepen.io/Nidal95/pen/RNNgWNM
+ */
+
+.slidercards3d-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    position: relative;
+}
+
+.slidercards3d-wrapper {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    perspective: 1000px;
+    overflow: hidden;
+}
+
+.slidercards3d-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slidercards3d-card {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    left: 50%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: -200px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    backface-visibility: hidden;
+}
+
+.slidercards3d-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.slidercards3d-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    color: white;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.slidercards3d-card:hover .slidercards3d-card-overlay {
+    transform: translateY(0);
+}
+
+.slidercards3d-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+}
+
+.slidercards3d-card-link {
+    color: white;
+    text-decoration: none;
+    font-size: 0.875rem;
+    opacity: 0.9;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.2s;
+}
+
+.slidercards3d-card-link:hover {
+    opacity: 1;
+}
+
+/* Controles */
+.slidercards3d-controls {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.slidercards3d-btn-prev,
+.slidercards3d-btn-next {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.slidercards3d-btn-prev:hover,
+.slidercards3d-btn-next:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.slidercards3d-btn-prev:active,
+.slidercards3d-btn-next:active {
+    transform: scale(0.95);
+}
+
+.slidercards3d-btn-prev:disabled,
+.slidercards3d-btn-next:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Indicadores */
+.slidercards3d-indicators {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.slidercards3d-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slidercards3d-indicator.active {
+    background: white;
+    width: 24px;
+    border-radius: 4px;
+}
+
+/* Loading */
+.slidercards3d-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 600px;
+    color: #666;
+}
+
+.slidercards3d-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e5e5;
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spinner-rotate 0.8s linear infinite;
+}
+
+@keyframes spinner-rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Empty State */
+.slidercards3d-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.slidercards3d-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.slidercards3d-empty-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+}
+
+.slidercards3d-empty-text {
+    font-size: 0.9375rem;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .slidercards3d-wrapper {
+        height: 500px;
+    }
+    
+    .slidercards3d-card {
+        width: 250px;
+        height: 350px;
+        margin-left: -125px;
+        margin-top: -175px;
+    }
+    
+    .slidercards3d-controls {
+        bottom: 1rem;
+    }
+    
+    .slidercards3d-btn-prev,
+    .slidercards3d-btn-next {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .slidercards3d-wrapper {
+        height: 400px;
+    }
+    
+    .slidercards3d-card {
+        width: 200px;
+        height: 300px;
+        margin-left: -100px;
+        margin-top: -150px;
+    }
+}
+

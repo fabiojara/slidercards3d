@@ -1,0 +1,472 @@
+/**
+ * Estilos del panel de administración - Estilo Vercel/Linear/Stripe/Apple
+ */
+
+:root {
+    --sc3d-bg: #ffffff;
+    --sc3d-surface: #fafafa;
+    --sc3d-border: #e5e5e5;
+    --sc3d-text: #171717;
+    --sc3d-text-secondary: #737373;
+    --sc3d-primary: #000000;
+    --sc3d-primary-hover: #171717;
+    --sc3d-accent: #0066ff;
+    --sc3d-accent-hover: #0052cc;
+    --sc3d-success: #10b981;
+    --sc3d-error: #ef4444;
+    --sc3d-shadow: rgba(0, 0, 0, 0.05);
+    --sc3d-shadow-lg: rgba(0, 0, 0, 0.1);
+}
+
+.slidercards3d-admin-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+    background: var(--sc3d-bg);
+    min-height: calc(100vh - 32px);
+}
+
+/* Header */
+.slidercards3d-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 2.5rem;
+    border-bottom: 1px solid var(--sc3d-border);
+    background: var(--sc3d-bg);
+}
+
+.slidercards3d-header-content {
+    flex: 1;
+}
+
+.slidercards3d-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--sc3d-text);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.slidercards3d-icon {
+    font-size: 2rem;
+}
+
+.slidercards3d-subtitle {
+    font-size: 0.9375rem;
+    color: var(--sc3d-text-secondary);
+    margin: 0;
+}
+
+.slidercards3d-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.slidercards3d-version {
+    font-size: 0.875rem;
+    color: var(--sc3d-text-secondary);
+    padding: 0.375rem 0.75rem;
+    background: var(--sc3d-surface);
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Tabs */
+.slidercards3d-tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 2.5rem;
+    border-bottom: 1px solid var(--sc3d-border);
+    background: var(--sc3d-bg);
+}
+
+.slidercards3d-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--sc3d-text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: -1px;
+}
+
+.slidercards3d-tab:hover {
+    color: var(--sc3d-text);
+    background: var(--sc3d-surface);
+}
+
+.slidercards3d-tab.active {
+    color: var(--sc3d-text);
+    border-bottom-color: var(--sc3d-text);
+}
+
+.slidercards3d-tab svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Content */
+.slidercards3d-content {
+    padding: 2.5rem;
+}
+
+.slidercards3d-tab-content {
+    display: none;
+}
+
+.slidercards3d-tab-content.active {
+    display: block;
+}
+
+/* Toolbar */
+.slidercards3d-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.slidercards3d-search {
+    flex: 1;
+    max-width: 400px;
+}
+
+.slidercards3d-search-input {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--sc3d-border);
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    background: var(--sc3d-bg);
+    color: var(--sc3d-text);
+    transition: all 0.2s ease;
+}
+
+.slidercards3d-search-input:focus {
+    outline: none;
+    border-color: var(--sc3d-text);
+    box-shadow: 0 0 0 3px var(--sc3d-shadow);
+}
+
+.slidercards3d-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* Buttons */
+.slidercards3d-btn {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.slidercards3d-btn-primary {
+    background: var(--sc3d-primary);
+    color: white;
+}
+
+.slidercards3d-btn-primary:hover {
+    background: var(--sc3d-primary-hover);
+}
+
+.slidercards3d-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Grid */
+.slidercards3d-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.slidercards3d-grid-cards {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* Image Card */
+.slidercards3d-image-card {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid var(--sc3d-border);
+    transition: all 0.2s ease;
+    background: var(--sc3d-surface);
+}
+
+.slidercards3d-image-card:hover {
+    border-color: var(--sc3d-text);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--sc3d-shadow-lg);
+}
+
+.slidercards3d-image-card.selected {
+    border-color: var(--sc3d-primary);
+}
+
+.slidercards3d-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.slidercards3d-image-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.slidercards3d-image-card:hover .slidercards3d-image-card-overlay {
+    opacity: 1;
+}
+
+.slidercards3d-image-card-title {
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.slidercards3d-image-card-checkbox {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid white;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.slidercards3d-image-card.selected .slidercards3d-image-card-checkbox {
+    background: var(--sc3d-primary);
+    border-color: var(--sc3d-primary);
+}
+
+.slidercards3d-image-card-checkbox svg {
+    width: 16px;
+    height: 16px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.slidercards3d-image-card.selected .slidercards3d-image-card-checkbox svg {
+    opacity: 1;
+}
+
+/* Page Card */
+.slidercards3d-page-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--sc3d-border);
+    background: var(--sc3d-bg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.slidercards3d-page-card:hover {
+    border-color: var(--sc3d-text);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--sc3d-shadow-lg);
+}
+
+.slidercards3d-page-card.selected {
+    border-color: var(--sc3d-primary);
+}
+
+.slidercards3d-page-card-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--sc3d-surface);
+    position: relative;
+    overflow: hidden;
+}
+
+.slidercards3d-page-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slidercards3d-page-card-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.slidercards3d-page-card-content {
+    padding: 1.25rem;
+}
+
+.slidercards3d-page-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sc3d-text);
+    margin: 0 0 0.75rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.slidercards3d-page-card-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--sc3d-border);
+    background: var(--sc3d-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.slidercards3d-page-card.selected .slidercards3d-page-card-checkbox {
+    background: var(--sc3d-primary);
+    border-color: var(--sc3d-primary);
+}
+
+.slidercards3d-page-card-checkbox svg {
+    width: 14px;
+    height: 14px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.slidercards3d-page-card.selected .slidercards3d-page-card-checkbox svg {
+    opacity: 1;
+}
+
+/* Loading */
+.slidercards3d-loading {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    color: var(--sc3d-text-secondary);
+}
+
+.slidercards3d-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--sc3d-border);
+    border-top-color: var(--sc3d-primary);
+    border-radius: 50%;
+    animation: spinner-rotate 0.8s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spinner-rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Empty State */
+.slidercards3d-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--sc3d-text-secondary);
+}
+
+.slidercards3d-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.slidercards3d-empty-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--sc3d-text);
+    margin: 0 0 0.5rem 0;
+}
+
+.slidercards3d-empty-text {
+    font-size: 0.9375rem;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .slidercards3d-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .slidercards3d-tabs {
+        padding: 0 1rem;
+        overflow-x: auto;
+    }
+    
+    .slidercards3d-content {
+        padding: 1.5rem 1rem;
+    }
+    
+    .slidercards3d-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .slidercards3d-search {
+        max-width: 100%;
+    }
+    
+    .slidercards3d-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+    
+    .slidercards3d-grid-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
