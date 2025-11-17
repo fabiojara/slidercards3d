@@ -7,10 +7,12 @@ Un slider 3D moderno para WordPress con gestión de imágenes y páginas desde e
 - **Slider 3D Interactivo**: Efecto 3D con transformaciones CSS y navegación fluida
 - **Gestión de Contenido**: Selección de imágenes desde la biblioteca de medios y páginas con imágenes destacadas
 - **Panel de Administración Moderno**: Interfaz estilo Vercel/Linear/Stripe/Apple
-- **Configuración Flexible**:
+- **Configuración Flexible**: 
   - Separación horizontal configurable (Desktop, Tablet, Mobile)
   - Autoplay configurable con intervalo personalizable
   - Control de intensidad de oscurecimiento de imágenes laterales
+  - Control de intensidad de filtro (blur y contrast) para imágenes no activas
+  - Control de intensidad de brillo para imágenes no activas
 - **Slider Infinito**: Navegación circular sin fin
 - **Lightbox Moderno**: Visualización ampliada de imágenes con zoom
 - **Múltiples Instancias**: Soporte para múltiples sliders en la misma página
@@ -75,6 +77,10 @@ Configura la separación entre las tarjetas del slider para diferentes dispositi
 ### Efectos Visuales
 
 - **Intensidad de Oscurecimiento**: Controla qué tan oscuras se ven las imágenes detrás de la imagen principal (0-100%)
+- **Intensidad de Filtro**: Controla la intensidad del filtro aplicado a las imágenes no activas (blur y contrast) (0-100%)
+- **Intensidad de Brillo**: Controla el brillo de las imágenes no activas (0% = muy oscuro, 100% = brillo normal) (0-100%)
+
+**Nota**: Los controles de filtro y brillo funcionan tanto para sliders de imágenes como de páginas, usando la misma configuración.
 
 ## 🎨 Características Técnicas
 

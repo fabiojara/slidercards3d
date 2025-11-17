@@ -456,28 +456,28 @@
                 } else if (absOffset > 0) {
                     opacity = 1 - (absOffset * 0.2);
                     scale = 1 - (absOffset * 0.05);
-                    
+
                     // Calcular oscurecimiento base
                     const baseDarkness = absOffset * 0.3;
                     const intensityMultiplier = 0.3 + (darknessFactor * 0.7);
                     const adjustedDarkness = baseDarkness * intensityMultiplier;
-                    
+
                     // Calcular brillo basado en brightness_intensity
                     // brightness_intensity: 0% = muy oscuro (0.2), 100% = brillo normal (1.0)
                     const minBrightness = 0.2;
                     const maxBrightness = 1.0;
                     const brightnessRange = maxBrightness - minBrightness;
                     const targetBrightness = minBrightness + (brightnessRange * brightnessFactor);
-                    
+
                     // Aplicar oscurecimiento adicional basado en adjustedDarkness
                     brightness = Math.max(minBrightness, targetBrightness - adjustedDarkness);
-                    
+
                     // Aplicar filtro adicional basado en filter_intensity
                     // filter_intensity afecta la opacidad del filtro (blur, contrast, etc.)
                     const filterOpacity = filterFactor;
                     const blurAmount = filterOpacity * 2; // Máximo 2px de blur
                     const contrastAmount = 1 - (filterOpacity * 0.3); // Reducir contraste hasta 70%
-                    
+
                     // Construir filtro combinado
                     const filters = [
                         `brightness(${brightness})`,

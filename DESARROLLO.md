@@ -2,8 +2,8 @@
 
 ## Estado Actual del Proyecto
 
-**Versión**: 1.3.0
-**Última Actualización**: 2024-12-XX
+**Versión**: 1.4.0  
+**Última Actualización**: 2024-12-XX  
 **Estado**: Funcional y estable
 
 ## 📋 Resumen de Funcionalidades Implementadas
@@ -34,6 +34,8 @@
    - Separación horizontal configurable por dispositivo
    - Autoplay con intervalo configurable
    - Control de intensidad de oscurecimiento (0-100%)
+   - Control de intensidad de filtro (0-100%) - blur y contrast
+   - Control de intensidad de brillo (0-100%) - brightness
    - Guardado de configuración en base de datos
 
 5. **Sistema de Iconos**
@@ -227,13 +229,14 @@ Todos los endpoints requieren autenticación WordPress:
 
 ## 🎯 Objetivos Cumplidos
 
-✅ Slider 3D funcional
-✅ Panel de administración moderno
-✅ Gestión de contenido (imágenes y páginas)
-✅ Configuración flexible
-✅ Múltiples instancias
-✅ Responsive design
-✅ Sistema de iconos robusto
+✅ Slider 3D funcional  
+✅ Panel de administración moderno  
+✅ Gestión de contenido (imágenes y páginas)  
+✅ Configuración flexible  
+✅ Múltiples instancias  
+✅ Responsive design  
+✅ Sistema de iconos robusto  
+✅ Controles avanzados de efectos visuales (filtro y brillo)  
 ✅ Documentación completa
 
 ## 📞 Contacto y Soporte
