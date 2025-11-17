@@ -442,16 +442,20 @@
                 if (absOffset > 3) {
                     opacity = 0;
                     scale = 0.8;
-                    brightness = 0.3;
+                    brightness = 0.2;
                 } else if (absOffset > 0) {
                     opacity = 1 - (absOffset * 0.2);
                     scale = 1 - (absOffset * 0.05);
                     // Aplicar filtro oscuro usando la intensidad configurada
-                    // La fórmula base es: 1 - (absOffset * 0.25)
-                    // Ajustamos con darknessFactor: cuanto mayor sea, más oscuro
-                    const baseDarkness = absOffset * 0.25; // Oscurecimiento base por distancia
-                    const adjustedDarkness = baseDarkness * (0.5 + darknessFactor * 0.5); // Ajuste según configuración
-                    brightness = 1 - adjustedDarkness;
+                    // Fórmula mejorada para hacer el efecto más visible:
+                    // - Con 0%: brightness = 1 (sin oscurecimiento)
+                    // - Con 100%: brightness puede llegar hasta 0.2 (muy oscuro)
+                    // - El oscurecimiento aumenta proporcionalmente con la distancia y la intensidad
+                    const baseDarkness = absOffset * 0.3; // Oscurecimiento base más pronunciado
+                    // Aplicar intensidad: 0% = sin efecto, 100% = efecto completo
+                    const intensityMultiplier = 0.3 + (darknessFactor * 0.7); // Rango de 0.3 a 1.0
+                    const adjustedDarkness = baseDarkness * intensityMultiplier;
+                    brightness = Math.max(0.2, 1 - adjustedDarkness); // Mínimo brightness de 0.2
                 }
 
                 // Aplicar transformación

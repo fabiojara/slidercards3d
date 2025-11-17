@@ -251,18 +251,18 @@ class SliderCards3D_API {
             'autoplay_interval' => 3000,
             'darkness_intensity' => 25
         );
-        
+
         $settings = get_option('slidercards3d_settings', $defaults);
-        
+
         // Asegurar que todos los valores estén presentes
         $settings = wp_parse_args($settings, $defaults);
-        
+
         // Convertir autoplay a booleano si es necesario
         $settings['autoplay'] = (bool) $settings['autoplay'];
-        
+
         // Asegurar que darkness_intensity esté en rango válido
         $settings['darkness_intensity'] = max(0, min(100, intval($settings['darkness_intensity'])));
-        
+
         return rest_ensure_response($settings);
     }
 
@@ -293,11 +293,11 @@ class SliderCards3D_API {
         if ($autoplay_interval < 1000 || $autoplay_interval > 10000) {
             return new WP_Error('invalid_value', 'El intervalo de reproducción debe estar entre 1000 y 10000 ms', array('status' => 400));
         }
-        
+
         if ($darkness_intensity < 0 || $darkness_intensity > 100) {
             return new WP_Error('invalid_value', 'La intensidad de oscurecimiento debe estar entre 0 y 100', array('status' => 400));
         }
-        
+
         $settings = array(
             'separation_desktop' => $separation_desktop,
             'separation_tablet' => $separation_tablet,

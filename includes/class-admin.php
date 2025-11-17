@@ -265,13 +265,13 @@ class SliderCards3D_Admin {
                                     <span class="slidercards3d-settings-label-desc">Tiempo entre cada transición automática (en milisegundos)</span>
                                 </label>
                                 <div class="slidercards3d-settings-input-wrapper">
-                                    <input 
-                                        type="number" 
-                                        id="autoplay-interval" 
-                                        name="autoplay_interval" 
-                                        class="slidercards3d-settings-input" 
-                                        min="1000" 
-                                        max="10000" 
+                                    <input
+                                        type="number"
+                                        id="autoplay-interval"
+                                        name="autoplay_interval"
+                                        class="slidercards3d-settings-input"
+                                        min="1000"
+                                        max="10000"
                                         step="500"
                                         value="<?php echo esc_attr($settings['autoplay_interval']); ?>"
                                     >
@@ -287,13 +287,13 @@ class SliderCards3D_Admin {
                                     <span class="slidercards3d-settings-label-desc">Controla qué tan oscuras se ven las imágenes detrás de la principal (0% = sin oscurecimiento, 100% = máximo oscurecimiento)</span>
                                 </label>
                                 <div class="slidercards3d-range-wrapper">
-                                    <input 
-                                        type="range" 
-                                        id="darkness-intensity" 
-                                        name="darkness_intensity" 
-                                        class="slidercards3d-range-input" 
-                                        min="0" 
-                                        max="100" 
+                                    <input
+                                        type="range"
+                                        id="darkness-intensity"
+                                        name="darkness_intensity"
+                                        class="slidercards3d-range-input"
+                                        min="0"
+                                        max="100"
                                         step="5"
                                         value="<?php echo esc_attr($settings['darkness_intensity']); ?>"
                                     >

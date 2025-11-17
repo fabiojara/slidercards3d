@@ -56,7 +56,7 @@
             $('#autoplay').on('change', () => {
                 this.toggleAutoplayInterval();
             });
-            
+
             // Actualizar valor del slider de oscurecimiento
             $('#darkness-intensity').on('input', (e) => {
                 $('#darkness-intensity-value').text(e.target.value);
