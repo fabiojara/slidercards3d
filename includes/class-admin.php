@@ -15,6 +15,13 @@ class SliderCards3D_Admin {
     }
 
     /**
+     * Verificar si WooCommerce está activo
+     */
+    private function is_woocommerce_active() {
+        return class_exists('WooCommerce');
+    }
+
+    /**
      * Agregar menú de administración
      */
     public function add_admin_menu() {
@@ -84,7 +91,10 @@ class SliderCards3D_Admin {
             'autoplay_interval' => 3000,
             'darkness_intensity' => 25, // Intensidad de oscurecimiento en porcentaje (0-100)
             'filter_intensity' => 30, // Intensidad del filtro en porcentaje (0-100)
-            'brightness_intensity' => 50 // Intensidad de brillo en porcentaje (0-100)
+            'brightness_intensity' => 50, // Intensidad de brillo en porcentaje (0-100)
+            'card_height_desktop' => 400, // Altura de las cards en desktop (px)
+            'card_height_tablet' => 350, // Altura de las cards en tablet (px)
+            'card_height_mobile' => 300 // Altura de las cards en móvil (px)
         );
         $settings = get_option('slidercards3d_settings', $defaults);
         $settings = wp_parse_args($settings, $defaults);
@@ -112,6 +122,12 @@ class SliderCards3D_Admin {
                     <?php echo SliderCards3D_Icons::render_icon('document-text', 20, 'Páginas', 'slidercards3d-tab-icon'); ?>
                     Páginas
                 </button>
+                <?php if ($this->is_woocommerce_active()): ?>
+                <button class="slidercards3d-tab" data-tab="products">
+                    <?php echo SliderCards3D_Icons::render_icon('shopping-bag', 20, 'Productos', 'slidercards3d-tab-icon'); ?>
+                    Productos
+                </button>
+                <?php endif; ?>
                 <button class="slidercards3d-tab" data-tab="settings">
                     <?php echo SliderCards3D_Icons::render_icon('cog-6-tooth', 20, 'Configuración', 'slidercards3d-tab-icon'); ?>
                     Configuración
@@ -166,6 +182,28 @@ class SliderCards3D_Admin {
                         </div>
                     </div>
                 </div>
+
+                <?php if ($this->is_woocommerce_active()): ?>
+                <!-- Pestaña Productos -->
+                <div class="slidercards3d-tab-content" id="tab-products">
+                    <div class="slidercards3d-toolbar">
+                        <div class="slidercards3d-search">
+                            <input type="text" id="product-search" placeholder="Buscar productos..." class="slidercards3d-search-input">
+                        </div>
+                        <div class="slidercards3d-actions">
+                            <button class="slidercards3d-btn slidercards3d-btn-primary" id="save-products">
+                                Guardar selección
+                            </button>
+                        </div>
+                    </div>
+                    <div class="slidercards3d-grid slidercards3d-grid-cards" id="products-grid">
+                        <div class="slidercards3d-loading">
+                            <div class="slidercards3d-spinner"></div>
+                            <p>Cargando productos...</p>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
 
                 <!-- Pestaña Configuración -->
                 <div class="slidercards3d-tab-content" id="tab-settings">
@@ -233,6 +271,82 @@ class SliderCards3D_Admin {
                                         value="<?php echo esc_attr($settings['separation_mobile']); ?>"
                                     >
                                     <span class="slidercards3d-settings-unit">px</span>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-divider"></div>
+
+                            <h3 class="slidercards3d-settings-section-title">Tamaño de las Cards</h3>
+
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Altura Desktop (px)</span>
+                                    <span class="slidercards3d-settings-label-desc">Altura de las cards en pantallas grandes. El ancho se calculará proporcionalmente.</span>
+                                </label>
+                                <div class="slidercards3d-settings-input-wrapper">
+                                    <input
+                                        type="number"
+                                        id="card-height-desktop"
+                                        name="card_height_desktop"
+                                        class="slidercards3d-settings-input"
+                                        min="200"
+                                        max="800"
+                                        step="10"
+                                        value="<?php echo esc_attr($settings['card_height_desktop'] ?? 400); ?>"
+                                    >
+                                    <span class="slidercards3d-settings-unit">px</span>
+                                </div>
+                                <div class="slidercards3d-settings-preview">
+                                    <span class="slidercards3d-settings-preview-label">Ancho calculado: </span>
+                                    <span id="card-width-desktop-preview" class="slidercards3d-settings-preview-value"><?php echo round(($settings['card_height_desktop'] ?? 400) * 0.75); ?>px</span>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Altura Tablet (px)</span>
+                                    <span class="slidercards3d-settings-label-desc">Altura de las cards en tablets. El ancho se calculará proporcionalmente.</span>
+                                </label>
+                                <div class="slidercards3d-settings-input-wrapper">
+                                    <input
+                                        type="number"
+                                        id="card-height-tablet"
+                                        name="card_height_tablet"
+                                        class="slidercards3d-settings-input"
+                                        min="150"
+                                        max="700"
+                                        step="10"
+                                        value="<?php echo esc_attr($settings['card_height_tablet'] ?? 350); ?>"
+                                    >
+                                    <span class="slidercards3d-settings-unit">px</span>
+                                </div>
+                                <div class="slidercards3d-settings-preview">
+                                    <span class="slidercards3d-settings-preview-label">Ancho calculado: </span>
+                                    <span id="card-width-tablet-preview" class="slidercards3d-settings-preview-value"><?php echo round(($settings['card_height_tablet'] ?? 350) * 0.714); ?>px</span>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Altura Móvil (px)</span>
+                                    <span class="slidercards3d-settings-label-desc">Altura de las cards en móviles. El ancho se calculará proporcionalmente.</span>
+                                </label>
+                                <div class="slidercards3d-settings-input-wrapper">
+                                    <input
+                                        type="number"
+                                        id="card-height-mobile"
+                                        name="card_height_mobile"
+                                        class="slidercards3d-settings-input"
+                                        min="100"
+                                        max="600"
+                                        step="10"
+                                        value="<?php echo esc_attr($settings['card_height_mobile'] ?? 300); ?>"
+                                    >
+                                    <span class="slidercards3d-settings-unit">px</span>
+                                </div>
+                                <div class="slidercards3d-settings-preview">
+                                    <span class="slidercards3d-settings-preview-label">Ancho calculado: </span>
+                                    <span id="card-width-mobile-preview" class="slidercards3d-settings-preview-value"><?php echo round(($settings['card_height_mobile'] ?? 300) * 0.667); ?>px</span>
                                 </div>
                             </div>
 
@@ -382,7 +496,7 @@ class SliderCards3D_Admin {
                                     <pre><code>[slidercards3d]</code></pre>
                                 </div>
 
-                                <p class="slidercards3d-usage-note">Este shortcode mostrará todas las imágenes y páginas que hayas seleccionado en el panel de administración.</p>
+                                <p class="slidercards3d-usage-note">Este shortcode mostrará todas las imágenes, páginas<?php if ($this->is_woocommerce_active()): ?> y productos de WooCommerce<?php endif; ?> que hayas seleccionado en el panel de administración.</p>
                             </div>
 
                             <!-- Parámetros -->
@@ -393,9 +507,12 @@ class SliderCards3D_Admin {
                                     <h4 class="slidercards3d-usage-param-name">type</h4>
                                     <p class="slidercards3d-usage-text">Especifica qué tipo de contenido mostrar en el slider.</p>
                                     <ul class="slidercards3d-usage-list">
-                                        <li><code>all</code> (por defecto) - Muestra imágenes y páginas seleccionadas</li>
+                                        <li><code>all</code> (por defecto) - Muestra imágenes, páginas<?php if ($this->is_woocommerce_active()): ?> y productos de WooCommerce<?php endif; ?> seleccionados</li>
                                         <li><code>images</code> - Solo muestra imágenes seleccionadas</li>
                                         <li><code>pages</code> - Solo muestra páginas seleccionadas</li>
+                                        <?php if ($this->is_woocommerce_active()): ?>
+                                        <li><code>products</code> - Solo muestra productos de WooCommerce seleccionados (requiere WooCommerce activo)</li>
+                                        <?php endif; ?>
                                     </ul>
                                 </div>
                             </div>
@@ -405,7 +522,7 @@ class SliderCards3D_Admin {
                                 <h3 class="slidercards3d-usage-section-title">Ejemplos de Uso</h3>
 
                                 <div class="slidercards3d-usage-example">
-                                    <h4 class="slidercards3d-usage-example-title">1. Mostrar Todo (Imágenes + Páginas)</h4>
+                                    <h4 class="slidercards3d-usage-example-title">1. Mostrar Todo (Imágenes + Páginas<?php if ($this->is_woocommerce_active()): ?> + Productos<?php endif; ?>)</h4>
                                     <div class="slidercards3d-usage-code-block">
                                         <div class="slidercards3d-usage-code-header">
                                             <span>Shortcode</span>
@@ -421,6 +538,9 @@ class SliderCards3D_Admin {
                                         </div>
                                         <pre><code>[slidercards3d type="all"]</code></pre>
                                     </div>
+                                    <?php if ($this->is_woocommerce_active()): ?>
+                                    <p class="slidercards3d-usage-note">💡 <strong>Nota:</strong> Con WooCommerce activo, este shortcode mostrará imágenes, páginas y productos seleccionados.</p>
+                                    <?php endif; ?>
                                 </div>
 
                                 <div class="slidercards3d-usage-example">
@@ -444,7 +564,71 @@ class SliderCards3D_Admin {
                                         <pre><code>[slidercards3d type="pages"]</code></pre>
                                     </div>
                                 </div>
+
+                                <?php if ($this->is_woocommerce_active()): ?>
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">4. Solo Productos de WooCommerce</h4>
+                                    <p class="slidercards3d-usage-text">Muestra únicamente los productos de WooCommerce que hayas seleccionado en la pestaña <strong>Productos</strong> del panel de administración.</p>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>Shortcode</span>
+                                            <button class="slidercards3d-copy-btn" data-copy='[slidercards3d type="products"]'>Copiar</button>
+                                        </div>
+                                        <pre><code>[slidercards3d type="products"]</code></pre>
+                                    </div>
+                                    <p class="slidercards3d-usage-note">🛍️ <strong>Requisito:</strong> Este parámetro solo funciona si WooCommerce está instalado y activo. Los productos se mostrarán con su imagen destacada y al hacer clic redirigirán a la página del producto.</p>
+                                </div>
+                                <?php endif; ?>
                             </div>
+
+                            <?php if ($this->is_woocommerce_active()): ?>
+                            <!-- Integración WooCommerce -->
+                            <div class="slidercards3d-usage-section">
+                                <h3 class="slidercards3d-usage-section-title">🛍️ Integración con WooCommerce</h3>
+                                <p class="slidercards3d-usage-text">El plugin está integrado con WooCommerce y permite mostrar productos en el slider 3D.</p>
+
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">Cómo Funciona</h4>
+                                    <ol class="slidercards3d-usage-list">
+                                        <li>Ve a la pestaña <strong>Productos</strong> en el panel de administración</li>
+                                        <li>Selecciona los productos que deseas mostrar en el slider</li>
+                                        <li>Guarda la selección haciendo clic en <strong>"Guardar selección"</strong></li>
+                                        <li>Usa el shortcode <code>[slidercards3d type="products"]</code> en tu página o entrada</li>
+                                    </ol>
+                                </div>
+
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">Características de los Productos</h4>
+                                    <ul class="slidercards3d-usage-list">
+                                        <li>Se muestra la imagen destacada del producto</li>
+                                        <li>Al hacer clic, redirige a la página del producto en WooCommerce</li>
+                                        <li>Muestra el título del producto en el overlay</li>
+                                        <li>Compatible con todos los efectos visuales del slider (zoom, oscurecimiento, etc.)</li>
+                                        <li>Funciona con navegación por teclado, mouse y touch</li>
+                                    </ul>
+                                </div>
+
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">Ejemplo de Implementación</h4>
+                                    <p class="slidercards3d-usage-text">Para mostrar productos en una página de tienda:</p>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>Shortcode</span>
+                                            <button class="slidercards3d-copy-btn" data-copy='[slidercards3d type="products"]'>Copiar</button>
+                                        </div>
+                                        <pre><code>[slidercards3d type="products"]</code></pre>
+                                    </div>
+                                    <p class="slidercards3d-usage-text">Para combinar productos con otros contenidos:</p>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>Shortcode</span>
+                                            <button class="slidercards3d-copy-btn" data-copy='[slidercards3d type="all"]'>Copiar</button>
+                                        </div>
+                                        <pre><code>[slidercards3d type="all"]</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endif; ?>
 
                             <!-- Dónde Usar -->
                             <div class="slidercards3d-usage-section">
@@ -493,11 +677,20 @@ class SliderCards3D_Admin {
                                     <p class="slidercards3d-usage-text">O con parámetros:</p>
                                     <div class="slidercards3d-usage-code-block">
                                         <div class="slidercards3d-usage-code-header">
-                                            <span>PHP</span>
+                                            <span>PHP - Solo Imágenes</span>
                                             <button class="slidercards3d-copy-btn" data-copy="<?php echo esc_attr('<?php echo do_shortcode(\'[slidercards3d type="images"]\'); ?>'); ?>">Copiar</button>
                                         </div>
                                         <pre><code><?php echo esc_html('<?php echo do_shortcode(\'[slidercards3d type="images"]\'); ?>'); ?></code></pre>
                                     </div>
+                                    <?php if ($this->is_woocommerce_active()): ?>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>PHP - Solo Productos</span>
+                                            <button class="slidercards3d-copy-btn" data-copy="<?php echo esc_attr('<?php echo do_shortcode(\'[slidercards3d type="products"]\'); ?>'); ?>">Copiar</button>
+                                        </div>
+                                        <pre><code><?php echo esc_html('<?php echo do_shortcode(\'[slidercards3d type="products"]\'); ?>'); ?></code></pre>
+                                    </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
 

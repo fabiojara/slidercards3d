@@ -29,6 +29,15 @@ class SliderCards3D_API {
             'permission_callback' => array($this, 'check_permissions')
         ));
 
+        // Endpoint para productos WooCommerce (solo si WooCommerce está activo)
+        if (class_exists('WooCommerce')) {
+            register_rest_route('slidercards3d/v1', '/products', array(
+                'methods' => 'GET',
+                'callback' => array($this, 'get_products'),
+                'permission_callback' => array($this, 'check_permissions')
+            ));
+        }
+
         register_rest_route('slidercards3d/v1', '/selection', array(
             'methods' => 'POST',
             'callback' => array($this, 'save_selection'),
@@ -46,6 +55,26 @@ class SliderCards3D_API {
                 ),
             ),
         ));
+
+        // Endpoint para obtener datos completos de productos seleccionados (público)
+        if (class_exists('WooCommerce')) {
+            register_rest_route('slidercards3d/v1', '/products-data', array(
+                'methods' => 'GET',
+                'callback' => array($this, 'get_products_data'),
+                'permission_callback' => '__return_true', // Público para el frontend
+                'args' => array(
+                    'ids' => array(
+                        'default' => array(),
+                        'sanitize_callback' => function($ids) {
+                            if (is_string($ids)) {
+                                $ids = explode(',', $ids);
+                            }
+                            return array_map('intval', $ids);
+                        },
+                    ),
+                ),
+            ));
+        }
 
         register_rest_route('slidercards3d/v1', '/settings', array(
             'methods' => 'GET',
@@ -144,6 +173,50 @@ class SliderCards3D_API {
     }
 
     /**
+     * Obtener todos los productos WooCommerce
+     */
+    public function get_products($request) {
+        if (!class_exists('WooCommerce')) {
+            return new WP_Error('woocommerce_not_active', 'WooCommerce no está activo', array('status' => 400));
+        }
+
+        $args = array(
+            'post_type' => 'product',
+            'posts_per_page' => -1,
+            'post_status' => 'publish',
+            'orderby' => 'title',
+            'order' => 'ASC'
+        );
+
+        $search = $request->get_param('search');
+        if ($search) {
+            $args['s'] = sanitize_text_field($search);
+        }
+
+        $products = get_posts($args);
+        $selected_ids = $this->get_selected_ids('product');
+
+        $result = array();
+        foreach ($products as $product) {
+            $product_obj = wc_get_product($product->ID);
+            $thumbnail_id = get_post_thumbnail_id($product->ID);
+            $thumbnail_url = $thumbnail_id ? wp_get_attachment_image_url($thumbnail_id, 'medium') : '';
+            $price = $product_obj ? $product_obj->get_price_html() : '';
+
+            $result[] = array(
+                'id' => $product->ID,
+                'title' => $product->post_title,
+                'thumbnail' => $thumbnail_url,
+                'price' => $price,
+                'selected' => in_array($product->ID, $selected_ids),
+                'url' => get_permalink($product->ID)
+            );
+        }
+
+        return rest_ensure_response($result);
+    }
+
+    /**
      * Guardar selección
      */
     public function save_selection($request) {
@@ -152,7 +225,12 @@ class SliderCards3D_API {
         $type = sanitize_text_field($request->get_param('type'));
         $items = $request->get_param('items');
 
-        if (!in_array($type, array('image', 'page'))) {
+        $valid_types = array('image', 'page');
+        if (class_exists('WooCommerce')) {
+            $valid_types[] = 'product';
+        }
+
+        if (!in_array($type, $valid_types)) {
             return new WP_Error('invalid_type', 'Tipo inválido', array('status' => 400));
         }
 
@@ -222,6 +300,42 @@ class SliderCards3D_API {
     }
 
     /**
+     * Obtener datos completos de productos (público para frontend)
+     */
+    public function get_products_data($request) {
+        if (!class_exists('WooCommerce')) {
+            return new WP_Error('woocommerce_not_active', 'WooCommerce no está activo', array('status' => 400));
+        }
+
+        $ids = $request->get_param('ids');
+        if (empty($ids) || !is_array($ids)) {
+            return rest_ensure_response(array());
+        }
+
+        $result = array();
+        foreach ($ids as $id) {
+            $id = intval($id);
+            if (!$id) continue;
+
+            $product = wc_get_product($id);
+            if (!$product) continue;
+
+            $thumbnail_id = get_post_thumbnail_id($id);
+            $thumbnail_url = $thumbnail_id ? wp_get_attachment_image_url($thumbnail_id, 'medium') : '';
+
+            $result[] = array(
+                'id' => $id,
+                'title' => $product->get_name(),
+                'thumbnail' => $thumbnail_url,
+                'price' => $product->get_price_html(),
+                'url' => get_permalink($id)
+            );
+        }
+
+        return rest_ensure_response($result);
+    }
+
+    /**
      * Obtener IDs seleccionados
      */
     private function get_selected_ids($type) {
@@ -251,7 +365,10 @@ class SliderCards3D_API {
             'autoplay_interval' => 3000,
             'darkness_intensity' => 25,
             'filter_intensity' => 30,
-            'brightness_intensity' => 50
+            'brightness_intensity' => 50,
+            'card_height_desktop' => 400,
+            'card_height_tablet' => 350,
+            'card_height_mobile' => 300
         );
 
         $settings = get_option('slidercards3d_settings', $defaults);
@@ -280,6 +397,9 @@ class SliderCards3D_API {
         $darkness_intensity = intval($request->get_param('darkness_intensity'));
         $filter_intensity = intval($request->get_param('filter_intensity'));
         $brightness_intensity = intval($request->get_param('brightness_intensity'));
+        $card_height_desktop = intval($request->get_param('card_height_desktop'));
+        $card_height_tablet = intval($request->get_param('card_height_tablet'));
+        $card_height_mobile = intval($request->get_param('card_height_mobile'));
 
         // Validar valores
         if ($separation_desktop < 0 || $separation_desktop > 500) {
@@ -310,6 +430,17 @@ class SliderCards3D_API {
             return new WP_Error('invalid_value', 'La intensidad de brillo debe estar entre 0 y 100', array('status' => 400));
         }
 
+        // Validar alturas de cards
+        if ($card_height_desktop < 200 || $card_height_desktop > 800) {
+            $card_height_desktop = 400;
+        }
+        if ($card_height_tablet < 150 || $card_height_tablet > 700) {
+            $card_height_tablet = 350;
+        }
+        if ($card_height_mobile < 100 || $card_height_mobile > 600) {
+            $card_height_mobile = 300;
+        }
+
         $settings = array(
             'separation_desktop' => $separation_desktop,
             'separation_tablet' => $separation_tablet,
@@ -318,7 +449,10 @@ class SliderCards3D_API {
             'autoplay_interval' => $autoplay_interval,
             'darkness_intensity' => $darkness_intensity,
             'filter_intensity' => $filter_intensity,
-            'brightness_intensity' => $brightness_intensity
+            'brightness_intensity' => $brightness_intensity,
+            'card_height_desktop' => $card_height_desktop,
+            'card_height_tablet' => $card_height_tablet,
+            'card_height_mobile' => $card_height_mobile
         );
 
         update_option('slidercards3d_settings', $settings);

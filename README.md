@@ -5,7 +5,7 @@ Un slider 3D moderno para WordPress con gestión de imágenes y páginas desde e
 ## 📋 Características
 
 - **Slider 3D Interactivo**: Efecto 3D con transformaciones CSS y navegación fluida
-- **Gestión de Contenido**: Selección de imágenes desde la biblioteca de medios y páginas con imágenes destacadas
+- **Gestión de Contenido**: Selección de imágenes desde la biblioteca de medios, páginas con imágenes destacadas y productos de WooCommerce
 - **Panel de Administración Moderno**: Interfaz estilo Vercel/Linear/Stripe/Apple
 - **Configuración Flexible**:
   - Separación horizontal configurable (Desktop, Tablet, Mobile)
@@ -48,9 +48,10 @@ Un slider 3D moderno para WordPress con gestión de imágenes y páginas desde e
 ### Parámetros Disponibles
 
 - `type`: Especifica qué tipo de contenido mostrar
-  - `all` (por defecto) - Muestra imágenes y páginas seleccionadas
+  - `all` (por defecto) - Muestra imágenes, páginas y productos de WooCommerce seleccionados
   - `images` - Solo muestra imágenes seleccionadas
   - `pages` - Solo muestra páginas seleccionadas
+  - `products` - Solo muestra productos de WooCommerce seleccionados (requiere WooCommerce activo)
 
 ### Ejemplos
 
@@ -58,6 +59,7 @@ Un slider 3D moderno para WordPress con gestión de imágenes y páginas desde e
 [slidercards3d]
 [slidercards3d type="images"]
 [slidercards3d type="pages"]
+[slidercards3d type="products"]
 [slidercards3d type="all"]
 ```
 
@@ -130,8 +132,10 @@ El plugin crea una tabla personalizada para almacenar las selecciones:
 ### API REST
 
 Endpoints disponibles:
-- `GET /wp-json/slidercards3d/v1/selection?type={image|page}`: Obtener selecciones
+- `GET /wp-json/slidercards3d/v1/selection?type={image|page|product}`: Obtener selecciones
 - `POST /wp-json/slidercards3d/v1/selection`: Guardar selecciones
+- `GET /wp-json/slidercards3d/v1/products`: Obtener productos WooCommerce (admin)
+- `GET /wp-json/slidercards3d/v1/products-data?ids={id1,id2,...}`: Obtener datos de productos (público)
 - `GET /wp-json/slidercards3d/v1/settings`: Obtener configuración
 - `POST /wp-json/slidercards3d/v1/settings`: Guardar configuración
 
@@ -142,6 +146,7 @@ Endpoints disponibles:
 - WordPress 5.0+
 - PHP 7.4+
 - Navegadores modernos (Chrome, Firefox, Safari, Edge)
+- WooCommerce (opcional, solo para funcionalidad de productos)
 
 ### Control de Versiones
 

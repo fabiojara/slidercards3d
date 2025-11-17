@@ -24,7 +24,10 @@
                 autoplay_interval: 3000,
                 darkness_intensity: 25,
                 filter_intensity: 30,
-                brightness_intensity: 50
+                brightness_intensity: 50,
+                card_height_desktop: 400,
+                card_height_tablet: 350,
+                card_height_mobile: 300
             };
             this.autoplayTimer = null;
             this.isPaused = false;
@@ -53,12 +56,140 @@
                         autoplay_interval: data.autoplay_interval || 3000,
                         darkness_intensity: data.darkness_intensity || 25,
                         filter_intensity: data.filter_intensity || 30,
-                        brightness_intensity: data.brightness_intensity || 50
+                        brightness_intensity: data.brightness_intensity || 50,
+                        card_height_desktop: data.card_height_desktop || 400,
+                        card_height_tablet: data.card_height_tablet || 350,
+                        card_height_mobile: data.card_height_mobile || 300
                     };
+
+                    // Aplicar tamaños de cards dinámicamente
+                    this.applyCardSizes();
                 })
                 .catch(() => {
                     console.warn('No se pudieron cargar los ajustes, usando valores por defecto');
+                    this.applyCardSizes();
                 });
+        }
+
+        applyCardSizes() {
+            // Calcular anchos proporcionales
+            const widthDesktop = Math.round(this.settings.card_height_desktop * 0.75);
+            const widthTablet = Math.round(this.settings.card_height_tablet * 0.714);
+            const widthMobile = Math.round(this.settings.card_height_mobile * 0.667);
+
+            // Aplicar estilos usando CSS variables
+            const style = document.createElement('style');
+            style.id = `${this.instanceId}-card-sizes`;
+
+            // Remover estilo anterior si existe
+            const oldStyle = document.getElementById(`${this.instanceId}-card-sizes`);
+            if (oldStyle) oldStyle.remove();
+
+            style.textContent = `
+                .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card {
+                    width: ${widthDesktop}px !important;
+                    height: ${this.settings.card_height_desktop}px !important;
+                    margin-left: ${-widthDesktop / 2}px !important;
+                    margin-top: ${-this.settings.card_height_desktop / 2}px !important;
+                    min-height: ${this.settings.card_height_desktop}px !important;
+                    max-height: ${this.settings.card_height_desktop}px !important;
+                }
+                .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card-image-container {
+                    height: ${this.settings.card_height_desktop}px !important;
+                    min-height: ${this.settings.card_height_desktop}px !important;
+                    max-height: ${this.settings.card_height_desktop}px !important;
+                    background-size: cover !important;
+                    background-position: center center !important;
+                    background-repeat: no-repeat !important;
+                    image-rendering: auto !important;
+                    -webkit-backface-visibility: hidden !important;
+                    backface-visibility: hidden !important;
+                    transform: translateZ(0) scale(1) !important;
+                    -webkit-transform: translateZ(0) scale(1) !important;
+                    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                }
+                @media (hover: hover) and (pointer: fine) {
+                    .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card:hover .slidercards3d-card-image-container {
+                        transform: translateZ(0) scale(1.1) !important;
+                        -webkit-transform: translateZ(0) scale(1.1) !important;
+                    }
+                }
+                @media (max-width: 768px) {
+                    .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card {
+                        width: ${widthTablet}px !important;
+                        height: ${this.settings.card_height_tablet}px !important;
+                        margin-left: ${-widthTablet / 2}px !important;
+                        margin-top: ${-this.settings.card_height_tablet / 2}px !important;
+                        min-height: ${this.settings.card_height_tablet}px !important;
+                        max-height: ${this.settings.card_height_tablet}px !important;
+                    }
+                    .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card-image-container {
+                        height: ${this.settings.card_height_tablet}px !important;
+                        min-height: ${this.settings.card_height_tablet}px !important;
+                        max-height: ${this.settings.card_height_tablet}px !important;
+                        background-size: cover !important;
+                        background-position: center center !important;
+                        background-repeat: no-repeat !important;
+                        image-rendering: auto !important;
+                        -webkit-backface-visibility: hidden !important;
+                        backface-visibility: hidden !important;
+                        transform: translateZ(0) scale(1) !important;
+                        -webkit-transform: translateZ(0) scale(1) !important;
+                        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                    }
+                    @media (hover: hover) and (pointer: fine) {
+                        .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card:hover .slidercards3d-card-image-container {
+                            transform: translateZ(0) scale(1.1) !important;
+                            -webkit-transform: translateZ(0) scale(1.1) !important;
+                        }
+                    }
+                }
+                @media (max-width: 480px) {
+                    .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card {
+                        width: ${widthMobile}px !important;
+                        height: ${this.settings.card_height_mobile}px !important;
+                        margin-left: ${-widthMobile / 2}px !important;
+                        margin-top: ${-this.settings.card_height_mobile / 2}px !important;
+                        min-height: ${this.settings.card_height_mobile}px !important;
+                        max-height: ${this.settings.card_height_mobile}px !important;
+                    }
+                    .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card-image-container {
+                        height: ${this.settings.card_height_mobile}px !important;
+                        min-height: ${this.settings.card_height_mobile}px !important;
+                        max-height: ${this.settings.card_height_mobile}px !important;
+                        background-size: cover !important;
+                        background-position: center center !important;
+                        background-repeat: no-repeat !important;
+                        image-rendering: auto !important;
+                        -webkit-backface-visibility: hidden !important;
+                        backface-visibility: hidden !important;
+                        transform: translateZ(0) scale(1) !important;
+                        -webkit-transform: translateZ(0) scale(1) !important;
+                        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                    }
+                    @media (hover: hover) and (pointer: fine) {
+                        .slidercards3d-container[data-instance-id="${this.instanceId}"] .slidercards3d-card:hover .slidercards3d-card-image-container {
+                            transform: translateZ(0) scale(1.1) !important;
+                            -webkit-transform: translateZ(0) scale(1.1) !important;
+                        }
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Asegurar que los contenedores de imagen tengan la altura correcta
+            setTimeout(() => {
+                const imageContainers = this.container.querySelectorAll('.slidercards3d-card-image-container');
+                imageContainers.forEach(container => {
+                    const card = container.parentElement;
+                    if (card) {
+                        const cardHeight = window.getComputedStyle(card).height;
+                        container.style.height = cardHeight;
+                        container.style.minHeight = cardHeight;
+                        container.style.maxHeight = cardHeight;
+                    }
+                });
+            }, 100);
         }
 
         startAutoplay() {
@@ -97,6 +228,10 @@
 
             if (this.type === 'all' || this.type === 'pages') {
                 promises.push(this.loadPages());
+            }
+
+            if (this.type === 'all' || this.type === 'products') {
+                promises.push(this.loadProducts());
             }
 
             Promise.all(promises).then(() => {
@@ -180,6 +315,44 @@
                 })
                 .catch(error => {
                     console.error('Error al cargar páginas:', error);
+                    return [];
+                });
+        }
+
+        loadProducts() {
+            return fetch(slidercards3dData.apiUrl + 'selection?type=product')
+                .then(response => {
+                    if (!response.ok) {
+                        // Si WooCommerce no está activo, simplemente retornar array vacío
+                        if (response.status === 400) {
+                            return { ids: [] };
+                        }
+                        throw new Error('Error al obtener selección de productos');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.ids && data.ids.length > 0) {
+                        return Promise.all(
+                            data.ids.map(id => this.getProductData(id))
+                        );
+                    }
+                    return [];
+                })
+                .then(products => {
+                    const validProducts = products.filter(product => product && product !== null);
+                    this.items = this.items.concat(validProducts.map(product => ({
+                        type: 'product', // Tipo específico para productos
+                        id: product.id,
+                        url: product.thumbnail || '',
+                        fullUrl: product.thumbnail || '',
+                        title: product.title,
+                        link: product.url,
+                        price: product.price || '' // Incluir precio HTML formateado
+                    })));
+                })
+                .catch(error => {
+                    console.error('Error al cargar productos:', error);
                     return [];
                 });
         }
@@ -272,6 +445,37 @@
                 });
         }
 
+        getProductData(id) {
+            // Obtener datos del producto desde el endpoint público del plugin (ya tiene precio formateado)
+            const pluginProductUrl = slidercards3dData.apiUrl + `products-data?ids=${id}`;
+
+            return fetch(pluginProductUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP ${response.status} al obtener producto ${id}`);
+                    }
+                    return response.json();
+                })
+                .then(products => {
+                    const product = products && products.length > 0 ? products[0] : null;
+                    if (!product) {
+                        throw new Error(`Producto ${id} no encontrado`);
+                    }
+
+                    return {
+                        id: product.id,
+                        thumbnail: product.thumbnail || '',
+                        title: product.title || 'Sin título',
+                        url: product.url || '',
+                        price: product.price || '' // Precio HTML formateado desde WooCommerce (incluye descuentos)
+                    };
+                })
+                .catch(error => {
+                    console.error(`Error al obtener producto ${id}:`, error);
+                    return null;
+                });
+        }
+
         render() {
             const slider = this.container.querySelector(`#${this.instanceId}-slider`);
             if (!slider) return;
@@ -287,11 +491,8 @@
                 slider.appendChild(card);
             });
 
-            // Crear controles si no existen
-            const wrapper = this.container.querySelector('.slidercards3d-wrapper');
-            if (wrapper && !wrapper.querySelector('.slidercards3d-controls')) {
-                this.createControls();
-            }
+            // Aplicar tamaños de cards primero (antes de posicionar)
+            this.applyCardSizes();
 
             // Crear indicadores
             this.createIndicators();
@@ -305,12 +506,43 @@
             card.className = 'slidercards3d-card';
             card.dataset.index = index;
 
+            // Crear contenedor interno para la imagen con altura fija
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'slidercards3d-card-image-container';
+            imageContainer.style.position = 'absolute';
+            imageContainer.style.top = '0';
+            imageContainer.style.left = '0';
+            imageContainer.style.width = '100%';
+            imageContainer.style.height = '100%';
+            imageContainer.style.backgroundImage = `url(${item.url})`;
+            imageContainer.style.backgroundSize = 'cover';
+            imageContainer.style.backgroundPosition = 'center center';
+            imageContainer.style.backgroundRepeat = 'no-repeat';
+            imageContainer.style.backgroundAttachment = 'scroll';
+            imageContainer.style.imageRendering = 'auto';
+            imageContainer.style.webkitBackfaceVisibility = 'hidden';
+            imageContainer.style.backfaceVisibility = 'hidden';
+            imageContainer.style.transform = 'translateZ(0)';
+            imageContainer.style.webkitTransform = 'translateZ(0)';
+            imageContainer.style.zIndex = '1';
+            card.appendChild(imageContainer);
+
+            // Agregar img oculto para accesibilidad y SEO
             const img = document.createElement('img');
             img.src = item.url;
             img.alt = item.title;
             img.loading = 'lazy';
+            img.style.position = 'absolute';
+            img.style.opacity = '0';
+            img.style.width = '1px';
+            img.style.height = '1px';
+            img.style.overflow = 'hidden';
+            img.style.clip = 'rect(0, 0, 0, 0)';
+            img.style.zIndex = '0';
+            img.setAttribute('aria-hidden', 'true');
             card.appendChild(img);
 
+            // Overlay para páginas
             if (item.type === 'page' && item.link) {
                 const overlay = document.createElement('div');
                 overlay.className = 'slidercards3d-card-overlay';
@@ -352,10 +584,64 @@
                 card.appendChild(overlay);
             }
 
+            // Overlay para productos
+            if (item.type === 'product' && item.link) {
+                card.setAttribute('data-product', 'true');
+                const overlay = document.createElement('div');
+                overlay.className = 'slidercards3d-card-overlay';
+
+                // Mostrar precio primero (sobre el nombre)
+                if (item.price && item.price.trim() !== '') {
+                    const priceContainer = document.createElement('div');
+                    priceContainer.className = 'slidercards3d-card-price';
+                    priceContainer.innerHTML = item.price; // El precio viene formateado desde WooCommerce (incluye <del> e <ins>)
+                    overlay.appendChild(priceContainer);
+                } else {
+                    // Debug: verificar si el precio está llegando
+                    console.log('Producto sin precio:', item);
+                }
+
+                const title = document.createElement('h3');
+                title.className = 'slidercards3d-card-title';
+                title.textContent = item.title;
+                overlay.appendChild(title);
+
+                const link = document.createElement('a');
+                link.href = item.link;
+                link.className = 'slidercards3d-card-link';
+                link.textContent = 'Ver producto ';
+
+                // Cargar icono SVG de forma asíncrona
+                this.loadIconSVG('arrow-top-right-on-square', 16, 'slidercards3d-icon-inline')
+                    .then(iconElement => {
+                        link.appendChild(iconElement);
+                    })
+                    .catch(() => {
+                        // Si falla la carga asíncrona, usar método síncrono simple
+                        const img = document.createElement('img');
+                        img.src = slidercards3dData.pluginUrl + 'assets/icons/arrow-top-right-on-square.svg';
+                        img.width = 16;
+                        img.height = 16;
+                        img.alt = '';
+                        img.className = 'slidercards3d-icon-inline';
+                        img.style.display = 'inline-block';
+                        img.style.verticalAlign = 'middle';
+                        img.onerror = function() {
+                            this.onerror = null;
+                            this.src = 'https://api.iconify.design/heroicons-outline/arrow-top-right-on-square.svg?width=16&height=16&color=%23000000';
+                        };
+                        link.appendChild(img);
+                    });
+
+                overlay.appendChild(link);
+
+                card.appendChild(overlay);
+            }
+
             card.addEventListener('click', () => {
                 const isActive = index === this.currentIndex;
 
-                if (item.type === 'page' && item.link) {
+                if ((item.type === 'page' || item.type === 'product') && item.link) {
                     window.location.href = item.link;
                 } else if (isActive) {
                     this.openLightbox(item);
@@ -365,35 +651,6 @@
             });
 
             return card;
-        }
-
-        createControls() {
-            const wrapper = this.container.querySelector('.slidercards3d-wrapper');
-            if (!wrapper) return;
-
-            let controls = wrapper.querySelector('.slidercards3d-controls');
-            if (controls) return; // Ya existen controles
-
-            controls = document.createElement('div');
-            controls.className = 'slidercards3d-controls';
-
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'slidercards3d-btn-prev';
-            prevBtn.setAttribute('aria-label', 'Anterior');
-            prevBtn.dataset.instance = this.instanceId;
-            prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
-            prevBtn.addEventListener('click', () => this.prev());
-
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'slidercards3d-btn-next';
-            nextBtn.setAttribute('aria-label', 'Siguiente');
-            nextBtn.dataset.instance = this.instanceId;
-            nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
-            nextBtn.addEventListener('click', () => this.next());
-
-            controls.appendChild(prevBtn);
-            controls.appendChild(nextBtn);
-            wrapper.appendChild(controls);
         }
 
         createIndicators() {
@@ -517,13 +774,6 @@
             indicatorElements.forEach((indicator, index) => {
                 indicator.classList.toggle('active', index === this.currentIndex);
             });
-
-            // Botones siempre habilitados en modo infinito
-            const prevBtn = this.container.querySelector('.slidercards3d-btn-prev');
-            const nextBtn = this.container.querySelector('.slidercards3d-btn-next');
-
-            if (prevBtn) prevBtn.disabled = false;
-            if (nextBtn) nextBtn.disabled = false;
         }
 
         next() {
@@ -562,12 +812,6 @@
             const slider = this.container.querySelector(`#${this.instanceId}-slider`);
             if (!slider) return;
 
-            // Ocultar controles mientras carga
-            const controls = this.container.querySelector('.slidercards3d-controls');
-            if (controls) {
-                controls.style.display = 'none';
-            }
-
             // Crear skeleton cards
             slider.innerHTML = `
                 <div class="slidercards3d-loading">
@@ -591,12 +835,6 @@
                         loading.remove();
                     }, 300);
                 }
-            }
-
-            // Mostrar controles después de cargar
-            const controls = this.container.querySelector('.slidercards3d-controls');
-            if (controls) {
-                controls.style.display = 'flex';
             }
         }
 

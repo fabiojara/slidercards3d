@@ -9,15 +9,18 @@
         currentTab: 'images',
         images: [],
         pages: [],
+        products: [],
         selectedImages: new Set(),
         selectedPages: new Set(),
+        selectedProducts: new Set(),
 
         init: function() {
             this.bindEvents();
 
             // Restaurar pestaña activa desde localStorage
             const savedTab = localStorage.getItem('slidercards3d_active_tab');
-            const initialTab = savedTab && ['images', 'pages', 'settings', 'usage', 'info'].includes(savedTab)
+            const validTabs = ['images', 'pages', 'products', 'settings', 'usage', 'info'];
+            const initialTab = savedTab && validTabs.includes(savedTab)
                 ? savedTab
                 : 'images';
 
@@ -49,6 +52,10 @@
                 this.filterPages();
             }, 300));
 
+            $('#product-search').on('input', this.debounce(() => {
+                this.filterProducts();
+            }, 300));
+
             // Guardar selecciones
             $('#save-images').on('click', () => {
                 this.saveSelection('image');
@@ -56,6 +63,10 @@
 
             $('#save-pages').on('click', () => {
                 this.saveSelection('page');
+            });
+
+            $('#save-products').on('click', () => {
+                this.saveSelection('product');
             });
 
             // Configuración
@@ -86,6 +97,25 @@
             $('#brightness-intensity').on('input', (e) => {
                 $('#brightness-intensity-value').text(e.target.value);
             });
+
+            // Calcular ancho proporcional cuando cambia la altura de las cards
+            $('#card-height-desktop').on('input', (e) => {
+                const height = parseInt(e.target.value) || 400;
+                const width = Math.round(height * 0.75); // Relación 3:4 (300/400)
+                $('#card-width-desktop-preview').text(width + 'px');
+            });
+
+            $('#card-height-tablet').on('input', (e) => {
+                const height = parseInt(e.target.value) || 350;
+                const width = Math.round(height * 0.714); // Relación 5:7 (250/350)
+                $('#card-width-tablet-preview').text(width + 'px');
+            });
+
+            $('#card-height-mobile').on('input', (e) => {
+                const height = parseInt(e.target.value) || 300;
+                const width = Math.round(height * 0.667); // Relación 2:3 (200/300)
+                $('#card-width-mobile-preview').text(width + 'px');
+            });
         },
 
         switchTab: function(tab) {
@@ -111,6 +141,8 @@
                 this.loadImages();
             } else if (tab === 'pages') {
                 this.loadPages();
+            } else if (tab === 'products') {
+                this.loadProducts();
             } else if (tab === 'settings') {
                 this.loadSettings();
             }
@@ -234,6 +266,76 @@
             });
         },
 
+        loadProducts: function() {
+            const $grid = $('#products-grid');
+            $grid.html('<div class="slidercards3d-loading"><div class="slidercards3d-spinner"></div><p>Cargando productos...</p></div>');
+
+            $.ajax({
+                url: slidercards3dAdmin.apiUrl + 'products',
+                method: 'GET',
+                beforeSend: (xhr) => {
+                    xhr.setRequestHeader('X-WP-Nonce', slidercards3dAdmin.nonce);
+                },
+                success: (data) => {
+                    this.products = data;
+                    this.selectedProducts = new Set(data.filter(p => p.selected).map(p => p.id));
+                    this.renderProducts();
+                },
+                error: (xhr) => {
+                    console.error('Error al cargar productos:', xhr);
+                    let errorMessage = 'Error al cargar productos.';
+                    if (xhr.status === 400) {
+                        errorMessage = 'WooCommerce no está activo. Activa WooCommerce para usar esta funcionalidad.';
+                    } else if (xhr.status === 403) {
+                        errorMessage = 'No tienes permisos para acceder a los productos.';
+                    } else if (xhr.status === 404) {
+                        errorMessage = 'El endpoint de productos no está disponible.';
+                    }
+                    $grid.html(`<div class="slidercards3d-error"><p>${errorMessage}</p></div>`);
+                }
+            });
+        },
+
+        renderProducts: function() {
+            const $grid = $('#products-grid');
+
+            if (this.products.length === 0) {
+                $grid.html('<div class="slidercards3d-empty"><div class="slidercards3d-empty-icon">🛍️</div><div class="slidercards3d-empty-title">No hay productos</div><div class="slidercards3d-empty-text">Crea productos en WooCommerce para comenzar</div></div>');
+                return;
+            }
+
+            const html = this.products.map(product => {
+                const isSelected = this.selectedProducts.has(product.id);
+                const thumbnail = product.thumbnail || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f5f5f5" width="400" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3ESin imagen%3C/text%3E%3C/svg%3E';
+
+                return `
+                    <div class="slidercards3d-page-card ${isSelected ? 'selected' : ''}" data-id="${product.id}">
+                        <div class="slidercards3d-page-card-image">
+                            <img src="${thumbnail}" alt="${this.escapeHtml(product.title)}" loading="lazy">
+                        </div>
+                        <div class="slidercards3d-page-card-content">
+                            <h3 class="slidercards3d-page-card-title">
+                                ${this.escapeHtml(product.title)}
+                                <div class="slidercards3d-page-card-checkbox">
+                                    <img src="${slidercards3dAdmin.pluginUrl}assets/icons/check.svg" width="14" height="14" alt="" class="slidercards3d-check-icon" onerror="this.onerror=null; this.src='https://api.iconify.design/heroicons-outline/check.svg?width=14&height=14&color=%23000000'">
+                                </div>
+                            </h3>
+                            ${product.price ? `<div class="slidercards3d-product-price">${product.price}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            $grid.html(html);
+
+            // Bind click events - usar selector específico para productos
+            $('#products-grid .slidercards3d-page-card').off('click').on('click', (e) => {
+                const $card = $(e.currentTarget);
+                const id = parseInt($card.data('id'));
+                this.toggleProductSelection(id);
+            });
+        },
+
         toggleImageSelection: function(id) {
             if (this.selectedImages.has(id)) {
                 this.selectedImages.delete(id);
@@ -249,6 +351,16 @@
                 this.selectedPages.delete(id);
             } else {
                 this.selectedPages.add(id);
+            }
+
+            $(`.slidercards3d-page-card[data-id="${id}"]`).toggleClass('selected');
+        },
+
+        toggleProductSelection: function(id) {
+            if (this.selectedProducts.has(id)) {
+                this.selectedProducts.delete(id);
+            } else {
+                this.selectedProducts.add(id);
             }
 
             $(`.slidercards3d-page-card[data-id="${id}"]`).toggleClass('selected');
@@ -284,17 +396,41 @@
             });
         },
 
+        filterProducts: function() {
+            const search = $('#product-search').val().toLowerCase();
+
+            if (!search) {
+                $('#products-grid .slidercards3d-page-card').show();
+                return;
+            }
+
+            $('#products-grid .slidercards3d-page-card').each(function() {
+                const $card = $(this);
+                const title = $card.find('.slidercards3d-page-card-title').text().toLowerCase();
+                $card.toggle(title.includes(search));
+            });
+        },
+
         saveSelection: function(type) {
-            const $btn = type === 'image' ? $('#save-images') : $('#save-pages');
+            let $btn;
+            let selectedItems;
+
+            if (type === 'image') {
+                $btn = $('#save-images');
+                selectedItems = Array.from(this.selectedImages).map(id => ({ id, selected: true }));
+            } else if (type === 'page') {
+                $btn = $('#save-pages');
+                selectedItems = Array.from(this.selectedPages).map(id => ({ id, selected: true }));
+            } else if (type === 'product') {
+                $btn = $('#save-products');
+                selectedItems = Array.from(this.selectedProducts).map(id => ({ id, selected: true }));
+            } else {
+                return;
+            }
+
             const originalText = $btn.text();
 
             $btn.prop('disabled', true).text(slidercards3dAdmin.strings.saving);
-
-            const selected = type === 'image' ? this.selectedImages : this.selectedPages;
-            const items = Array.from(selected).map(id => ({
-                id: id,
-                selected: true
-            }));
 
             $.ajax({
                 url: slidercards3dAdmin.apiUrl + 'selection',
@@ -304,7 +440,7 @@
                 },
                 data: JSON.stringify({
                     type: type,
-                    items: items
+                    items: selectedItems
                 }),
                 contentType: 'application/json',
                 success: () => {
@@ -313,7 +449,8 @@
                         $btn.prop('disabled', false).text(originalText);
                     }, 2000);
                 },
-                error: () => {
+                error: (xhr) => {
+                    console.error('Error al guardar selección:', xhr);
                     $btn.text(slidercards3dAdmin.strings.error);
                     setTimeout(() => {
                         $btn.prop('disabled', false).text(originalText);
@@ -386,7 +523,10 @@
                 autoplay_interval: parseInt($('#autoplay-interval').val()) || 3000,
                 darkness_intensity: parseInt($('#darkness-intensity').val()) || 25,
                 filter_intensity: parseInt($('#filter-intensity').val()) || 30,
-                brightness_intensity: parseInt($('#brightness-intensity').val()) || 50
+                brightness_intensity: parseInt($('#brightness-intensity').val()) || 50,
+                card_height_desktop: parseInt($('#card-height-desktop').val()) || 400,
+                card_height_tablet: parseInt($('#card-height-tablet').val()) || 350,
+                card_height_mobile: parseInt($('#card-height-mobile').val()) || 300
             };
 
             $.ajax({
@@ -425,6 +565,12 @@
                 $('#filter-intensity-value').text(30);
                 $('#brightness-intensity').val(50);
                 $('#brightness-intensity-value').text(50);
+                $('#card-height-desktop').val(400);
+                $('#card-width-desktop-preview').text('300px');
+                $('#card-height-tablet').val(350);
+                $('#card-width-tablet-preview').text('250px');
+                $('#card-height-mobile').val(300);
+                $('#card-width-mobile-preview').text('200px');
                 this.toggleAutoplayInterval();
                 this.saveSettings();
             }

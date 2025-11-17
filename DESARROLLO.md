@@ -2,7 +2,7 @@
 
 ## Estado Actual del Proyecto
 
-**Versión**: 1.7.0
+**Versión**: 1.8.0
 **Última Actualización**: 2024-12-XX
 **Estado**: Funcional y estable
 
@@ -17,12 +17,14 @@
 
 2. **Panel de Administración**
    - Interfaz moderna estilo Vercel/Linear/Stripe/Apple
-   - Pestañas: Imágenes, Páginas, Configuración, Modo de Uso, Información
+   - Pestañas: Imágenes, Páginas, Productos (WooCommerce), Configuración, Modo de Uso, Información
    - Persistencia de pestaña activa usando localStorage
    - Selección de imágenes desde biblioteca de medios
    - Selección de páginas con imágenes destacadas
+   - Selección de productos de WooCommerce con precios (solo si WooCommerce está activo)
    - Grid responsive para imágenes (1:1)
    - Cards para páginas con thumbnails
+   - Cards para productos con thumbnails y precios
 
 3. **Slider 3D Frontend**
    - Efecto 3D con transformaciones CSS
@@ -63,8 +65,9 @@
 
 9. **Shortcode**
    - `[slidercards3d]` básico
-   - Parámetro `type` (all, images, pages)
+   - Parámetro `type` (all, images, pages, products)
    - Soporte para múltiples instancias
+   - Integración con WooCommerce para productos
 
 10. **Navegación Múltiple**
     - Navegación con teclado (flechas izquierda/derecha)
@@ -117,7 +120,7 @@ slidercards3d/
 ### Constantes del Plugin
 
 ```php
-SLIDERCARDS3D_VERSION = '1.7.0'
+SLIDERCARDS3D_VERSION = '1.8.0'
 SLIDERCARDS3D_PLUGIN_DIR = ruta del plugin
 SLIDERCARDS3D_PLUGIN_URL = URL del plugin
 SLIDERCARDS3D_PLUGIN_FILE = archivo principal
@@ -249,13 +252,14 @@ Todos los endpoints requieren autenticación WordPress:
 ✅ Sistema de iconos robusto
 ✅ Controles avanzados de efectos visuales (filtro y brillo)
 ✅ Navegación múltiple (teclado, botones, swipe táctil, mouse drag)
+✅ Integración con WooCommerce (productos como contenido)
 ✅ Documentación completa
 
 ## 📞 Contacto y Soporte
 
 - **Repositorio**: https://github.com/fabiojara/slidercards3d
 - **Autor**: Fabio Jara
-- **Versión Actual**: 1.7.0
+- **Versión Actual**: 1.8.0
 
 ---
 

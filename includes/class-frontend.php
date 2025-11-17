@@ -26,6 +26,14 @@ class SliderCards3D_Frontend {
     }
 
     /**
+     * Prevenir conflictos con otros plugins que carguen scripts externos
+     */
+    public function prevent_external_conflicts() {
+        // Este método puede usarse en el futuro para prevenir conflictos
+        // Por ahora, el plugin no carga scripts externos problemáticos
+    }
+
+    /**
      * Cargar assets
      */
     private function load_assets() {
@@ -62,7 +70,7 @@ class SliderCards3D_Frontend {
         $this->load_assets();
 
         $atts = shortcode_atts(array(
-            'type' => 'all' // 'images', 'pages', 'all'
+            'type' => 'all' // 'images', 'pages', 'products', 'all'
         ), $atts);
 
         // Generar ID único para esta instancia
@@ -76,18 +84,6 @@ class SliderCards3D_Frontend {
             <div class="slidercards3d-wrapper">
                 <div class="slidercards3d-slider" id="<?php echo esc_attr($instance_id); ?>-slider">
                     <!-- Contenido cargado dinámicamente -->
-                </div>
-                <div class="slidercards3d-controls">
-                    <button class="slidercards3d-btn-prev" aria-label="Anterior" data-instance="<?php echo esc_attr($instance_id); ?>">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m15 18-6-6 6-6"/>
-                        </svg>
-                    </button>
-                    <button class="slidercards3d-btn-next" aria-label="Siguiente" data-instance="<?php echo esc_attr($instance_id); ?>">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m9 18 6-6-6-6"/>
-                        </svg>
-                    </button>
                 </div>
             </div>
         </div>

@@ -362,6 +362,18 @@
     overflow: hidden;
 }
 
+.slidercards3d-product-price {
+    color: var(--sc3d-text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.slidercards3d-product-price .woocommerce-Price-amount {
+    color: var(--sc3d-primary);
+    font-weight: 600;
+}
+
 .slidercards3d-page-card-image img {
     width: 100%;
     height: 100%;
@@ -594,6 +606,33 @@
     height: 1px;
     background: var(--sc3d-border);
     margin: 1.5rem 0;
+}
+
+.slidercards3d-settings-section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--sc3d-text);
+    margin: 0 0 1rem 0;
+}
+
+.slidercards3d-settings-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--sc3d-surface);
+    border-radius: 6px;
+    font-size: 0.875rem;
+}
+
+.slidercards3d-settings-preview-label {
+    color: var(--sc3d-text-secondary);
+}
+
+.slidercards3d-settings-preview-value {
+    font-weight: 600;
+    color: var(--sc3d-primary);
 }
 
 .slidercards3d-settings-switch-wrapper {

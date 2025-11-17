@@ -27,6 +27,7 @@
     position: relative;
     width: 100%;
     height: 400px;
+    min-height: 400px;
     perspective: 1000px;
     overflow: visible; /* Cambiar a visible para permitir que las tarjetas laterales se vean */
 }
@@ -50,16 +51,54 @@
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s, box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     backface-visibility: hidden;
+    background-color: #000;
+}
+
+/* Zoom suave en hover - Solo para dispositivos con mouse */
+@media (hover: hover) and (pointer: fine) {
+    .slidercards3d-card:hover .slidercards3d-card-image-container {
+        transform: translateZ(0) scale(1.1);
+        -webkit-transform: translateZ(0) scale(1.1);
+    }
+
+    .slidercards3d-card:hover {
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    }
+}
+
+.slidercards3d-card-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    image-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0) scale(1);
+    -webkit-transform: translateZ(0) scale(1);
+    will-change: transform;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
 }
 
 .slidercards3d-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    z-index: 0;
 }
 
 .slidercards3d-card-overlay {
@@ -72,9 +111,15 @@
     color: white;
     transform: translateY(100%);
     transition: transform 0.3s ease;
+    z-index: 2;
 }
 
 .slidercards3d-card:hover .slidercards3d-card-overlay {
+    transform: translateY(0);
+}
+
+/* Overlay siempre visible para productos */
+.slidercards3d-card[data-product="true"] .slidercards3d-card-overlay {
     transform: translateY(0);
 }
 
@@ -82,6 +127,61 @@
     font-size: 1.25rem;
     font-weight: 600;
     margin: 0 0 0.5rem 0;
+}
+
+/* Ajuste para cuando el precio está antes del título */
+.slidercards3d-card-price + .slidercards3d-card-title {
+    margin-top: 0;
+}
+
+.slidercards3d-card-price {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.4;
+}
+
+/* Precio tachado: tamaño base (1em) */
+.slidercards3d-card-price del {
+    opacity: 0.7;
+    text-decoration: line-through;
+    margin-right: 0.5rem;
+    font-size: 1em; /* Tamaño base */
+    font-weight: 500;
+    display: inline-block;
+}
+
+.slidercards3d-card-price del .woocommerce-Price-amount {
+    font-size: 1em;
+    color: white;
+    font-weight: 500;
+}
+
+/* Precio final (con descuento): 1.5 veces más grande que el tachado */
+.slidercards3d-card-price ins {
+    text-decoration: none;
+    color: #4ade80;
+    font-weight: 700;
+    font-size: 1.5em; /* 1.5 veces más grande que el precio tachado */
+    display: inline-block;
+}
+
+.slidercards3d-card-price ins .woocommerce-Price-amount {
+    font-size: 1em; /* Mantener tamaño relativo dentro del ins */
+    color: #4ade80;
+    font-weight: 700;
+}
+
+/* Precio normal (sin descuento): también 1.5 veces más grande que el tachado */
+.slidercards3d-card-price > .woocommerce-Price-amount {
+    color: white;
+    font-weight: 600;
+    font-size: 1.5em; /* 1.5 veces más grande que el precio tachado */
+}
+
+.slidercards3d-card-price .woocommerce-Price-amount.amount {
+    color: white;
 }
 
 .slidercards3d-card-link {
@@ -93,21 +193,16 @@
     align-items: center;
     gap: 0.5rem;
     transition: opacity 0.2s;
+    margin-top: 0.5rem;
 }
 
 .slidercards3d-card-link:hover {
     opacity: 1;
 }
 
-/* Controles */
+/* Controles - Ocultos */
 .slidercards3d-controls {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 1rem;
-    z-index: 10;
+    display: none !important;
 }
 
 .slidercards3d-btn-prev,

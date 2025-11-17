@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.8.0] - 2024-12-XX
+
+### Nuevas Características
+- **Integración con WooCommerce**: Soporte completo para productos de WooCommerce como contenido del slider
+- **Pestaña Productos en Admin**: Nueva pestaña en el panel de administración para seleccionar productos (solo visible si WooCommerce está activo)
+- **Mostrar Precio de Productos**: Los productos muestran su precio formateado en el slider
+- **Precios con Descuento**: Soporte visual para productos con descuento (precio tachado y precio final destacado)
+- **Shortcode para Productos**: Nuevo parámetro `type="products"` para mostrar solo productos de WooCommerce
+
+### Mejoras
+- Precio final de productos es 1.5 veces más grande que el precio tachado para mejor visibilidad
+- Overlay siempre visible para productos (no solo en hover)
+- Precio se muestra sobre el nombre del producto
+- Estilos mejorados para precios con descuento (verde para precio final)
+- Endpoint REST API público `/products-data` para obtener datos de productos con precio formateado
+- Mejor manejo de errores cuando WooCommerce no está activo
+
+### Detalles Técnicos
+- Nuevo endpoint REST API `/products` para listar productos en el admin
+- Endpoint `/products-data` público para obtener datos completos de productos en el frontend
+- Función `getProductData()` optimizada para usar endpoint del plugin
+- Estilos CSS específicos para `.slidercards3d-card-price` con soporte para `<del>` e `<ins>`
+- Integración condicional: funcionalidades de WooCommerce solo disponibles si WooCommerce está activo
+- Documentación actualizada en "Modo de Uso" con ejemplos para productos
+
 ## [1.7.0] - 2024-12-XX
 
 ### Nuevas Características
