@@ -442,20 +442,52 @@
                 let opacity = 1;
                 let scale = 1;
                 let brightness = 1;
+                let filterValue = '';
 
                 const darknessFactor = this.settings.darkness_intensity / 100;
+                const filterFactor = this.settings.filter_intensity / 100;
+                const brightnessFactor = this.settings.brightness_intensity / 100;
 
                 if (absOffset > 3) {
                     opacity = 0;
                     scale = 0.8;
                     brightness = 0.2;
+                    filterValue = 'brightness(0.2)';
                 } else if (absOffset > 0) {
                     opacity = 1 - (absOffset * 0.2);
                     scale = 1 - (absOffset * 0.05);
+                    
+                    // Calcular oscurecimiento base
                     const baseDarkness = absOffset * 0.3;
                     const intensityMultiplier = 0.3 + (darknessFactor * 0.7);
                     const adjustedDarkness = baseDarkness * intensityMultiplier;
-                    brightness = Math.max(0.2, 1 - adjustedDarkness);
+                    
+                    // Calcular brillo basado en brightness_intensity
+                    // brightness_intensity: 0% = muy oscuro (0.2), 100% = brillo normal (1.0)
+                    const minBrightness = 0.2;
+                    const maxBrightness = 1.0;
+                    const brightnessRange = maxBrightness - minBrightness;
+                    const targetBrightness = minBrightness + (brightnessRange * brightnessFactor);
+                    
+                    // Aplicar oscurecimiento adicional basado en adjustedDarkness
+                    brightness = Math.max(minBrightness, targetBrightness - adjustedDarkness);
+                    
+                    // Aplicar filtro adicional basado en filter_intensity
+                    // filter_intensity afecta la opacidad del filtro (blur, contrast, etc.)
+                    const filterOpacity = filterFactor;
+                    const blurAmount = filterOpacity * 2; // Máximo 2px de blur
+                    const contrastAmount = 1 - (filterOpacity * 0.3); // Reducir contraste hasta 70%
+                    
+                    // Construir filtro combinado
+                    const filters = [
+                        `brightness(${brightness})`,
+                        `blur(${blurAmount}px)`,
+                        `contrast(${contrastAmount})`
+                    ];
+                    filterValue = filters.join(' ');
+                } else {
+                    // Imagen activa - sin filtros
+                    filterValue = 'brightness(1)';
                 }
 
                 card.style.transform = `
@@ -465,7 +497,7 @@
                     scale(${scale})
                 `;
                 card.style.opacity = opacity;
-                card.style.filter = `brightness(${brightness})`;
+                card.style.filter = filterValue || `brightness(${brightness})`;
                 card.style.zIndex = total - absOffset;
             });
 

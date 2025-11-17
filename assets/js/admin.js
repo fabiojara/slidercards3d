@@ -410,6 +410,10 @@
                 $('#autoplay-interval').val(3000);
                 $('#darkness-intensity').val(25);
                 $('#darkness-intensity-value').text(25);
+                $('#filter-intensity').val(30);
+                $('#filter-intensity-value').text(30);
+                $('#brightness-intensity').val(50);
+                $('#brightness-intensity-value').text(50);
                 this.toggleAutoplayInterval();
                 this.saveSettings();
             }
