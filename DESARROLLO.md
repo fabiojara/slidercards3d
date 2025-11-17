@@ -2,8 +2,8 @@
 
 ## Estado Actual del Proyecto
 
-**Versión**: 1.4.0
-**Última Actualización**: 2024-12-XX
+**Versión**: 1.5.0  
+**Última Actualización**: 2024-12-XX  
 **Estado**: Funcional y estable
 
 ## 📋 Resumen de Funcionalidades Implementadas
@@ -18,6 +18,7 @@
 2. **Panel de Administración**
    - Interfaz moderna estilo Vercel/Linear/Stripe/Apple
    - Pestañas: Imágenes, Páginas, Configuración, Modo de Uso, Información
+   - Persistencia de pestaña activa usando localStorage
    - Selección de imágenes desde biblioteca de medios
    - Selección de páginas con imágenes destacadas
    - Grid responsive para imágenes (1:1)

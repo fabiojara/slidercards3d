@@ -14,7 +14,15 @@
 
         init: function() {
             this.bindEvents();
-            this.loadTabContent('images');
+            
+            // Restaurar pestaña activa desde localStorage
+            const savedTab = localStorage.getItem('slidercards3d_active_tab');
+            const initialTab = savedTab && ['images', 'pages', 'settings', 'usage', 'info'].includes(savedTab) 
+                ? savedTab 
+                : 'images';
+            
+            this.currentTab = initialTab;
+            this.switchTab(initialTab);
         },
 
         bindEvents: function() {
@@ -82,6 +90,9 @@
 
         switchTab: function(tab) {
             this.currentTab = tab;
+
+            // Guardar pestaña activa en localStorage
+            localStorage.setItem('slidercards3d_active_tab', tab);
 
             // Actualizar UI de pestañas
             $('.slidercards3d-tab').removeClass('active');

@@ -18,6 +18,8 @@ Un slider 3D moderno para WordPress con gestión de imágenes y páginas desde e
 - **Múltiples Instancias**: Soporte para múltiples sliders en la misma página
 - **Responsive**: Adaptación automática a diferentes tamaños de pantalla
 - **Iconos SVG**: Sistema de iconos Heroicons con fallbacks automáticos
+- **Skeleton Screens**: Indicador de carga moderno con efecto shimmer
+- **Persistencia de Estado**: La pestaña activa se mantiene al recargar el admin
 
 ## 🚀 Instalación
 

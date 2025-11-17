@@ -9,6 +9,28 @@
 
 # Changelog
 
+## [1.5.0] - 2024-12-XX
+
+### Nuevas Características
+- Agregado sistema de **Skeleton Screens** con efecto Shimmer para indicador de carga moderno
+- Skeleton cards 3D que imitan la estructura del slider mientras carga
+- Efecto shimmer animado (método moderno usado por Facebook, Instagram, LinkedIn)
+- Persistencia de pestaña activa en el panel de administración usando localStorage
+
+### Mejoras
+- Indicador de carga mejorado: skeleton screens en lugar de spinner tradicional
+- Mejor experiencia de usuario durante la carga del contenido
+- Los controles del slider se ocultan automáticamente durante la carga
+- Transición suave al ocultar el skeleton cuando el contenido está listo
+- La pestaña activa se mantiene al recargar la página del administrador
+- Skeleton cards responsive adaptados a diferentes tamaños de pantalla
+
+### Detalles Técnicos
+- Implementación de `showLoading()` y `hideLoading()` en la clase `SliderCards3DInstance`
+- Animaciones CSS puras sin dependencias externas
+- Uso de localStorage para persistencia de estado en el admin
+- Skeleton cards con transformaciones 3D que imitan el slider real
+
 ## [1.4.0] - 2024-12-XX
 
 ### Nuevas Características
