@@ -46,6 +46,18 @@ class SliderCards3D_API {
                 ),
             ),
         ));
+        
+        register_rest_route('slidercards3d/v1', '/settings', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'get_settings'),
+            'permission_callback' => '__return_true', // Público para el frontend
+        ));
+        
+        register_rest_route('slidercards3d/v1', '/settings', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'save_settings'),
+            'permission_callback' => array($this, 'check_permissions')
+        ));
     }
 
     /**
@@ -214,17 +226,71 @@ class SliderCards3D_API {
      */
     private function get_selected_ids($type) {
         global $wpdb;
-
+        
         $table_name = $wpdb->prefix . 'slidercards3d_selections';
-
+        
         $results = $wpdb->get_results($wpdb->prepare(
             "SELECT item_id FROM $table_name WHERE type = %s AND selected = 1 ORDER BY order_index ASC",
             $type
         ));
-
+        
         return array_map(function($row) {
             return intval($row->item_id);
         }, $results);
+    }
+    
+    /**
+     * Obtener configuración
+     */
+    public function get_settings($request) {
+        $defaults = array(
+            'separation_desktop' => 100,
+            'separation_tablet' => 70,
+            'separation_mobile' => 50
+        );
+        
+        $settings = get_option('slidercards3d_settings', $defaults);
+        
+        // Asegurar que todos los valores estén presentes
+        $settings = wp_parse_args($settings, $defaults);
+        
+        return rest_ensure_response($settings);
+    }
+    
+    /**
+     * Guardar configuración
+     */
+    public function save_settings($request) {
+        $separation_desktop = intval($request->get_param('separation_desktop'));
+        $separation_tablet = intval($request->get_param('separation_tablet'));
+        $separation_mobile = intval($request->get_param('separation_mobile'));
+        
+        // Validar valores
+        if ($separation_desktop < 0 || $separation_desktop > 500) {
+            return new WP_Error('invalid_value', 'El valor de separación desktop debe estar entre 0 y 500', array('status' => 400));
+        }
+        
+        if ($separation_tablet < 0 || $separation_tablet > 500) {
+            return new WP_Error('invalid_value', 'El valor de separación tablet debe estar entre 0 y 500', array('status' => 400));
+        }
+        
+        if ($separation_mobile < 0 || $separation_mobile > 500) {
+            return new WP_Error('invalid_value', 'El valor de separación móvil debe estar entre 0 y 500', array('status' => 400));
+        }
+        
+        $settings = array(
+            'separation_desktop' => $separation_desktop,
+            'separation_tablet' => $separation_tablet,
+            'separation_mobile' => $separation_mobile
+        );
+        
+        update_option('slidercards3d_settings', $settings);
+        
+        return rest_ensure_response(array(
+            'success' => true,
+            'message' => 'Configuración guardada correctamente',
+            'settings' => $settings
+        ));
     }
 }
 

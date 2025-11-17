@@ -41,6 +41,16 @@
             $('#save-pages').on('click', () => {
                 this.saveSelection('page');
             });
+            
+            // Configuración
+            $('#slidercards3d-settings-form').on('submit', (e) => {
+                e.preventDefault();
+                this.saveSettings();
+            });
+            
+            $('#reset-settings').on('click', () => {
+                this.resetSettings();
+            });
         },
 
         switchTab: function(tab) {
@@ -63,6 +73,8 @@
                 this.loadImages();
             } else if (tab === 'pages') {
                 this.loadPages();
+            } else if (tab === 'settings') {
+                this.loadSettings();
             }
         },
 
@@ -292,6 +304,68 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
             };
+        },
+        
+        loadSettings: function() {
+            $.ajax({
+                url: slidercards3dAdmin.apiUrl + 'settings',
+                method: 'GET',
+                beforeSend: (xhr) => {
+                    xhr.setRequestHeader('X-WP-Nonce', slidercards3dAdmin.nonce);
+                },
+                success: (data) => {
+                    $('#separation-desktop').val(data.separation_desktop || 100);
+                    $('#separation-tablet').val(data.separation_tablet || 70);
+                    $('#separation-mobile').val(data.separation_mobile || 50);
+                },
+                error: () => {
+                    console.error('Error al cargar configuración');
+                }
+            });
+        },
+        
+        saveSettings: function() {
+            const $btn = $('#save-settings');
+            const originalText = $btn.text();
+            
+            $btn.prop('disabled', true).text(slidercards3dAdmin.strings.saving);
+            
+            const settings = {
+                separation_desktop: parseInt($('#separation-desktop').val()) || 100,
+                separation_tablet: parseInt($('#separation-tablet').val()) || 70,
+                separation_mobile: parseInt($('#separation-mobile').val()) || 50
+            };
+            
+            $.ajax({
+                url: slidercards3dAdmin.apiUrl + 'settings',
+                method: 'POST',
+                beforeSend: (xhr) => {
+                    xhr.setRequestHeader('X-WP-Nonce', slidercards3dAdmin.nonce);
+                },
+                data: JSON.stringify(settings),
+                contentType: 'application/json',
+                success: (data) => {
+                    $btn.text(slidercards3dAdmin.strings.saved);
+                    setTimeout(() => {
+                        $btn.prop('disabled', false).text(originalText);
+                    }, 2000);
+                },
+                error: () => {
+                    $btn.text(slidercards3dAdmin.strings.error);
+                    setTimeout(() => {
+                        $btn.prop('disabled', false).text(originalText);
+                    }, 2000);
+                }
+            });
+        },
+        
+        resetSettings: function() {
+            if (confirm('¿Estás seguro de que quieres restaurar los valores por defecto?')) {
+                $('#separation-desktop').val(100);
+                $('#separation-tablet').val(70);
+                $('#separation-mobile').val(50);
+                this.saveSettings();
+            }
         }
     };
 

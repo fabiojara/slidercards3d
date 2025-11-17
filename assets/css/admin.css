@@ -434,6 +434,107 @@
     margin: 0;
 }
 
+/* Settings Form */
+.slidercards3d-settings {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.slidercards3d-settings-header {
+    margin-bottom: 2rem;
+}
+
+.slidercards3d-settings-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--sc3d-text);
+    margin: 0 0 0.5rem 0;
+}
+
+.slidercards3d-settings-description {
+    font-size: 0.9375rem;
+    color: var(--sc3d-text-secondary);
+    margin: 0;
+}
+
+.slidercards3d-settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.slidercards3d-settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.slidercards3d-settings-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.slidercards3d-settings-label-text {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--sc3d-text);
+}
+
+.slidercards3d-settings-label-desc {
+    font-size: 0.875rem;
+    color: var(--sc3d-text-secondary);
+}
+
+.slidercards3d-settings-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 300px;
+}
+
+.slidercards3d-settings-input {
+    flex: 1;
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--sc3d-border);
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    background: var(--sc3d-bg);
+    color: var(--sc3d-text);
+    transition: all 0.2s ease;
+}
+
+.slidercards3d-settings-input:focus {
+    outline: none;
+    border-color: var(--sc3d-text);
+    box-shadow: 0 0 0 3px var(--sc3d-shadow);
+}
+
+.slidercards3d-settings-unit {
+    font-size: 0.875rem;
+    color: var(--sc3d-text-secondary);
+    font-weight: 500;
+    min-width: 30px;
+}
+
+.slidercards3d-settings-actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sc3d-border);
+}
+
+.slidercards3d-btn-secondary {
+    background: var(--sc3d-surface);
+    color: var(--sc3d-text);
+    border: 1px solid var(--sc3d-border);
+}
+
+.slidercards3d-btn-secondary:hover {
+    background: var(--sc3d-border);
+    border-color: var(--sc3d-text);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .slidercards3d-header {
@@ -467,6 +568,18 @@
 
     .slidercards3d-grid-cards {
         grid-template-columns: 1fr;
+    }
+    
+    .slidercards3d-settings-input-wrapper {
+        max-width: 100%;
+    }
+    
+    .slidercards3d-settings-actions {
+        flex-direction: column;
+    }
+    
+    .slidercards3d-settings-actions .slidercards3d-btn {
+        width: 100%;
     }
 }
 

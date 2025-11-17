@@ -74,6 +74,14 @@ class SliderCards3D_Admin {
      * Renderizar página de administración
      */
     public function render_admin_page() {
+        // Obtener configuración guardada
+        $defaults = array(
+            'separation_desktop' => 100,
+            'separation_tablet' => 70,
+            'separation_mobile' => 50
+        );
+        $settings = get_option('slidercards3d_settings', $defaults);
+        $settings = wp_parse_args($settings, $defaults);
         ?>
         <div class="slidercards3d-admin-wrap">
             <div class="slidercards3d-header">
@@ -107,6 +115,13 @@ class SliderCards3D_Admin {
                         <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
                     Páginas
+                </button>
+                <button class="slidercards3d-tab" data-tab="settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243m-4.242 0L5.636 18.364m12.728 0l-4.243-4.243m-4.242 0L5.636 5.636"></path>
+                    </svg>
+                    Configuración
                 </button>
             </div>
 
@@ -148,6 +163,87 @@ class SliderCards3D_Admin {
                             <div class="slidercards3d-spinner"></div>
                             <p>Cargando páginas...</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Pestaña Configuración -->
+                <div class="slidercards3d-tab-content" id="tab-settings">
+                    <div class="slidercards3d-settings">
+                        <div class="slidercards3d-settings-header">
+                            <h2 class="slidercards3d-settings-title">Configuración del Slider</h2>
+                            <p class="slidercards3d-settings-description">Ajusta la separación horizontal de las tarjetas según el tamaño de pantalla</p>
+                        </div>
+                        
+                        <form id="slidercards3d-settings-form" class="slidercards3d-settings-form">
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Separación Desktop (px)</span>
+                                    <span class="slidercards3d-settings-label-desc">Separación horizontal para pantallas grandes (más de 768px)</span>
+                                </label>
+                                <div class="slidercards3d-settings-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="separation-desktop" 
+                                        name="separation_desktop" 
+                                        class="slidercards3d-settings-input" 
+                                        min="0" 
+                                        max="500" 
+                                        step="10"
+                                        value="<?php echo esc_attr($settings['separation_desktop']); ?>"
+                                    >
+                                    <span class="slidercards3d-settings-unit">px</span>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Separación Tablet (px)</span>
+                                    <span class="slidercards3d-settings-label-desc">Separación horizontal para tablets (481px - 768px)</span>
+                                </label>
+                                <div class="slidercards3d-settings-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="separation-tablet" 
+                                        name="separation_tablet" 
+                                        class="slidercards3d-settings-input" 
+                                        min="0" 
+                                        max="500" 
+                                        step="10"
+                                        value="<?php echo esc_attr($settings['separation_tablet']); ?>"
+                                    >
+                                    <span class="slidercards3d-settings-unit">px</span>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-group">
+                                <label class="slidercards3d-settings-label">
+                                    <span class="slidercards3d-settings-label-text">Separación Móvil (px)</span>
+                                    <span class="slidercards3d-settings-label-desc">Separación horizontal para móviles (hasta 480px)</span>
+                                </label>
+                                <div class="slidercards3d-settings-input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="separation-mobile" 
+                                        name="separation_mobile" 
+                                        class="slidercards3d-settings-input" 
+                                        min="0" 
+                                        max="500" 
+                                        step="10"
+                                        value="<?php echo esc_attr($settings['separation_mobile']); ?>"
+                                    >
+                                    <span class="slidercards3d-settings-unit">px</span>
+                                </div>
+                            </div>
+
+                            <div class="slidercards3d-settings-actions">
+                                <button type="submit" class="slidercards3d-btn slidercards3d-btn-primary" id="save-settings">
+                                    Guardar configuración
+                                </button>
+                                <button type="button" class="slidercards3d-btn slidercards3d-btn-secondary" id="reset-settings">
+                                    Restaurar valores por defecto
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -15,10 +15,35 @@
         init: function() {
             const container = document.querySelector('.slidercards3d-container');
             if (!container) return;
-
+            
             this.type = container.dataset.type || 'all';
-            this.loadItems();
-            this.bindEvents();
+            this.settings = {
+                separation_desktop: 100,
+                separation_tablet: 70,
+                separation_mobile: 50
+            };
+            
+            // Cargar configuración primero
+            this.loadSettings().then(() => {
+                this.loadItems();
+                this.bindEvents();
+            });
+        },
+        
+        loadSettings: function() {
+            return fetch(slidercards3dData.apiUrl + 'settings')
+                .then(response => response.json())
+                .then(data => {
+                    this.settings = {
+                        separation_desktop: data.separation_desktop || 100,
+                        separation_tablet: data.separation_tablet || 70,
+                        separation_mobile: data.separation_mobile || 50
+                    };
+                })
+                .catch(() => {
+                    // Usar valores por defecto si falla
+                    console.warn('No se pudieron cargar los ajustes, usando valores por defecto');
+                });
         },
 
         loadItems: function() {
@@ -348,11 +373,12 @@
 
                 // Calcular transformación 3D
                 let translateZ = -absOffset * 100;
-                // Aumentar separación horizontal según el tamaño de pantalla
-                // Desktop: 100px, Tablet: 70px, Móvil: 50px
+                // Usar separación horizontal desde configuración según el tamaño de pantalla
                 const isMobile = window.innerWidth <= 480;
                 const isTablet = window.innerWidth <= 768 && window.innerWidth > 480;
-                const separationX = isMobile ? 50 : (isTablet ? 70 : 100);
+                const separationX = isMobile ? this.settings.separation_mobile : 
+                                   (isTablet ? this.settings.separation_tablet : 
+                                    this.settings.separation_desktop);
                 let translateX = offset * separationX;
                 let rotateY = offset * 15;
                 let opacity = 1;
@@ -457,7 +483,7 @@
             document.addEventListener('keydown', (e) => {
                 const container = document.querySelector('.slidercards3d-container');
                 if (!container) return;
-                
+
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
                     this.prev();
@@ -466,7 +492,7 @@
                     this.next();
                 }
             });
-            
+
             // Recalcular posiciones al redimensionar la ventana
             let resizeTimeout;
             window.addEventListener('resize', () => {
