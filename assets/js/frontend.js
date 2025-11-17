@@ -54,9 +54,9 @@
 
         startAutoplay: function() {
             if (!this.settings.autoplay || this.items.length <= 1) return;
-            
+
             this.stopAutoplay();
-            
+
             this.autoplayTimer = setInterval(() => {
                 if (!this.isPaused && !this.isAnimating) {
                     // En modo infinito, simplemente avanzar (next ya maneja el ciclo)
@@ -408,14 +408,14 @@
             cards.forEach((card, index) => {
                 // Calcular offset con lógica circular para efecto infinito
                 let offset = index - this.currentIndex;
-                
+
                 // Ajustar offset para crear efecto infinito
                 if (offset > total / 2) {
                     offset = offset - total;
                 } else if (offset < -total / 2) {
                     offset = offset + total;
                 }
-                
+
                 const absOffset = Math.abs(offset);
 
                 // Calcular transformación 3D
@@ -430,13 +430,18 @@
                 let rotateY = offset * 15;
                 let opacity = 1;
                 let scale = 1;
+                let brightness = 1; // Filtro de brillo (1 = normal, menor = más oscuro)
 
                 if (absOffset > 3) {
                     opacity = 0;
                     scale = 0.8;
+                    brightness = 0.3;
                 } else if (absOffset > 0) {
                     opacity = 1 - (absOffset * 0.2);
                     scale = 1 - (absOffset * 0.05);
+                    // Aplicar filtro oscuro: cuanto más lejos, más oscuro
+                    // absOffset 1 = 0.7, absOffset 2 = 0.5, absOffset 3 = 0.3
+                    brightness = 1 - (absOffset * 0.25);
                 }
 
                 // Aplicar transformación
@@ -447,6 +452,7 @@
                     scale(${scale})
                 `;
                 card.style.opacity = opacity;
+                card.style.filter = `brightness(${brightness})`;
                 card.style.zIndex = total - absOffset;
             });
 
@@ -459,7 +465,7 @@
             // Los botones nunca se deshabilitan en modo infinito
             const prevBtn = document.querySelector('.slidercards3d-btn-prev');
             const nextBtn = document.querySelector('.slidercards3d-btn-next');
-            
+
             if (prevBtn) {
                 prevBtn.disabled = false; // Siempre habilitado en modo infinito
             }
@@ -478,7 +484,7 @@
                 this.isAnimating = false;
             }, 500);
         },
-        
+
         prev: function() {
             if (this.isAnimating) return;
             this.isAnimating = true;
@@ -489,7 +495,7 @@
                 this.isAnimating = false;
             }, 500);
         },
-        
+
         goTo: function(index) {
             if (this.isAnimating) return;
             if (index >= 0 && index < this.items.length && index !== this.currentIndex) {
