@@ -348,8 +348,12 @@
 
                 // Calcular transformación 3D
                 let translateZ = -absOffset * 100;
-                // Aumentar separación horizontal (de 50 a 100px por cada tarjeta)
-                let translateX = offset * 100;
+                // Aumentar separación horizontal según el tamaño de pantalla
+                // Desktop: 100px, Tablet: 70px, Móvil: 50px
+                const isMobile = window.innerWidth <= 480;
+                const isTablet = window.innerWidth <= 768 && window.innerWidth > 480;
+                const separationX = isMobile ? 50 : (isTablet ? 70 : 100);
+                let translateX = offset * separationX;
                 let rotateY = offset * 15;
                 let opacity = 1;
                 let scale = 1;

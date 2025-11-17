@@ -213,6 +213,7 @@
 @media (max-width: 768px) {
     .slidercards3d-wrapper {
         height: 500px;
+        overflow: visible; /* Mantener visible en móviles también */
     }
 
     .slidercards3d-card {
@@ -231,11 +232,17 @@
         width: 40px;
         height: 40px;
     }
+    
+    /* Reducir separación en móviles para que quepa mejor */
+    .slidercards3d-container {
+        padding: 1rem 0.5rem;
+    }
 }
 
 @media (max-width: 480px) {
     .slidercards3d-wrapper {
         height: 400px;
+        overflow: visible; /* Mantener visible en móviles pequeños también */
     }
 
     .slidercards3d-card {
@@ -243,6 +250,11 @@
         height: 300px;
         margin-left: -100px;
         margin-top: -150px;
+    }
+    
+    /* Reducir separación en móviles pequeños */
+    .slidercards3d-container {
+        padding: 1rem 0.25rem;
     }
 }
 
