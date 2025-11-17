@@ -132,9 +132,9 @@
         <div class="badge">Heroicons - Tailwind CSS</div>
         <h1>🎨 Convertir Iconos Heroicons a PNG</h1>
         <p class="subtitle">Convierte los iconos SVG de Heroicons a formato PNG para uso en el plugin</p>
-        
+
         <div id="icons-container"></div>
-        
+
         <div class="instructions">
             <h3>📋 Instrucciones:</h3>
             <ol>
@@ -165,7 +165,7 @@
             const item = document.createElement('div');
             item.className = 'icon-item';
             item.id = `icon-${icon.name}`;
-            
+
             const preview = document.createElement('div');
             preview.className = 'icon-preview';
             const img = document.createElement('img');
@@ -179,23 +179,23 @@
                 this.src = `https://api.iconify.design/heroicons-outline/${icon.name}.svg?width=${icon.size}&height=${icon.size}`;
             };
             preview.appendChild(img);
-            
+
             const info = document.createElement('div');
             info.className = 'icon-info';
             info.innerHTML = `
                 <div class="icon-name">${icon.name}.png</div>
                 <div class="icon-size">${icon.description} • ${icon.size}x${icon.size}px</div>
             `;
-            
+
             const status = document.createElement('span');
             status.className = 'status';
             status.id = `status-${icon.name}`;
-            
+
             const downloadBtn = document.createElement('button');
             downloadBtn.textContent = 'Descargar PNG';
             downloadBtn.id = `btn-${icon.name}`;
             downloadBtn.onclick = () => downloadAsPNG(icon.name, icon.size, downloadBtn, status);
-            
+
             item.appendChild(preview);
             item.appendChild(info);
             const btnContainer = document.createElement('div');
@@ -211,7 +211,7 @@
             button.disabled = true;
             statusElement.textContent = 'Convirtiendo...';
             statusElement.className = 'status';
-            
+
             // Cargar SVG local primero, si no existe usar la URL remota
             fetch(`${iconName}.svg`)
                 .then(response => {
@@ -228,12 +228,12 @@
                         const ctx = canvas.getContext('2d');
                         canvas.width = size;
                         canvas.height = size;
-                        
+
                         const img = new Image();
                         img.onload = () => {
                             ctx.clearRect(0, 0, size, size);
                             ctx.drawImage(img, 0, 0, size, size);
-                            
+
                             canvas.toBlob(blob => {
                                 if (blob) {
                                     const url = URL.createObjectURL(blob);
@@ -244,7 +244,7 @@
                                     a.click();
                                     document.body.removeChild(a);
                                     URL.revokeObjectURL(url);
-                                    
+
                                     statusElement.textContent = '✓ Descargado';
                                     statusElement.className = 'status success';
                                     button.disabled = false;
@@ -254,9 +254,9 @@
                                 }
                             }, 'image/png');
                         };
-                        
+
                         img.onerror = () => reject(new Error('Error al cargar SVG'));
-                        
+
                         // Convertir SVG a data URL
                         const svgBlob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
                         const url = URL.createObjectURL(svgBlob);

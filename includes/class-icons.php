@@ -1,7 +1,8 @@
 <?php
 /**
- * Gestor de iconos Heroicons en formato PNG
+ * Gestor de iconos Heroicons en formato SVG
  * Heroicons es la librería oficial de Tailwind CSS, perfecta para diseños estilo Vercel/Linear/Stripe/Apple
+ * Usamos SVG directamente para mejor calidad y escalabilidad
  */
 
 if (!defined('ABSPATH')) {
@@ -13,31 +14,26 @@ class SliderCards3D_Icons {
     private static $iconify_api = 'https://api.iconify.design/heroicons-outline/';
 
     /**
-     * Obtener URL del icono
+     * Obtener URL del icono SVG
      */
     public static function get_icon_url($icon_name, $size = 24, $color = 'currentColor') {
-        $local_path = SLIDERCARDS3D_PLUGIN_DIR . 'assets/icons/' . $icon_name . '.png';
-        $local_url = SLIDERCARDS3D_PLUGIN_URL . 'assets/icons/' . $icon_name . '.png';
+        $local_path = SLIDERCARDS3D_PLUGIN_DIR . 'assets/icons/' . $icon_name . '.svg';
+        $local_url = SLIDERCARDS3D_PLUGIN_URL . 'assets/icons/' . $icon_name . '.svg';
 
         // Si existe el archivo local, usarlo
         if (file_exists($local_path)) {
             return $local_url;
         }
 
-        // Si no existe, usar API de Iconify para generar PNG
+        // Si no existe, usar API de Iconify como fallback
         return self::get_iconify_url($icon_name, $size, $color);
     }
 
     /**
-     * Obtener URL desde Iconify API (servirá como fallback temporal)
-     * Nota: Iconify sirve SVG, pero podemos usar un servicio de conversión
+     * Obtener URL desde Iconify API (fallback si no existe localmente)
      */
     private static function get_iconify_url($icon_name, $size = 24, $color = 'currentColor') {
-        // Usar SimpleIcons o similar que puede servir PNG
-        // Por ahora, retornar SVG como fallback hasta que se descarguen los PNG
         $color_hex = self::color_to_hex($color);
-        // Usar un servicio que convierta SVG a PNG en tiempo real
-        // Por ahora, retornamos el SVG como fallback temporal
         return self::$iconify_api . $icon_name . '.svg?color=' . urlencode($color_hex) . '&width=' . $size . '&height=' . $size;
     }
 

@@ -31,22 +31,22 @@ foreach ($icon in $icons) {
     $iconName = $icon.name
     $size = $icon.size
     $description = $icon.description
-    
+
     # Heroicons en Iconify usa formato: heroicons-outline:icon-name o heroicons:icon-name-24-outline
     # Probamos ambos formatos
     # Formato 1: heroicons-outline:photo
     # Formato 2: heroicons:photo-24-outline
-    
+
     # Usamos la variante outline (más minimalista)
     # Iconify API acepta: heroicons-outline/photo o heroicons/photo-24-outline
     $iconifyName = "${iconName}"
     $url = "https://api.iconify.design/heroicons-outline/${iconifyName}.svg?width=${size}&height=${size}&color=%23000000"
     $outputFile = "${iconName}.svg"
-    
+
     try {
         Write-Host "  [$description] Descargando: $iconName.svg ($size x $size)..." -NoNewline
         $response = Invoke-WebRequest -Uri $url -OutFile $outputFile -ErrorAction Stop
-        
+
         # Verificar que el archivo se descargó correctamente
         if (Test-Path $outputFile -PathType Leaf) {
             $fileSize = (Get-Item $outputFile).Length

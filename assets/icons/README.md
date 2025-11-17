@@ -1,36 +1,50 @@
-# Iconos PNG de Lucide
+# Iconos SVG de Heroicons
 
-Esta carpeta contiene los iconos PNG de Lucide utilizados en el plugin.
+Esta carpeta contiene los iconos SVG de Heroicons utilizados en el plugin.
 
-## Iconos necesarios:
+## 📦 Librería: Heroicons
 
-1. **image.png** - Icono de imagen (24x24px)
-2. **file-text.png** - Icono de página/documento (24x24px)
-3. **settings.png** - Icono de configuración (24x24px)
-4. **chevron-left.png** - Icono de anterior (24x24px)
-5. **chevron-right.png** - Icono de siguiente (24x24px)
-6. **x.png** - Icono de cerrar (24x24px)
-7. **check.png** - Icono de checkmark (24x24px)
-8. **external-link.png** - Icono de enlace externo (16x16px)
+**Heroicons** es la librería oficial de Tailwind CSS, perfecta para diseños modernos estilo Vercel/Linear/Stripe/Apple.
 
-## Cómo obtener los iconos:
+- ✅ **Formato**: SVG (escalable y ligero)
+- ✅ **Variante**: Outline (minimalista y moderna)
+- ✅ **Fuente**: https://heroicons.com/
 
-### Opción 1: Descargar desde Lucide Icons
-1. Visita: https://lucide.dev/icons/
-2. Busca cada icono por nombre
-3. Descarga en formato PNG (24x24px para la mayoría, 16x16px para el enlace externo)
-4. Guarda en esta carpeta con los nombres indicados
+## 🎨 Iconos necesarios:
 
-### Opción 2: Usar Iconify API (recomendado)
-Los iconos se cargarán automáticamente desde la API de Iconify si no están disponibles localmente.
+1. **photo.svg** - Icono de imágenes (24x24px)
+2. **document-text.svg** - Icono de páginas/documentos (24x24px)
+3. **cog-6-tooth.svg** - Icono de configuración (24x24px)
+4. **chevron-left.svg** - Icono de anterior (24x24px)
+5. **chevron-right.svg** - Icono de siguiente (24x24px)
+6. **x-mark.svg** - Icono de cerrar (24x24px)
+7. **check.svg** - Icono de checkmark (24x24px)
+8. **arrow-top-right-on-square.svg** - Icono de enlace externo (16x16px)
 
-### Opción 3: Convertir SVG a PNG
-Si tienes los SVG de Lucide, puedes convertirlos a PNG usando herramientas online como:
-- https://cloudconvert.com/svg-to-png
-- https://convertio.co/svg-png/
+## 📥 Descarga automática:
 
-## Tamaños recomendados:
-- Iconos principales: 24x24px
-- Iconos pequeños: 16x16px
-- Resolución: 2x para pantallas retina (48x48px y 32x32px)
+Los iconos se pueden descargar automáticamente usando:
 
+```powershell
+.\descargar-heroicons.ps1
+```
+
+Este script descarga todos los SVG necesarios desde la API de Iconify.
+
+## 🔄 Fallback automático:
+
+Si un icono SVG no existe localmente, el sistema automáticamente usará la API de Iconify como fallback, garantizando que los iconos siempre se muestren correctamente.
+
+## ✨ Ventajas de usar SVG:
+
+- **Escalabilidad**: Se ven perfectos en cualquier resolución (retina, 4K, etc.)
+- **Tamaño**: Archivos más pequeños que PNG
+- **Personalización**: Se pueden modificar con CSS (color, tamaño, etc.)
+- **Calidad**: Siempre nítidos, sin pixelación
+- **Moderno**: Estándar actual para iconos web
+
+## 📝 Notas:
+
+- Los SVG ya están descargados en esta carpeta
+- Si necesitas actualizar los iconos, ejecuta el script de descarga nuevamente
+- Los iconos usan la variante "outline" de Heroicons para un look más minimalista

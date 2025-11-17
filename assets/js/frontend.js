@@ -331,14 +331,14 @@
                 link.className = 'slidercards3d-card-link';
                 link.textContent = 'Ver página';
                 const linkIcon = document.createElement('img');
-                linkIcon.src = slidercards3dData.pluginUrl + 'assets/icons/external-link.png';
+                linkIcon.src = slidercards3dData.pluginUrl + 'assets/icons/arrow-top-right-on-square.svg';
                 linkIcon.width = 16;
                 linkIcon.height = 16;
                 linkIcon.alt = '';
                 linkIcon.className = 'slidercards3d-icon-inline';
                 linkIcon.onerror = function() {
-                    // Fallback a SVG si PNG no existe
-                    this.src = 'https://api.iconify.design/lucide/external-link.svg?width=16&height=16';
+                    // Fallback a API si SVG local no existe
+                    this.src = 'https://api.iconify.design/heroicons-outline/arrow-top-right-on-square.svg?width=16&height=16';
                 };
                 link.textContent = 'Ver página ';
                 link.appendChild(linkIcon);
@@ -379,14 +379,14 @@
                 prevBtn.className = 'slidercards3d-btn-prev';
                 prevBtn.setAttribute('aria-label', 'Anterior');
                 const prevIcon = document.createElement('img');
-                prevIcon.src = slidercards3dData.pluginUrl + 'assets/icons/chevron-left.png';
+                prevIcon.src = slidercards3dData.pluginUrl + 'assets/icons/chevron-left.svg';
                 prevIcon.width = 24;
                 prevIcon.height = 24;
                 prevIcon.alt = 'Anterior';
                 prevIcon.className = 'slidercards3d-icon';
                 prevIcon.onerror = function() {
-                    // Fallback a SVG si PNG no existe
-                    this.src = 'https://api.iconify.design/lucide/chevron-left.svg?width=24&height=24';
+                    // Fallback a API si SVG local no existe
+                    this.src = 'https://api.iconify.design/heroicons-outline/chevron-left.svg?width=24&height=24';
                 };
                 prevBtn.appendChild(prevIcon);
                 prevBtn.addEventListener('click', () => this.prev());
@@ -395,14 +395,14 @@
                 nextBtn.className = 'slidercards3d-btn-next';
                 nextBtn.setAttribute('aria-label', 'Siguiente');
                 const nextIcon = document.createElement('img');
-                nextIcon.src = slidercards3dData.pluginUrl + 'assets/icons/chevron-right.png';
+                nextIcon.src = slidercards3dData.pluginUrl + 'assets/icons/chevron-right.svg';
                 nextIcon.width = 24;
                 nextIcon.height = 24;
                 nextIcon.alt = 'Siguiente';
                 nextIcon.className = 'slidercards3d-icon';
                 nextIcon.onerror = function() {
-                    // Fallback a SVG si PNG no existe
-                    this.src = 'https://api.iconify.design/lucide/chevron-right.svg?width=24&height=24';
+                    // Fallback a API si SVG local no existe
+                    this.src = 'https://api.iconify.design/heroicons-outline/chevron-right.svg?width=24&height=24';
                 };
                 nextBtn.appendChild(nextIcon);
                 nextBtn.addEventListener('click', () => this.next());
