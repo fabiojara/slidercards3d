@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convertir SVG a PNG - Lucide Icons</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 2rem auto;
             padding: 2rem;
             background: #f5f5f5;
@@ -20,6 +25,11 @@
         }
         h1 {
             margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
         }
         .icon-item {
             display: flex;
@@ -29,49 +39,98 @@
             border: 1px solid #e5e5e5;
             border-radius: 8px;
             margin-bottom: 1rem;
+            background: #fafafa;
         }
         .icon-preview {
-            width: 48px;
-            height: 48px;
+            width: 64px;
+            height: 64px;
             border: 1px solid #e5e5e5;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: white;
+            flex-shrink: 0;
+        }
+        .icon-info {
+            flex: 1;
+        }
+        .icon-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .icon-size {
+            color: #666;
+            font-size: 0.875rem;
         }
         button {
             background: #000;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
         }
         button:hover {
             background: #333;
+            transform: translateY(-1px);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .status {
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+        }
+        .status.success {
+            color: #10b981;
+        }
+        .status.error {
+            color: #ef4444;
         }
         .instructions {
             background: #f9f9f9;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 8px;
             margin-top: 2rem;
+            border-left: 4px solid #000;
+        }
+        .instructions h3 {
+            margin-bottom: 0.75rem;
+        }
+        .instructions ol {
+            margin-left: 1.5rem;
+        }
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 0.125rem 0.375rem;
+            border-radius: 3px;
+            font-size: 0.875rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Convertir Iconos SVG a PNG</h1>
-        <p>Haz clic en cada icono para descargarlo como PNG</p>
-
+        <h1>🎨 Convertir Iconos SVG a PNG</h1>
+        <p class="subtitle">Convierte los iconos SVG de Lucide a formato PNG</p>
+        
         <div id="icons-container"></div>
-
+        
         <div class="instructions">
-            <h3>Instrucciones:</h3>
+            <h3>📋 Instrucciones:</h3>
             <ol>
                 <li>Haz clic en "Descargar PNG" para cada icono</li>
                 <li>Guarda cada archivo en la carpeta <code>assets/icons/</code></li>
-                <li>Asegúrate de que los nombres sean exactos (ej: image.png, file-text.png)</li>
+                <li>Asegúrate de que los nombres sean exactos (ej: <code>image.png</code>, <code>file-text.png</code>)</li>
+                <li>Una vez descargados todos, recarga la página del plugin</li>
             </ol>
         </div>
     </div>
@@ -93,63 +152,111 @@
         icons.forEach(icon => {
             const item = document.createElement('div');
             item.className = 'icon-item';
-
+            item.id = `icon-${icon.name}`;
+            
             const preview = document.createElement('div');
             preview.className = 'icon-preview';
             const img = document.createElement('img');
-            img.src = `https://api.iconify.design/lucide/${icon.name}.svg?width=${icon.size}&height=${icon.size}`;
+            img.src = `${icon.name}.svg`;
             img.width = icon.size;
             img.height = icon.size;
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            img.onerror = function() {
+                this.src = `https://api.iconify.design/lucide/${icon.name}.svg?width=${icon.size}&height=${icon.size}`;
+            };
             preview.appendChild(img);
-
+            
             const info = document.createElement('div');
-            info.style.flex = '1';
+            info.className = 'icon-info';
             info.innerHTML = `
-                <strong>${icon.name}.png</strong><br>
-                <small>Tamaño: ${icon.size}x${icon.size}px</small>
+                <div class="icon-name">${icon.name}.png</div>
+                <div class="icon-size">Tamaño: ${icon.size}x${icon.size}px</div>
             `;
-
+            
+            const status = document.createElement('span');
+            status.className = 'status';
+            status.id = `status-${icon.name}`;
+            
             const downloadBtn = document.createElement('button');
             downloadBtn.textContent = 'Descargar PNG';
-            downloadBtn.onclick = () => downloadAsPNG(icon.name, icon.size);
-
+            downloadBtn.id = `btn-${icon.name}`;
+            downloadBtn.onclick = () => downloadAsPNG(icon.name, icon.size, downloadBtn, status);
+            
             item.appendChild(preview);
             item.appendChild(info);
-            item.appendChild(downloadBtn);
+            const btnContainer = document.createElement('div');
+            btnContainer.style.display = 'flex';
+            btnContainer.style.alignItems = 'center';
+            btnContainer.appendChild(downloadBtn);
+            btnContainer.appendChild(status);
+            item.appendChild(btnContainer);
             container.appendChild(item);
         });
 
-        function downloadAsPNG(iconName, size) {
-            // Crear canvas para convertir SVG a PNG
-            const svgUrl = `https://api.iconify.design/lucide/${iconName}.svg?width=${size}&height=${size}`;
-
-            fetch(svgUrl)
+        function downloadAsPNG(iconName, size, button, statusElement) {
+            button.disabled = true;
+            statusElement.textContent = 'Convirtiendo...';
+            statusElement.className = 'status';
+            
+            // Cargar SVG local primero, si no existe usar la URL remota
+            fetch(`${iconName}.svg`)
+                .then(response => {
+                    if (!response.ok) {
+                        return fetch(`https://api.iconify.design/lucide/${iconName}.svg?width=${size}&height=${size}`);
+                    }
+                    return response;
+                })
                 .then(response => response.text())
                 .then(svg => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = size;
-                    canvas.height = size;
-
-                    const img = new Image();
-                    img.onload = () => {
-                        ctx.drawImage(img, 0, 0);
-                        canvas.toBlob(blob => {
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = `${iconName}.png`;
-                            a.click();
-                            URL.revokeObjectURL(url);
-                        });
-                    };
-                    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+                    return new Promise((resolve, reject) => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = size;
+                        canvas.height = size;
+                        
+                        const img = new Image();
+                        img.onload = () => {
+                            ctx.clearRect(0, 0, size, size);
+                            ctx.drawImage(img, 0, 0, size, size);
+                            
+                            canvas.toBlob(blob => {
+                                if (blob) {
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `${iconName}.png`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                    
+                                    statusElement.textContent = '✓ Descargado';
+                                    statusElement.className = 'status success';
+                                    button.disabled = false;
+                                    resolve();
+                                } else {
+                                    reject(new Error('Error al crear PNG'));
+                                }
+                            }, 'image/png');
+                        };
+                        
+                        img.onerror = () => reject(new Error('Error al cargar SVG'));
+                        
+                        // Convertir SVG a data URL
+                        const svgBlob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+                        const url = URL.createObjectURL(svgBlob);
+                        img.src = url;
+                    });
                 })
                 .catch(err => {
-                    alert('Error al convertir. Usa un convertidor online: https://cloudconvert.com/svg-to-png');
+                    console.error('Error:', err);
+                    statusElement.textContent = '✗ Error';
+                    statusElement.className = 'status error';
+                    button.disabled = false;
+                    alert('Error al convertir. Asegúrate de que el archivo SVG existe en esta carpeta.\n\nSi no existe, descárgalo primero usando el script descargar-iconos.ps1');
                 });
         }
     </script>
 </body>
 </html>
-
