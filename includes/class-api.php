@@ -250,15 +250,15 @@ class SliderCards3D_API {
             'autoplay' => false,
             'autoplay_interval' => 3000
         );
-        
+
         $settings = get_option('slidercards3d_settings', $defaults);
-        
+
         // Asegurar que todos los valores estén presentes
         $settings = wp_parse_args($settings, $defaults);
-        
+
         // Convertir autoplay a booleano si es necesario
         $settings['autoplay'] = (bool) $settings['autoplay'];
-        
+
         return rest_ensure_response($settings);
     }
 
@@ -271,24 +271,24 @@ class SliderCards3D_API {
         $separation_mobile = intval($request->get_param('separation_mobile'));
         $autoplay = $request->get_param('autoplay') === '1' || $request->get_param('autoplay') === true || $request->get_param('autoplay') === 'true';
         $autoplay_interval = intval($request->get_param('autoplay_interval'));
-        
+
         // Validar valores
         if ($separation_desktop < 0 || $separation_desktop > 500) {
             return new WP_Error('invalid_value', 'El valor de separación desktop debe estar entre 0 y 500', array('status' => 400));
         }
-        
+
         if ($separation_tablet < 0 || $separation_tablet > 500) {
             return new WP_Error('invalid_value', 'El valor de separación tablet debe estar entre 0 y 500', array('status' => 400));
         }
-        
+
         if ($separation_mobile < 0 || $separation_mobile > 500) {
             return new WP_Error('invalid_value', 'El valor de separación móvil debe estar entre 0 y 500', array('status' => 400));
         }
-        
+
         if ($autoplay_interval < 1000 || $autoplay_interval > 10000) {
             return new WP_Error('invalid_value', 'El intervalo de reproducción debe estar entre 1000 y 10000 ms', array('status' => 400));
         }
-        
+
         $settings = array(
             'separation_desktop' => $separation_desktop,
             'separation_tablet' => $separation_tablet,
@@ -296,9 +296,9 @@ class SliderCards3D_API {
             'autoplay' => $autoplay,
             'autoplay_interval' => $autoplay_interval
         );
-        
+
         update_option('slidercards3d_settings', $settings);
-        
+
         return rest_ensure_response(array(
             'success' => true,
             'message' => 'Configuración guardada correctamente',

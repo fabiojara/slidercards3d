@@ -223,13 +223,13 @@ class SliderCards3D_Admin {
                                     <span class="slidercards3d-settings-label-desc">Separación horizontal para móviles (hasta 480px)</span>
                                 </label>
                                 <div class="slidercards3d-settings-input-wrapper">
-                                    <input 
-                                        type="number" 
-                                        id="separation-mobile" 
-                                        name="separation_mobile" 
-                                        class="slidercards3d-settings-input" 
-                                        min="0" 
-                                        max="500" 
+                                    <input
+                                        type="number"
+                                        id="separation-mobile"
+                                        name="separation_mobile"
+                                        class="slidercards3d-settings-input"
+                                        min="0"
+                                        max="500"
                                         step="10"
                                         value="<?php echo esc_attr($settings['separation_mobile']); ?>"
                                     >
@@ -246,10 +246,10 @@ class SliderCards3D_Admin {
                                         <span class="slidercards3d-settings-label-desc">Activa el desplazamiento automático del slider</span>
                                     </label>
                                     <label class="slidercards3d-switch">
-                                        <input 
-                                            type="checkbox" 
-                                            id="autoplay" 
-                                            name="autoplay" 
+                                        <input
+                                            type="checkbox"
+                                            id="autoplay"
+                                            name="autoplay"
                                             value="1"
                                             <?php checked($settings['autoplay'], true); ?>
                                         >
@@ -264,13 +264,13 @@ class SliderCards3D_Admin {
                                     <span class="slidercards3d-settings-label-desc">Tiempo entre cada transición automática (en milisegundos)</span>
                                 </label>
                                 <div class="slidercards3d-settings-input-wrapper">
-                                    <input 
-                                        type="number" 
-                                        id="autoplay-interval" 
-                                        name="autoplay_interval" 
-                                        class="slidercards3d-settings-input" 
-                                        min="1000" 
-                                        max="10000" 
+                                    <input
+                                        type="number"
+                                        id="autoplay-interval"
+                                        name="autoplay_interval"
+                                        class="slidercards3d-settings-input"
+                                        min="1000"
+                                        max="10000"
                                         step="500"
                                         value="<?php echo esc_attr($settings['autoplay_interval']); ?>"
                                     >

@@ -15,7 +15,7 @@
         init: function() {
             const container = document.querySelector('.slidercards3d-container');
             if (!container) return;
-            
+
             this.type = container.dataset.type || 'all';
             this.settings = {
                 separation_desktop: 100,
@@ -26,7 +26,7 @@
             };
             this.autoplayTimer = null;
             this.isPaused = false;
-            
+
             // Cargar configuración primero
             this.loadSettings().then(() => {
                 this.loadItems();
@@ -51,7 +51,7 @@
                     console.warn('No se pudieron cargar los ajustes, usando valores por defecto');
                 });
         },
-        
+
         startAutoplay: function() {
             if (!this.settings.autoplay || this.items.length <= 1) return;
             
@@ -59,27 +59,23 @@
             
             this.autoplayTimer = setInterval(() => {
                 if (!this.isPaused && !this.isAnimating) {
-                    if (this.currentIndex < this.items.length - 1) {
-                        this.next();
-                    } else {
-                        // Volver al inicio
-                        this.goTo(0);
-                    }
+                    // En modo infinito, simplemente avanzar (next ya maneja el ciclo)
+                    this.next();
                 }
             }, this.settings.autoplay_interval);
         },
-        
+
         stopAutoplay: function() {
             if (this.autoplayTimer) {
                 clearInterval(this.autoplayTimer);
                 this.autoplayTimer = null;
             }
         },
-        
+
         pauseAutoplay: function() {
             this.isPaused = true;
         },
-        
+
         resumeAutoplay: function() {
             this.isPaused = false;
         },
@@ -410,7 +406,16 @@
             if (total === 0) return;
 
             cards.forEach((card, index) => {
-                const offset = index - this.currentIndex;
+                // Calcular offset con lógica circular para efecto infinito
+                let offset = index - this.currentIndex;
+                
+                // Ajustar offset para crear efecto infinito
+                if (offset > total / 2) {
+                    offset = offset - total;
+                } else if (offset < -total / 2) {
+                    offset = offset + total;
+                }
+                
                 const absOffset = Math.abs(offset);
 
                 // Calcular transformación 3D
@@ -445,48 +450,46 @@
                 card.style.zIndex = total - absOffset;
             });
 
-            // Actualizar indicadores
+            // Actualizar indicadores (mantener para referencia visual)
             const indicatorElements = document.querySelectorAll('.slidercards3d-indicator');
             indicatorElements.forEach((indicator, index) => {
                 indicator.classList.toggle('active', index === this.currentIndex);
             });
 
-            // Actualizar botones
+            // Los botones nunca se deshabilitan en modo infinito
             const prevBtn = document.querySelector('.slidercards3d-btn-prev');
             const nextBtn = document.querySelector('.slidercards3d-btn-next');
-
+            
             if (prevBtn) {
-                prevBtn.disabled = this.currentIndex === 0;
+                prevBtn.disabled = false; // Siempre habilitado en modo infinito
             }
             if (nextBtn) {
-                nextBtn.disabled = this.currentIndex === total - 1;
+                nextBtn.disabled = false; // Siempre habilitado en modo infinito
             }
         },
 
         next: function() {
             if (this.isAnimating) return;
-            if (this.currentIndex < this.items.length - 1) {
-                this.isAnimating = true;
-                this.currentIndex++;
-                this.updateCards();
-                setTimeout(() => {
-                    this.isAnimating = false;
-                }, 500);
-            }
+            this.isAnimating = true;
+            // Navegación circular infinita
+            this.currentIndex = (this.currentIndex + 1) % this.items.length;
+            this.updateCards();
+            setTimeout(() => {
+                this.isAnimating = false;
+            }, 500);
         },
-
+        
         prev: function() {
             if (this.isAnimating) return;
-            if (this.currentIndex > 0) {
-                this.isAnimating = true;
-                this.currentIndex--;
-                this.updateCards();
-                setTimeout(() => {
-                    this.isAnimating = false;
-                }, 500);
-            }
+            this.isAnimating = true;
+            // Navegación circular infinita
+            this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+            this.updateCards();
+            setTimeout(() => {
+                this.isAnimating = false;
+            }, 500);
         },
-
+        
         goTo: function(index) {
             if (this.isAnimating) return;
             if (index >= 0 && index < this.items.length && index !== this.currentIndex) {
@@ -523,7 +526,7 @@
         bindEvents: function() {
             const container = document.querySelector('.slidercards3d-container');
             if (!container) return;
-            
+
             // Navegación con teclado
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') {
@@ -538,36 +541,36 @@
                     setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
                 }
             });
-            
+
             // Pausar autoplay al interactuar con el slider
             container.addEventListener('mouseenter', () => {
                 this.pauseAutoplay();
             });
-            
+
             container.addEventListener('mouseleave', () => {
                 if (this.settings.autoplay) {
                     this.resumeAutoplay();
                 }
             });
-            
+
             // Pausar autoplay al hacer clic en los botones
             const prevBtn = container.querySelector('.slidercards3d-btn-prev');
             const nextBtn = container.querySelector('.slidercards3d-btn-next');
-            
+
             if (prevBtn) {
                 prevBtn.addEventListener('click', () => {
                     this.pauseAutoplay();
                     setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
                 });
             }
-            
+
             if (nextBtn) {
                 nextBtn.addEventListener('click', () => {
                     this.pauseAutoplay();
                     setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
                 });
             }
-            
+
             // Recalcular posiciones al redimensionar la ventana
             let resizeTimeout;
             window.addEventListener('resize', () => {
@@ -580,13 +583,13 @@
             // Touch events para móviles
             let touchStartX = 0;
             let touchEndX = 0;
-            
+
             if (container) {
                 container.addEventListener('touchstart', (e) => {
                     touchStartX = e.changedTouches[0].screenX;
                     this.pauseAutoplay();
                 });
-                
+
                 container.addEventListener('touchend', (e) => {
                     touchEndX = e.changedTouches[0].screenX;
                     this.handleSwipe();
@@ -597,11 +600,11 @@
                     }, this.settings.autoplay_interval);
                 });
             }
-            
+
             this.handleSwipe = () => {
                 const swipeThreshold = 50;
                 const diff = touchStartX - touchEndX;
-                
+
                 if (Math.abs(diff) > swipeThreshold) {
                     if (diff > 0) {
                         this.next();

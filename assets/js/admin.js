@@ -47,11 +47,11 @@
                 e.preventDefault();
                 this.saveSettings();
             });
-            
+
             $('#reset-settings').on('click', () => {
                 this.resetSettings();
             });
-            
+
             // Toggle autoplay interval visibility
             $('#autoplay').on('change', () => {
                 this.toggleAutoplayInterval();
@@ -331,7 +331,7 @@
                 }
             });
         },
-        
+
         toggleAutoplayInterval: function() {
             const isChecked = $('#autoplay').is(':checked');
             $('#autoplay-interval-group').toggle(isChecked);
@@ -340,9 +340,9 @@
         saveSettings: function() {
             const $btn = $('#save-settings');
             const originalText = $btn.text();
-            
+
             $btn.prop('disabled', true).text(slidercards3dAdmin.strings.saving);
-            
+
             const settings = {
                 separation_desktop: parseInt($('#separation-desktop').val()) || 100,
                 separation_tablet: parseInt($('#separation-tablet').val()) || 70,
