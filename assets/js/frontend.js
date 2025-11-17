@@ -558,6 +558,48 @@
             }
         }
 
+        showLoading() {
+            const slider = this.container.querySelector(`#${this.instanceId}-slider`);
+            if (!slider) return;
+
+            // Ocultar controles mientras carga
+            const controls = this.container.querySelector('.slidercards3d-controls');
+            if (controls) {
+                controls.style.display = 'none';
+            }
+
+            // Crear skeleton cards
+            slider.innerHTML = `
+                <div class="slidercards3d-loading">
+                    <div class="slidercards3d-skeleton-container">
+                        <div class="slidercards3d-skeleton-card"></div>
+                        <div class="slidercards3d-skeleton-card"></div>
+                        <div class="slidercards3d-skeleton-card"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        hideLoading() {
+            const slider = this.container.querySelector(`#${this.instanceId}-slider`);
+            if (slider) {
+                const loading = slider.querySelector('.slidercards3d-loading');
+                if (loading) {
+                    loading.style.opacity = '0';
+                    loading.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => {
+                        loading.remove();
+                    }, 300);
+                }
+            }
+
+            // Mostrar controles después de cargar
+            const controls = this.container.querySelector('.slidercards3d-controls');
+            if (controls) {
+                controls.style.display = 'flex';
+            }
+        }
+
         showEmpty() {
             const slider = this.container.querySelector(`#${this.instanceId}-slider`);
             if (slider) {
