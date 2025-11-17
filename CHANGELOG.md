@@ -1,6 +1,15 @@
 # Changelog
 
 
+## [1.5.0] - 2025-11-17
+
+### Cambios
+- Actualización de versión de 1.4.0 a 1.5.0
+- Mejoras y correcciones generales
+
+# Changelog
+
+
 ## [1.4.0] - 2025-11-17
 
 ### Cambios

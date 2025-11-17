@@ -109,7 +109,7 @@ slidercards3d/
 ### Constantes del Plugin
 
 ```php
-SLIDERCARDS3D_VERSION = '1.4.0'
+SLIDERCARDS3D_VERSION = '1.5.0'
 SLIDERCARDS3D_PLUGIN_DIR = ruta del plugin
 SLIDERCARDS3D_PLUGIN_URL = URL del plugin
 SLIDERCARDS3D_PLUGIN_FILE = archivo principal
@@ -246,7 +246,7 @@ Todos los endpoints requieren autenticación WordPress:
 
 - **Repositorio**: https://github.com/fabiojara/slidercards3d
 - **Autor**: Fabio Jara
-- **Versión Actual**: 1.4.0
+- **Versión Actual**: 1.5.0
 
 ---
 
