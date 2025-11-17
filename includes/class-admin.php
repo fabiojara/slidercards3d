@@ -570,13 +570,21 @@ class SliderCards3D_Admin {
                                     <?php endif; ?>
                                 </div>
 
-                                <div class="slidercards3d-info-group">
-                                    <h4 class="slidercards3d-info-group-title">Efectos Visuales</h4>
-                                    <div class="slidercards3d-info-item">
-                                        <span class="slidercards3d-info-label">Intensidad de oscurecimiento:</span>
-                                        <span class="slidercards3d-info-value"><?php echo esc_html($settings['darkness_intensity']); ?>%</span>
-                                    </div>
-                                </div>
+                    <div class="slidercards3d-info-group">
+                        <h4 class="slidercards3d-info-group-title">Efectos Visuales</h4>
+                        <div class="slidercards3d-info-item">
+                            <span class="slidercards3d-info-label">Intensidad de oscurecimiento:</span>
+                            <span class="slidercards3d-info-value"><?php echo esc_html($settings['darkness_intensity']); ?>%</span>
+                        </div>
+                        <div class="slidercards3d-info-item">
+                            <span class="slidercards3d-info-label">Intensidad de filtro:</span>
+                            <span class="slidercards3d-info-value"><?php echo esc_html($settings['filter_intensity']); ?>%</span>
+                        </div>
+                        <div class="slidercards3d-info-item">
+                            <span class="slidercards3d-info-label">Intensidad de brillo:</span>
+                            <span class="slidercards3d-info-value"><?php echo esc_html($settings['brightness_intensity']); ?>%</span>
+                        </div>
+                    </div>
                             </div>
 
                             <!-- Información del Sistema -->

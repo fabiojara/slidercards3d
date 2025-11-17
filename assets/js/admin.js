@@ -69,6 +69,15 @@
             $('#darkness-intensity').on('input', (e) => {
                 $('#darkness-intensity-value').text(e.target.value);
             });
+
+            // Actualizar valores de los nuevos sliders
+            $('#filter-intensity').on('input', (e) => {
+                $('#filter-intensity-value').text(e.target.value);
+            });
+
+            $('#brightness-intensity').on('input', (e) => {
+                $('#brightness-intensity-value').text(e.target.value);
+            });
         },
 
         switchTab: function(tab) {
@@ -364,7 +373,9 @@
                 separation_mobile: parseInt($('#separation-mobile').val()) || 50,
                 autoplay: $('#autoplay').is(':checked') ? '1' : '0',
                 autoplay_interval: parseInt($('#autoplay-interval').val()) || 3000,
-                darkness_intensity: parseInt($('#darkness-intensity').val()) || 25
+                darkness_intensity: parseInt($('#darkness-intensity').val()) || 25,
+                filter_intensity: parseInt($('#filter-intensity').val()) || 30,
+                brightness_intensity: parseInt($('#brightness-intensity').val()) || 50
             };
 
             $.ajax({

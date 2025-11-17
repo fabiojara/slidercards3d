@@ -48,7 +48,9 @@
                         separation_mobile: data.separation_mobile || 50,
                         autoplay: data.autoplay || false,
                         autoplay_interval: data.autoplay_interval || 3000,
-                        darkness_intensity: data.darkness_intensity || 25
+                        darkness_intensity: data.darkness_intensity || 25,
+                        filter_intensity: data.filter_intensity || 30,
+                        brightness_intensity: data.brightness_intensity || 50
                     };
                 })
                 .catch(() => {

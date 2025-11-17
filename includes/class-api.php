@@ -278,6 +278,8 @@ class SliderCards3D_API {
         $autoplay = $request->get_param('autoplay') === '1' || $request->get_param('autoplay') === true || $request->get_param('autoplay') === 'true';
         $autoplay_interval = intval($request->get_param('autoplay_interval'));
         $darkness_intensity = intval($request->get_param('darkness_intensity'));
+        $filter_intensity = intval($request->get_param('filter_intensity'));
+        $brightness_intensity = intval($request->get_param('brightness_intensity'));
 
         // Validar valores
         if ($separation_desktop < 0 || $separation_desktop > 500) {
@@ -300,13 +302,23 @@ class SliderCards3D_API {
             return new WP_Error('invalid_value', 'La intensidad de oscurecimiento debe estar entre 0 y 100', array('status' => 400));
         }
 
+        if ($filter_intensity < 0 || $filter_intensity > 100) {
+            return new WP_Error('invalid_value', 'La intensidad de filtro debe estar entre 0 y 100', array('status' => 400));
+        }
+
+        if ($brightness_intensity < 0 || $brightness_intensity > 100) {
+            return new WP_Error('invalid_value', 'La intensidad de brillo debe estar entre 0 y 100', array('status' => 400));
+        }
+
         $settings = array(
             'separation_desktop' => $separation_desktop,
             'separation_tablet' => $separation_tablet,
             'separation_mobile' => $separation_mobile,
             'autoplay' => $autoplay,
             'autoplay_interval' => $autoplay_interval,
-            'darkness_intensity' => $darkness_intensity
+            'darkness_intensity' => $darkness_intensity,
+            'filter_intensity' => $filter_intensity,
+            'brightness_intensity' => $brightness_intensity
         );
 
         update_option('slidercards3d_settings', $settings);
