@@ -24,6 +24,14 @@
                 this.switchTab(tab);
             });
 
+            // Botones de copiar en Modo de Uso
+            $('.slidercards3d-copy-btn').on('click', (e) => {
+                e.preventDefault();
+                const $btn = $(e.currentTarget);
+                const text = $btn.data('copy');
+                this.copyToClipboard(text, $btn);
+            });
+
             // Búsqueda
             $('#image-search').on('input', this.debounce(() => {
                 this.filterImages();

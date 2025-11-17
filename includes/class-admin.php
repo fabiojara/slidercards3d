@@ -94,7 +94,7 @@ class SliderCards3D_Admin {
                         <span class="slidercards3d-icon">🎴</span>
                         Slider Cards 3D
                     </h1>
-                    <p class="slidercards3d-subtitle">Gestiona el contenido de tu slider 3D</p>
+                    <p class="slidercards3d-subtitle">Gestiona el contenido de tu slider 3D - Versión del plugin <?php echo SLIDERCARDS3D_VERSION; ?></p>
                 </div>
                 <div class="slidercards3d-header-actions">
                     <span class="slidercards3d-version">v<?php echo SLIDERCARDS3D_VERSION; ?></span>
@@ -113,6 +113,10 @@ class SliderCards3D_Admin {
                 <button class="slidercards3d-tab" data-tab="settings">
                     <?php echo SliderCards3D_Icons::render_icon('cog-6-tooth', 20, 'Configuración', 'slidercards3d-tab-icon'); ?>
                     Configuración
+                </button>
+                <button class="slidercards3d-tab" data-tab="usage">
+                    <?php echo SliderCards3D_Icons::render_icon('document-text', 20, 'Modo de Uso', 'slidercards3d-tab-icon'); ?>
+                    Modo de Uso
                 </button>
             </div>
 
@@ -301,6 +305,162 @@ class SliderCards3D_Admin {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <!-- Pestaña Modo de Uso -->
+                <div class="slidercards3d-tab-content" id="tab-usage">
+                    <div class="slidercards3d-usage">
+                        <div class="slidercards3d-usage-header">
+                            <h2 class="slidercards3d-usage-title">📖 Modo de Uso del Shortcode</h2>
+                            <p class="slidercards3d-usage-description">Aprende cómo implementar el slider 3D en tu sitio WordPress</p>
+                        </div>
+
+                        <div class="slidercards3d-usage-content">
+                            <!-- Shortcode Básico -->
+                            <div class="slidercards3d-usage-section">
+                                <h3 class="slidercards3d-usage-section-title">Shortcode Básico</h3>
+                                <p class="slidercards3d-usage-text">El shortcode principal es <code>[slidercards3d]</code> y puede usarse en cualquier página, entrada o widget de WordPress.</p>
+                                
+                                <div class="slidercards3d-usage-code-block">
+                                    <div class="slidercards3d-usage-code-header">
+                                        <span>Uso Simple</span>
+                                        <button class="slidercards3d-copy-btn" data-copy="[slidercards3d]">Copiar</button>
+                                    </div>
+                                    <pre><code>[slidercards3d]</code></pre>
+                                </div>
+                                
+                                <p class="slidercards3d-usage-note">Este shortcode mostrará todas las imágenes y páginas que hayas seleccionado en el panel de administración.</p>
+                            </div>
+
+                            <!-- Parámetros -->
+                            <div class="slidercards3d-usage-section">
+                                <h3 class="slidercards3d-usage-section-title">Parámetros Disponibles</h3>
+                                
+                                <div class="slidercards3d-usage-param">
+                                    <h4 class="slidercards3d-usage-param-name">type</h4>
+                                    <p class="slidercards3d-usage-text">Especifica qué tipo de contenido mostrar en el slider.</p>
+                                    <ul class="slidercards3d-usage-list">
+                                        <li><code>all</code> (por defecto) - Muestra imágenes y páginas seleccionadas</li>
+                                        <li><code>images</code> - Solo muestra imágenes seleccionadas</li>
+                                        <li><code>pages</code> - Solo muestra páginas seleccionadas</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Ejemplos -->
+                            <div class="slidercards3d-usage-section">
+                                <h3 class="slidercards3d-usage-section-title">Ejemplos de Uso</h3>
+                                
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">1. Mostrar Todo (Imágenes + Páginas)</h4>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>Shortcode</span>
+                                            <button class="slidercards3d-copy-btn" data-copy="[slidercards3d]">Copiar</button>
+                                        </div>
+                                        <pre><code>[slidercards3d]</code></pre>
+                                    </div>
+                                    <p class="slidercards3d-usage-text">O también puedes especificar explícitamente:</p>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>Shortcode</span>
+                                            <button class="slidercards3d-copy-btn" data-copy='[slidercards3d type="all"]'>Copiar</button>
+                                        </div>
+                                        <pre><code>[slidercards3d type="all"]</code></pre>
+                                    </div>
+                                </div>
+
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">2. Solo Imágenes</h4>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>Shortcode</span>
+                                            <button class="slidercards3d-copy-btn" data-copy='[slidercards3d type="images"]'>Copiar</button>
+                                        </div>
+                                        <pre><code>[slidercards3d type="images"]</code></pre>
+                                    </div>
+                                </div>
+
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">3. Solo Páginas</h4>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>Shortcode</span>
+                                            <button class="slidercards3d-copy-btn" data-copy='[slidercards3d type="pages"]'>Copiar</button>
+                                        </div>
+                                        <pre><code>[slidercards3d type="pages"]</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Dónde Usar -->
+                            <div class="slidercards3d-usage-section">
+                                <h3 class="slidercards3d-usage-section-title">Dónde Usar el Shortcode</h3>
+                                
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">En el Editor de WordPress (Gutenberg)</h4>
+                                    <ol class="slidercards3d-usage-list">
+                                        <li>Agrega un bloque <strong>"Shortcode"</strong> o <strong>"Código corto"</strong></li>
+                                        <li>Escribe: <code>[slidercards3d]</code></li>
+                                        <li>Guarda y visualiza</li>
+                                    </ol>
+                                </div>
+
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">En el Editor Clásico</h4>
+                                    <p class="slidercards3d-usage-text">Simplemente pega el shortcode en el contenido:</p>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>Shortcode</span>
+                                            <button class="slidercards3d-copy-btn" data-copy="[slidercards3d]">Copiar</button>
+                                        </div>
+                                        <pre><code>[slidercards3d]</code></pre>
+                                    </div>
+                                </div>
+
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">En Widgets</h4>
+                                    <ol class="slidercards3d-usage-list">
+                                        <li>Ve a <strong>Apariencia → Widgets</strong></li>
+                                        <li>Agrega un widget de <strong>"Texto"</strong> o <strong>"HTML"</strong></li>
+                                        <li>Inserta el shortcode: <code>[slidercards3d]</code></li>
+                                    </ol>
+                                </div>
+
+                                <div class="slidercards3d-usage-example">
+                                    <h4 class="slidercards3d-usage-example-title">En Templates PHP</h4>
+                                    <p class="slidercards3d-usage-text">Si necesitas insertarlo directamente en un template PHP:</p>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>PHP</span>
+                                            <button class="slidercards3d-copy-btn" data-copy='<?php echo do_shortcode(\'[slidercards3d]\'); ?>'>Copiar</button>
+                                        </div>
+                                        <pre><code><?php echo do_shortcode('[slidercards3d]'); ?></code></pre>
+                                    </div>
+                                    <p class="slidercards3d-usage-text">O con parámetros:</p>
+                                    <div class="slidercards3d-usage-code-block">
+                                        <div class="slidercards3d-usage-code-header">
+                                            <span>PHP</span>
+                                            <button class="slidercards3d-copy-btn" data-copy='<?php echo do_shortcode(\'[slidercards3d type="images"]\'); ?>'>Copiar</button>
+                                        </div>
+                                        <pre><code><?php echo do_shortcode('[slidercards3d type="images"]'); ?></code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notas Importantes -->
+                            <div class="slidercards3d-usage-section">
+                                <h3 class="slidercards3d-usage-section-title">Notas Importantes</h3>
+                                <ul class="slidercards3d-usage-list">
+                                    <li>El slider solo mostrará el contenido que hayas seleccionado y guardado en el panel de administración</li>
+                                    <li>Si no hay contenido seleccionado, se mostrará un mensaje indicando que no hay contenido</li>
+                                    <li>El slider es responsive y se adapta automáticamente a diferentes tamaños de pantalla</li>
+                                    <li>La navegación funciona con teclado (flechas), mouse (botones) y touch (deslizar) en móviles</li>
+                                    <li>Puedes configurar la separación horizontal, autoplay y oscurecimiento desde la pestaña <strong>Configuración</strong></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
