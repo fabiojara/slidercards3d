@@ -102,7 +102,7 @@
             Promise.all(promises).then(() => {
                 // Ocultar loading
                 this.hideLoading();
-                
+
                 if (this.items.length > 0) {
                     this.render();
                     if (this.settings.autoplay) {
@@ -278,7 +278,7 @@
 
             // Asegurar que el loading esté oculto antes de renderizar
             this.hideLoading();
-            
+
             slider.innerHTML = '';
 
             // Crear cards
