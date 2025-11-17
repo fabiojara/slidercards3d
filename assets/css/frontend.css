@@ -7,15 +7,26 @@
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 0;
     position: relative;
     overflow: visible; /* Permitir que las tarjetas laterales se expandan */
+    touch-action: pan-x pan-y; /* Permitir scroll pero controlar swipe */
+    -webkit-tap-highlight-color: transparent; /* Eliminar highlight en móviles */
+    user-select: none; /* Prevenir selección de texto durante swipe */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: grab; /* Indicar que se puede arrastrar */
+}
+
+.slidercards3d-container:active {
+    cursor: grabbing; /* Cambiar cursor al arrastrar */
 }
 
 .slidercards3d-wrapper {
     position: relative;
     width: 100%;
-    height: 600px;
+    height: 400px;
     perspective: 1000px;
     overflow: visible; /* Cambiar a visible para permitir que las tarjetas laterales se vean */
 }
@@ -107,12 +118,16 @@
     border: 2px solid rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.1);
     color: white;
-    cursor: pointer;
+    cursor: pointer !important; /* Sobrescribir cursor grab del contenedor */
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    touch-action: manipulation; /* Mejorar respuesta táctil */
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .slidercards3d-btn-prev:hover,
@@ -202,7 +217,7 @@
 .slidercards3d-loading {
     position: relative;
     width: 100%;
-    height: 600px;
+    height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -301,7 +316,7 @@
 .slidercards3d-loading-combined {
     position: relative;
     width: 100%;
-    height: 600px;
+    height: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -495,7 +510,7 @@
 /* Responsive */
 @media (max-width: 768px) {
     .slidercards3d-wrapper {
-        height: 500px;
+        height: 400px;
         overflow: visible; /* Mantener visible en móviles también */
     }
 
@@ -507,7 +522,7 @@
     }
 
     .slidercards3d-loading {
-        height: 500px;
+        height: 400px;
     }
 
     .slidercards3d-skeleton-card {
@@ -537,7 +552,7 @@
 
     /* Reducir separación en móviles para que quepa mejor */
     .slidercards3d-container {
-        padding: 1rem 0.5rem;
+        padding: 0;
     }
 }
 
@@ -575,7 +590,7 @@
 
     /* Reducir separación en móviles pequeños */
     .slidercards3d-container {
-        padding: 1rem 0.25rem;
+        padding: 0;
     }
 }
 

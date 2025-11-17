@@ -20,6 +20,11 @@ Un slider 3D moderno para WordPress con gestión de imágenes y páginas desde e
 - **Iconos SVG**: Sistema de iconos Heroicons con fallbacks automáticos
 - **Skeleton Screens**: Indicador de carga moderno con efecto shimmer
 - **Persistencia de Estado**: La pestaña activa se mantiene al recargar el admin
+- **Navegación Múltiple**: 
+  - Teclado (flechas izquierda/derecha)
+  - Clic en botones de navegación
+  - Swipe táctil (móviles, tablets, escritorio táctil)
+  - Mouse drag en pantallas táctiles
 
 ## 🚀 Instalación
 

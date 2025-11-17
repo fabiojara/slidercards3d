@@ -2,8 +2,8 @@
 
 ## Estado Actual del Proyecto
 
-**Versión**: 1.6.0  
-**Última Actualización**: 2024-12-XX  
+**Versión**: 1.7.0
+**Última Actualización**: 2024-12-XX
 **Estado**: Funcional y estable
 
 ## 📋 Resumen de Funcionalidades Implementadas
@@ -66,7 +66,15 @@
    - Parámetro `type` (all, images, pages)
    - Soporte para múltiples instancias
 
-10. **Documentación**
+10. **Navegación Múltiple**
+    - Navegación con teclado (flechas izquierda/derecha)
+    - Navegación con clic en botones
+    - Swipe táctil mejorado (móviles, tablets, escritorio táctil)
+    - Mouse drag en pantallas táctiles
+    - Detección inteligente de gestos horizontales vs verticales
+    - Prevención de scroll durante swipe horizontal
+
+11. **Documentación**
     - CHANGELOG.md actualizado
     - README.md completo
     - Comentarios en código
@@ -109,7 +117,7 @@ slidercards3d/
 ### Constantes del Plugin
 
 ```php
-SLIDERCARDS3D_VERSION = '1.6.0'
+SLIDERCARDS3D_VERSION = '1.7.0'
 SLIDERCARDS3D_PLUGIN_DIR = ruta del plugin
 SLIDERCARDS3D_PLUGIN_URL = URL del plugin
 SLIDERCARDS3D_PLUGIN_FILE = archivo principal
@@ -240,13 +248,14 @@ Todos los endpoints requieren autenticación WordPress:
 ✅ Responsive design
 ✅ Sistema de iconos robusto
 ✅ Controles avanzados de efectos visuales (filtro y brillo)
+✅ Navegación múltiple (teclado, botones, swipe táctil, mouse drag)
 ✅ Documentación completa
 
 ## 📞 Contacto y Soporte
 
 - **Repositorio**: https://github.com/fabiojara/slidercards3d
 - **Autor**: Fabio Jara
-- **Versión Actual**: 1.6.0
+- **Versión Actual**: 1.7.0
 
 ---
 

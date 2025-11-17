@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.7.0] - 2024-12-XX
+
+### Nuevas Características
+- **Navegación con Teclado**: Soporte completo para navegación con flechas izquierda/derecha del teclado
+- **Navegación Táctil Mejorada**: Swipe mejorado para dispositivos touch (móviles, tablets, escritorio táctil)
+- **Mouse Drag**: Soporte para arrastrar con el mouse en pantallas táctiles de escritorio
+
+### Mejoras
+- Navegación con teclado funciona cuando el slider está visible en pantalla
+- Detección inteligente de swipe horizontal vs vertical
+- Prevención de scroll durante swipe horizontal
+- Mejor respuesta táctil en botones de navegación
+- Cursor grab/grabbing para indicar que el slider es arrastrable
+- Evita conflictos con inputs activos al usar teclado
+- Mejor accesibilidad con contenedor focusable
+
+### Detalles Técnicos
+- Implementada detección de visibilidad del slider antes de procesar teclas
+- Swipe mejorado con umbrales configurables (distancia mínima: 50px, tiempo máximo: 500ms)
+- `touch-action: pan-x pan-y` para mejor control de gestos
+- `user-select: none` para prevenir selección de texto durante swipe
+- Soporte para múltiples métodos de navegación simultáneos
+
 ## [1.6.0] - 2024-12-XX
 
 ### Mejoras

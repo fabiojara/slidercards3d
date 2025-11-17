@@ -3,7 +3,7 @@
  * Plugin Name: Slider Cards 3D
  * Plugin URI: https://github.com/fabiojara/slidercards3d
  * Description: Un slider 3D moderno para WordPress con gestión de imágenes y páginas desde el panel de administración.
- * Version: 1.6.0
+ * Version: 1.7.0
  * Author: Fabio Jara
  * Author URI: https://github.com/fabiojara
  * License: GPL v2 or later
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes del plugin
-define('SLIDERCARDS3D_VERSION', '1.6.0');
+define('SLIDERCARDS3D_VERSION', '1.7.0');
 define('SLIDERCARDS3D_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SLIDERCARDS3D_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('SLIDERCARDS3D_PLUGIN_FILE', __FILE__);

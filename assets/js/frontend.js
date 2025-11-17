@@ -616,24 +616,49 @@
         }
 
         bindEvents() {
-            // Navegación con teclado (solo para el slider activo con hover)
+            // Navegación con teclado (flechas izquierda/derecha)
+            // Funciona cuando el slider está visible en la pantalla
             const handleKeydown = (e) => {
-                // Solo procesar si el mouse está sobre este contenedor
-                if (!this.container.matches(':hover')) return;
+                // Verificar si el slider está visible en la pantalla
+                const rect = this.container.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
 
-                if (e.key === 'ArrowLeft') {
+                if (!isVisible) return;
+
+                // Solo procesar flechas izquierda/derecha
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    // Evitar conflicto si el usuario está escribiendo en un input
+                    const activeElement = document.activeElement;
+                    if (activeElement && (
+                        activeElement.tagName === 'INPUT' ||
+                        activeElement.tagName === 'TEXTAREA' ||
+                        activeElement.isContentEditable
+                    )) {
+                        return;
+                    }
+
                     e.preventDefault();
                     this.pauseAutoplay();
-                    this.prev();
-                    setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
-                } else if (e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    this.pauseAutoplay();
-                    this.next();
-                    setTimeout(() => this.resumeAutoplay(), this.settings.autoplay_interval);
+
+                    if (e.key === 'ArrowLeft') {
+                        this.prev();
+                    } else if (e.key === 'ArrowRight') {
+                        this.next();
+                    }
+
+                    setTimeout(() => {
+                        if (this.settings.autoplay) {
+                            this.resumeAutoplay();
+                        }
+                    }, this.settings.autoplay_interval);
                 }
             };
             document.addEventListener('keydown', handleKeydown);
+
+            // Hacer el contenedor focusable para mejor accesibilidad con teclado
+            if (!this.container.hasAttribute('tabindex')) {
+                this.container.setAttribute('tabindex', '0');
+            }
 
             // Pausar autoplay al interactuar
             this.container.addEventListener('mouseenter', () => {
@@ -656,33 +681,143 @@
             };
             window.addEventListener('resize', handleResize);
 
-            // Touch events para móviles
+            // Touch events mejorados para swipe (móviles, tablets, escritorio táctil)
             let touchStartX = 0;
+            let touchStartY = 0;
             let touchEndX = 0;
+            let touchEndY = 0;
+            let touchStartTime = 0;
+            let isSwiping = false;
+
+            // Prevenir scroll mientras se hace swipe
+            const preventScroll = (e) => {
+                if (isSwiping) {
+                    e.preventDefault();
+                }
+            };
 
             this.container.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
+                const touch = e.changedTouches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                touchStartTime = Date.now();
+                isSwiping = false;
                 this.pauseAutoplay();
-            });
+
+                // Prevenir scroll durante el swipe
+                this.container.addEventListener('touchmove', preventScroll, { passive: false });
+            }, { passive: true });
+
+            this.container.addEventListener('touchmove', (e) => {
+                if (!touchStartX) return;
+
+                const touch = e.changedTouches[0];
+                const deltaX = Math.abs(touch.clientX - touchStartX);
+                const deltaY = Math.abs(touch.clientY - touchStartY);
+
+                // Detectar si es un swipe horizontal (más horizontal que vertical)
+                if (deltaX > 10 && deltaX > deltaY * 1.5) {
+                    isSwiping = true;
+                    e.preventDefault();
+                }
+            }, { passive: false });
 
             this.container.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                const swipeThreshold = 50;
-                const diff = touchStartX - touchEndX;
+                if (!touchStartX) return;
 
-                if (Math.abs(diff) > swipeThreshold) {
-                    if (diff > 0) {
+                const touch = e.changedTouches[0];
+                touchEndX = touch.clientX;
+                touchEndY = touch.clientY;
+                const touchEndTime = Date.now();
+
+                // Remover listener de prevención de scroll
+                this.container.removeEventListener('touchmove', preventScroll);
+
+                const deltaX = touchStartX - touchEndX;
+                const deltaY = Math.abs(touchStartY - touchEndY);
+                const deltaTime = touchEndTime - touchStartTime;
+
+                // Umbrales para detectar swipe
+                const minSwipeDistance = 50; // Distancia mínima en píxeles
+                const maxSwipeTime = 500; // Tiempo máximo en milisegundos
+                const maxVerticalDistance = 100; // Máxima distancia vertical permitida
+
+                // Verificar que sea un swipe válido
+                if (
+                    Math.abs(deltaX) > minSwipeDistance &&
+                    deltaY < maxVerticalDistance &&
+                    deltaTime < maxSwipeTime &&
+                    Math.abs(deltaX) > deltaY * 1.5 // Más horizontal que vertical
+                ) {
+                    if (deltaX > 0) {
+                        // Swipe hacia la izquierda = siguiente
                         this.next();
                     } else {
+                        // Swipe hacia la derecha = anterior
                         this.prev();
                     }
                 }
+
+                // Resetear valores
+                touchStartX = 0;
+                touchStartY = 0;
+                touchEndX = 0;
+                touchEndY = 0;
+                isSwiping = false;
 
                 setTimeout(() => {
                     if (this.settings.autoplay) {
                         this.resumeAutoplay();
                     }
                 }, this.settings.autoplay_interval);
+            }, { passive: true });
+
+            // Soporte para mouse drag en escritorio táctil (opcional)
+            let mouseStartX = 0;
+            let mouseStartY = 0;
+            let isMouseDown = false;
+
+            this.container.addEventListener('mousedown', (e) => {
+                mouseStartX = e.clientX;
+                mouseStartY = e.clientY;
+                isMouseDown = true;
+                this.pauseAutoplay();
+            });
+
+            this.container.addEventListener('mousemove', (e) => {
+                if (!isMouseDown) return;
+                e.preventDefault();
+            });
+
+            this.container.addEventListener('mouseup', (e) => {
+                if (!isMouseDown) return;
+
+                const deltaX = mouseStartX - e.clientX;
+                const deltaY = Math.abs(mouseStartY - e.clientY);
+                const minDragDistance = 50;
+
+                if (Math.abs(deltaX) > minDragDistance && Math.abs(deltaX) > deltaY * 1.5) {
+                    if (deltaX > 0) {
+                        this.next();
+                    } else {
+                        this.prev();
+                    }
+                }
+
+                isMouseDown = false;
+                mouseStartX = 0;
+                mouseStartY = 0;
+
+                setTimeout(() => {
+                    if (this.settings.autoplay) {
+                        this.resumeAutoplay();
+                    }
+                }, this.settings.autoplay_interval);
+            });
+
+            // Prevenir que el mouseup fuera del contenedor cause problemas
+            document.addEventListener('mouseup', () => {
+                isMouseDown = false;
             });
         }
 
