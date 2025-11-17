@@ -1,7 +1,7 @@
 <?php
 /**
  * Desinstalación del plugin
- * 
+ *
  * Este archivo se ejecuta cuando el plugin es eliminado desde WordPress
  */
 

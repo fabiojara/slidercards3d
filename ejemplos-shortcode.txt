@@ -1,0 +1,41 @@
+EJEMPLOS DE USO DEL SHORTCODE - SLIDER CARDS 3D
+=================================================
+
+SHORTCODE BÁSICO:
+-----------------
+[slidercards3d]
+
+
+SHORTCODE CON PARÁMETROS:
+-------------------------
+[slidercards3d type="all"]      → Muestra imágenes y páginas
+[slidercards3d type="images"]   → Solo imágenes
+[slidercards3d type="pages"]    → Solo páginas
+
+
+EJEMPLOS PARA COPIAR Y PEGAR:
+------------------------------
+
+1. Slider completo (imágenes + páginas):
+[slidercards3d]
+
+
+2. Solo imágenes de la galería:
+[slidercards3d type="images"]
+
+
+3. Solo páginas destacadas:
+[slidercards3d type="pages"]
+
+
+4. En HTML/PHP:
+<?php echo do_shortcode('[slidercards3d]'); ?>
+
+
+INSTRUCCIONES:
+--------------
+1. Copia el shortcode que necesites
+2. Pégalo en cualquier página o entrada de WordPress
+3. Asegúrate de haber seleccionado contenido en el panel "Slider 3D"
+4. Guarda y visualiza la página
+

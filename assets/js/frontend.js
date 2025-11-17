@@ -22,29 +22,44 @@
         },
 
         loadItems: function() {
+            console.log('Iniciando carga de items, tipo:', this.type);
+            console.log('API URL:', slidercards3dData.apiUrl);
+            
             const promises = [];
-
+            
             if (this.type === 'all' || this.type === 'images') {
                 promises.push(this.loadImages());
             }
-
+            
             if (this.type === 'all' || this.type === 'pages') {
                 promises.push(this.loadPages());
             }
-
+            
             Promise.all(promises).then(() => {
+                console.log('Items finales cargados:', this.items.length, this.items);
                 if (this.items.length > 0) {
                     this.render();
                 } else {
+                    console.warn('No se encontraron items para mostrar');
                     this.showEmpty();
                 }
+            }).catch(error => {
+                console.error('Error al cargar items:', error);
+                this.showEmpty();
             });
         },
 
         loadImages: function() {
+            // Usar 'image' (singular) que es lo que espera la API
             return fetch(slidercards3dData.apiUrl + 'selection?type=image')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al obtener selección de imágenes');
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Datos de selección de imágenes:', data);
                     if (data.ids && data.ids.length > 0) {
                         return Promise.all(
                             data.ids.map(id => this.getImageData(id))
@@ -53,7 +68,9 @@
                     return [];
                 })
                 .then(images => {
-                    this.items = this.items.concat(images.map(img => ({
+                    console.log('Imágenes cargadas:', images);
+                    const validImages = images.filter(img => img && img.url);
+                    this.items = this.items.concat(validImages.map(img => ({
                         type: 'image',
                         id: img.id,
                         url: img.url,
@@ -61,13 +78,22 @@
                         title: img.title
                     })));
                 })
-                .catch(() => []);
+                .catch(error => {
+                    console.error('Error al cargar imágenes:', error);
+                    return [];
+                });
         },
 
         loadPages: function() {
             return fetch(slidercards3dData.apiUrl + 'selection?type=page')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al obtener selección de páginas');
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Datos de selección de páginas:', data);
                     if (data.ids && data.ids.length > 0) {
                         return Promise.all(
                             data.ids.map(id => this.getPageData(id))
@@ -76,7 +102,9 @@
                     return [];
                 })
                 .then(pages => {
-                    this.items = this.items.concat(pages.map(page => ({
+                    console.log('Páginas cargadas:', pages);
+                    const validPages = pages.filter(page => page && page !== null);
+                    this.items = this.items.concat(validPages.map(page => ({
                         type: 'page',
                         id: page.id,
                         url: page.thumbnail || '',
@@ -85,44 +113,93 @@
                         link: page.url
                     })));
                 })
-                .catch(() => []);
+                .catch(error => {
+                    console.error('Error al cargar páginas:', error);
+                    return [];
+                });
         },
 
         getImageData: function(id) {
-            return fetch(`/wp-json/wp/v2/media/${id}`)
-                .then(response => response.json())
-                .then(data => ({
-                    id: data.id,
-                    url: data.media_details.sizes.medium?.source_url || data.source_url,
-                    full_url: data.source_url,
-                    title: data.title.rendered || 'Sin título'
-                }));
+            // Construir URL absoluta correctamente
+            const baseUrl = slidercards3dData.apiUrl.replace('/slidercards3d/v1/', '');
+            const mediaUrl = baseUrl + `wp/v2/media/${id}`;
+            
+            return fetch(mediaUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP ${response.status} al obtener imagen ${id}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const mediumUrl = data.media_details?.sizes?.medium?.source_url;
+                    const fullUrl = data.source_url;
+                    
+                    return {
+                        id: data.id,
+                        url: mediumUrl || fullUrl,
+                        full_url: fullUrl,
+                        title: data.title?.rendered || data.title || 'Sin título'
+                    };
+                })
+                .catch(error => {
+                    console.error(`Error al obtener imagen ${id}:`, error);
+                    return null; // Retornar null para filtrar después
+                });
         },
 
         getPageData: function(id) {
-            return fetch(`/wp-json/wp/v2/pages/${id}`)
-                .then(response => response.json())
+            // Construir URL absoluta correctamente
+            const baseUrl = slidercards3dData.apiUrl.replace('/slidercards3d/v1/', '');
+            const pageUrl = baseUrl + `wp/v2/pages/${id}`;
+            
+            return fetch(pageUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP ${response.status} al obtener página ${id}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     const thumbnailId = data.featured_media;
                     let thumbnail = '';
 
                     if (thumbnailId) {
-                        return fetch(`/wp-json/wp/v2/media/${thumbnailId}`)
-                            .then(response => response.json())
+                        const mediaUrl = baseUrl + `wp/v2/media/${thumbnailId}`;
+                        return fetch(mediaUrl)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`Error al obtener thumbnail ${thumbnailId}`);
+                                }
+                                return response.json();
+                            })
                             .then(media => ({
                                 id: data.id,
-                                thumbnail: media.media_details.sizes.medium?.source_url || media.source_url,
-                                title: data.title.rendered || 'Sin título',
+                                thumbnail: media.media_details?.sizes?.medium?.source_url || media.source_url,
+                                title: data.title?.rendered || data.title || 'Sin título',
                                 url: data.link
-                            }));
+                            }))
+                            .catch(error => {
+                                console.error(`Error al obtener thumbnail para página ${id}:`, error);
+                                return {
+                                    id: data.id,
+                                    thumbnail: '',
+                                    title: data.title?.rendered || data.title || 'Sin título',
+                                    url: data.link
+                                };
+                            });
                     }
 
                     return {
                         id: data.id,
                         thumbnail: '',
-                        title: data.title.rendered || 'Sin título',
+                        title: data.title?.rendered || data.title || 'Sin título',
                         url: data.link
                     };
+                })
+                .catch(error => {
+                    console.error(`Error al obtener página ${id}:`, error);
+                    return null; // Retornar null para filtrar después
                 });
         },
 
@@ -342,7 +419,15 @@
                     <div class="slidercards3d-empty">
                         <div class="slidercards3d-empty-icon">🎴</div>
                         <div class="slidercards3d-empty-title">No hay contenido</div>
-                        <div class="slidercards3d-empty-text">Selecciona imágenes o páginas en el panel de administración</div>
+                        <div class="slidercards3d-empty-text">
+                            <p>Selecciona imágenes o páginas en el panel de administración.</p>
+                            <p style="margin-top: 1rem; font-size: 0.875rem; opacity: 0.7;">
+                                Ve a <strong>Slider 3D</strong> en el menú de WordPress, selecciona contenido y haz clic en "Guardar selección".
+                            </p>
+                            <p style="margin-top: 0.5rem; font-size: 0.75rem; opacity: 0.6;">
+                                Si ya seleccionaste contenido, verifica la consola del navegador (F12) para ver errores.
+                            </p>
+                        </div>
                     </div>
                 `;
             }

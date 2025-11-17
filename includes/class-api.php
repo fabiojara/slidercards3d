@@ -38,7 +38,13 @@ class SliderCards3D_API {
         register_rest_route('slidercards3d/v1', '/selection', array(
             'methods' => 'GET',
             'callback' => array($this, 'get_selection'),
-            'permission_callback' => '__return_true'
+            'permission_callback' => '__return_true', // Público para el frontend
+            'args' => array(
+                'type' => array(
+                    'default' => null,
+                    'sanitize_callback' => 'sanitize_text_field',
+                ),
+            ),
         ));
     }
 
@@ -176,22 +182,30 @@ class SliderCards3D_API {
      */
     public function get_selection($request) {
         $type = $request->get_param('type');
-
+        
+        // Normalizar el tipo (aceptar 'images' o 'image')
+        if ($type === 'images') {
+            $type = 'image';
+        }
+        
         if ($type) {
             $selected_ids = $this->get_selected_ids($type);
             return rest_ensure_response(array(
                 'type' => $type,
-                'ids' => $selected_ids
+                'ids' => $selected_ids,
+                'count' => count($selected_ids)
             ));
         }
-
+        
         // Obtener todas las selecciones
         $images = $this->get_selected_ids('image');
         $pages = $this->get_selected_ids('page');
-
+        
         return rest_ensure_response(array(
             'images' => $images,
-            'pages' => $pages
+            'pages' => $pages,
+            'images_count' => count($images),
+            'pages_count' => count($pages)
         ));
     }
 

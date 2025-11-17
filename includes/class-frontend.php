@@ -24,7 +24,7 @@ class SliderCards3D_Frontend {
             $this->load_assets();
         }
     }
-    
+
     /**
      * Cargar assets
      */
@@ -36,7 +36,7 @@ class SliderCards3D_Frontend {
             array(),
             SLIDERCARDS3D_VERSION
         );
-        
+
         // JavaScript
         wp_enqueue_script(
             'slidercards3d-frontend',
@@ -45,7 +45,7 @@ class SliderCards3D_Frontend {
             SLIDERCARDS3D_VERSION,
             true
         );
-        
+
         // Localizar script
         wp_localize_script('slidercards3d-frontend', 'slidercards3dData', array(
             'apiUrl' => rest_url('slidercards3d/v1/'),
@@ -59,11 +59,11 @@ class SliderCards3D_Frontend {
     public function render_slider($atts) {
         // Asegurar que los assets estén cargados
         $this->load_assets();
-        
+
         $atts = shortcode_atts(array(
             'type' => 'all' // 'images', 'pages', 'all'
         ), $atts);
-        
+
         ob_start();
         ?>
         <div class="slidercards3d-container" data-type="<?php echo esc_attr($atts['type']); ?>">
