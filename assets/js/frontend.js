@@ -457,7 +457,7 @@
             document.addEventListener('keydown', (e) => {
                 const container = document.querySelector('.slidercards3d-container');
                 if (!container) return;
-
+                
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
                     this.prev();
@@ -465,6 +465,15 @@
                     e.preventDefault();
                     this.next();
                 }
+            });
+            
+            // Recalcular posiciones al redimensionar la ventana
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    this.updateCards();
+                }, 250);
             });
 
             // Touch events para móviles
